@@ -1,0 +1,15 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean name="/accountManager" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service" ref="accountManager"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.accounts.AccountManager"/>
+    </bean>
+
+    <bean name="/dictionaryManager" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service" ref="dictionaryManager"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
+    </bean>
+</beans>
