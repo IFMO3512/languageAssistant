@@ -1,6 +1,8 @@
 package com.fivehundredtwelve.langassist.accounts;
 
 import com.fivehundredtwelve.langassist.User;
+import com.google.common.base.Preconditions;
+import com.sun.istack.internal.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,12 +18,14 @@ public class AccountManagerImpl implements AccountManager {
     }
 
     @Override
-    public void addUser(User user) {
+    public void addUser(final @NotNull User user) {
+        Preconditions.checkNotNull(user != null);
+
         users.put(user.getEmail(), user);
     }
 
     @Override
-    public boolean checkUser(User user) {
+    public boolean checkUser(final @NotNull User user) {
         return users.get(user.getEmail()) != null;
     }
 }

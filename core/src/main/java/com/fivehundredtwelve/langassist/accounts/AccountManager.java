@@ -1,6 +1,7 @@
 package com.fivehundredtwelve.langassist.accounts;
 
 import com.fivehundredtwelve.langassist.User;
+import com.sun.istack.internal.NotNull;
 
 /**
  * Manages {User}s entities, stores them in database and checks them
@@ -8,7 +9,7 @@ import com.fivehundredtwelve.langassist.User;
  * @author eliseev
  */
 public interface AccountManager {
-    public void addUser(User user);
+    public void addUser(final @NotNull User user);
 
-    public boolean checkUser(User user);
+    public boolean checkUser(final @NotNull User user);
 }
