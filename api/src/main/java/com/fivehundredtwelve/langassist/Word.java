@@ -11,17 +11,25 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Word {
     private final String word;
+    private final Languages language;
 
     /**
      * Creates a {@link Word} object with specified email.
      *
-     * @param word string of user email, can not be null
+     * @param word     string of user email, can not be null
+     * @param language language, bounded to this word
      * @throws java.lang.NullPointerException if word is null
      */
-    public Word(String word) {
+    public Word(final String word, final Languages language) {
         Preconditions.checkNotNull(word);
+        Preconditions.checkNotNull(language);
 
+        this.language = language;
         this.word = word;
+    }
+
+    public Languages getLanguage() {
+        return language;
     }
 
     public String getWord() {
