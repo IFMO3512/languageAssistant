@@ -2,9 +2,9 @@ package com.fivehundredtwelve.langassist.dictionaries;
 
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -14,16 +14,16 @@ import java.util.Map;
  * @author eliseev
  */
 public interface DictionaryManager {
-    public void addWord(@NotNull Word word);
+    public void addWord(@Nonnull Word word);
 
-    @NotNull
+    @Nonnull
     public Collection<Word> getWords();
 
-    public void addTranslation(final @NotNull Word word, final @NotNull Word translation);
+    public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation);
 
     @Nullable
-    public Word getTranslation(final @NotNull Word word, final @NotNull Languages language);
+    public Word getTranslation(final @Nonnull Word word, final @Nonnull Languages language);
 
-    @NotNull
+    @Nonnull
     public Map<Word, java.util.List<Word>> getTranslations();
 }
