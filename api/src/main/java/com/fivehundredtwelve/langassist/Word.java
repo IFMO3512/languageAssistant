@@ -16,7 +16,7 @@ public class Word {
     /**
      * Creates a {@link Word} object with specified email.
      *
-     * @param word     string of user email, can not be null
+     * @param word     
      * @param language language, bounded to this word
      * @throws java.lang.NullPointerException if word is null
      */
