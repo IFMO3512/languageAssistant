@@ -10,9 +10,9 @@ import static org.junit.Assert.*;
 public class DictionaryManagerImplTest {
     private final static Word WORD = new Word("word", Languages.ENGLISH);
 
-    private final static Word TRANSLATION = new Word("wort", Languages.GERMAN);
+    private final static Word TRANSLATION = new Word("das Wort", Languages.GERMAN);
 
-    private DictionaryManagerImpl dictionaryManager;
+    private DictionaryManager dictionaryManager;
 
     @Before
     public void setUp() throws Exception {

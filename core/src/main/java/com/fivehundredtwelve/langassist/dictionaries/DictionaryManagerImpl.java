@@ -3,9 +3,9 @@ package com.fivehundredtwelve.langassist.dictionaries;
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
 import com.google.common.base.Preconditions;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -26,20 +26,20 @@ public class DictionaryManagerImpl implements DictionaryManager {
     }
 
     @Override
-    public void addWord(@NotNull Word word) {
+    public void addWord(@Nonnull Word word) {
         Preconditions.checkNotNull(word, "Dictionary manager does not supports null element additions");
 
         words.add(word);
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public Collection<Word> getWords() {
         return new HashSet<>(words);
     }
 
     @Override
-    public void addTranslation(final @NotNull Word word, final @NotNull Word translation) {
+    public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation) {
         // TODO think about duplex translation
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");
         Preconditions.checkNotNull(translation, "Translation shouldn't be null");
@@ -55,7 +55,10 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
     @Override
     @Nullable
-    public Word getTranslation(final @NotNull Word word, final @NotNull Languages language) {
+    public Word getTranslation(final @Nonnull Word word, final @Nonnull Languages language) {
+        Preconditions.checkNotNull(word, "Translated word shouldn't be null");
+        Preconditions.checkNotNull(language, "Language shouldn't be null");
+
         List<Word> _translations = translations.getOrDefault(word, NO_TRANSLATIONS);
 
         for (Word translation : _translations) {
@@ -68,7 +71,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
     }
 
     @Override
-    @NotNull
+    @Nonnull
     public Map<Word, List<Word>> getTranslations() {
         return new HashMap<>(translations);
     }
