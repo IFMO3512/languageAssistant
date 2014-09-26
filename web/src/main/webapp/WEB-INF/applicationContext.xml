@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean class="com.fivehundredtwelve.langassist.controller.rest.UserController">
+	    <property name="accountManager" ref="accountManager"/>
+	</bean>
+	
+	<bean class="com.fivehundredtwelve.langassist.controller.rest.TranslatorController">
+	    <property name="translatorManager" ref="translatorManager"/>
+	</bean>
+	
+	<bean id="accountManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+	    <property name="serviceUrl" value="http://localhost:8080/accountManager"/>
+	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.interfaces.AccountManager"/>
+	</bean>
+	
+	<bean id="translatorManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+	    <property name="serviceUrl" value="http://localhost:8080/dictionaryManager"/>
+	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.interfaces.DictionaryManager"/>
+	</bean>
+	
+</beans>
