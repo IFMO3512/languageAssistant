@@ -1,5 +1,6 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import com.google.common.base.Preconditions;
 @RequestMapping("/translator")
 public class TranslatorController {
 	
+	@Autowired
 	public DictionaryManager translatorManager;
 	
 	/**
