@@ -16,8 +16,6 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author eliseev
  */
 public class DictionaryManagerImpl implements DictionaryManager {
-    private final static List<Word> NO_TRANSLATIONS = new ArrayList<>();
-
     private final Set<Word> words;
 
     private final Map<Word, List<Word>> translations;
@@ -61,7 +59,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");
         Preconditions.checkNotNull(language, "Language shouldn't be null");
 
-        List<Word> _translations = translations.getOrDefault(word, NO_TRANSLATIONS);
+        List<Word> _translations = translations.getOrDefault(word, new ArrayList<>());
 
         for (Word translation : _translations) {
             if (translation.getLanguage().equals(language)) {

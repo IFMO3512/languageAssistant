@@ -16,8 +16,8 @@ public interface AccountManager {
 
     public boolean checkUser(final @Nonnull User user);
 
-    void addTranslationToUser(final @Nonnull User user, final @Nonnull Word word, final @Nonnull Word translation);
+    void addWordToUser(final @Nonnull User user, final @Nonnull Word word);
 
     @Nonnull
-    List<Word> getTranslations(@Nonnull User user, @Nonnull Word word);
+    List<Word> getWords(final @Nonnull User user);
 }
