@@ -14,8 +14,6 @@ public class AccountManagerImplTest {
 
     private final static Word WORD = new Word("word", Languages.ENGLISH);
 
-    private final static Word TRANSLATION = new Word("das Wort", Languages.GERMAN);
-
     private AccountManager accountManager;
 
     @Before
@@ -32,15 +30,15 @@ public class AccountManagerImplTest {
 
     @Test
     public void testUserTranslations() throws Exception {
-        accountManager.addTranslationToUser(user, WORD, TRANSLATION);
+        accountManager.addWordToUser(user, WORD);
 
         assertEquals("User's dictionary should be empty because user does not exist", 0,
-                accountManager.getTranslations(user, WORD).size());
+                accountManager.getWords(user).size());
 
         accountManager.addUser(user);
-        accountManager.addTranslationToUser(user, WORD, TRANSLATION);
+        accountManager.addWordToUser(user, WORD);
 
         assertTrue("Translation should be visible at user Translations",
-                accountManager.getTranslations(user, WORD).contains(TRANSLATION));
+                accountManager.getWords(user).contains(WORD));
     }
 }

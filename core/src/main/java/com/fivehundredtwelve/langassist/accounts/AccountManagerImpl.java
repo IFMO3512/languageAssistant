@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AccountManagerImpl implements AccountManager {
     private final Map<String, User> users;
 
-    private final Map<User, Map<Word, List<Word>>> translations;
+    private final Map<User, List<Word>> translations;
 
     public AccountManagerImpl() {
         users = new ConcurrentHashMap<>();
@@ -40,32 +40,21 @@ public class AccountManagerImpl implements AccountManager {
 
 
     @Override
-    public void addTranslationToUser(final @Nonnull User user, final @Nonnull Word word,
-                                     final @Nonnull Word translation) {
+    public void addWordToUser(final @Nonnull User user, final @Nonnull Word word) {
         Preconditions.checkNotNull(user);
         Preconditions.checkNotNull(word);
-        Preconditions.checkNotNull(translation);
 
         if (checkUser(user)) {
-            Map<Word, List<Word>> userDictionary = getUserDictionary(user);
-            List<Word> wordTranslations = userDictionary.getOrDefault(word, new ArrayList<>());
+            List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
 
-            wordTranslations.add(translation);
-            userDictionary.put(word, wordTranslations);
-
-            translations.put(user, userDictionary);
+            userWords.add(word);
+            translations.put(user, userWords);
         }
     }
 
     @Override
     @Nonnull
-    public List<Word> getTranslations(final @Nonnull User user, final @Nonnull Word word) {
-        Map<Word, List<Word>> userDictionary = getUserDictionary(user);
-
-        return userDictionary.getOrDefault(word, new ArrayList<>());
-    }
-
-    private Map<Word, List<Word>> getUserDictionary(User user) {
-        return translations.getOrDefault(user, new HashMap<>());
+    public List<Word> getWords(final @Nonnull User user) {
+        return translations.getOrDefault(user, new ArrayList<>());
     }
 }
