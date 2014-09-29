@@ -1,4 +1,4 @@
-package com.fivehundredtwelve.langassist.accounts;
+package com.fivehundredtwelve.langassist.interfaces;
 
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
