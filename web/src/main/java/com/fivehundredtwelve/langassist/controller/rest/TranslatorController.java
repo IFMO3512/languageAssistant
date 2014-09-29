@@ -40,7 +40,10 @@ public class TranslatorController {
 			) {
 		
 		try {
-			translatorManager.addTranslation(new Word(word, Languages.getLanguage(language)), new Word(translationWord, Languages.getLanguage(translationLanguage)));
+			
+			translatorManager.addTranslation(new Word(word, Languages.getLanguage(language)),
+					new Word(translationWord, Languages.getLanguage(translationLanguage)));
+			
 		}catch(IllegalArgumentException e) {
 			// Wrong language name
 			return new AddTranslationResponse(AddTranslationResponse.ERROR, e.getMessage());
@@ -66,16 +69,19 @@ public class TranslatorController {
 		
 		Word translation = null;
 		try {
-			translation = translatorManager.getTranslation(new Word(word, Languages.getLanguage(language)), Languages.getLanguage(translationLanguage));
+			
+			translation = translatorManager.getTranslation(new Word(word, Languages.getLanguage(language)),
+					Languages.getLanguage(translationLanguage));
+			
 		}catch(IllegalArgumentException e) {
 			// Wrong language name
 			return new GetTranslationResponse(GetTranslationResponse.ERROR, e.getMessage());
 		}catch(RuntimeException e) {
 			
-			return new GetTranslationResponse(GetTranslationResponse.ERROR, e.toString());
+			return new GetTranslationResponse(GetTranslationResponse.ERROR);
 		}
 		
-		if (translation == null) new GetTranslationResponse(GetTranslationResponse.NO_TRANSLATION, "error");
+		if (translation == null) new GetTranslationResponse(GetTranslationResponse.NO_TRANSLATION);
 		
 		return new GetTranslationResponse(GetTranslationResponse.SUCCESS, translation);
 		

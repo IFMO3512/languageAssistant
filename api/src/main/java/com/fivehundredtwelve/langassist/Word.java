@@ -11,16 +11,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * This class is immutable.
  * <p>
  * Created by eliseev on 19/09/14.
+ * 
  */
 public class Word implements Serializable{
-    
+	
+	private static final long serialVersionUID = -5075958923027437396L;
 	private final String word;
     private final Languages language;
 
     /**
      * Creates a {@link Word} object with specified email.
      *
-     * @param word     
+     * @param word the word itself 
      * @param language language, bounded to this word
      * @throws java.lang.NullPointerException if word is null
      */

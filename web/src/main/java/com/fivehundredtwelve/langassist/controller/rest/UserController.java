@@ -35,7 +35,7 @@ public class UserController {
 		try {
 			accountManager.addUser(new User(email));
 		} catch(RuntimeException e) {
-			return new AddUserResponse(AddUserResponse.ERROR);
+			return new AddUserResponse(AddUserResponse.ERROR, e.getMessage());
 		}
 		
 		return new AddUserResponse(AddUserResponse.SUCCESS);
@@ -60,7 +60,8 @@ public class UserController {
 	 * @return status of adding word to user
 	 */
 	@RequestMapping("/dictionary/add")
-	public AddInUserDictionaryResponse addInUserDictionary(@RequestParam(value = "word", required = true) String word, @RequestParam(value = "word", required = true) String lanquage) {
+	public AddInUserDictionaryResponse addInUserDictionary(@RequestParam(value = "word", required = true) String word,
+			@RequestParam(value = "language", required = true) String lanquage) {
 		
 		// TODO - request appropriate accountManager method, return body
 		throw new UnsupportedOperationException();

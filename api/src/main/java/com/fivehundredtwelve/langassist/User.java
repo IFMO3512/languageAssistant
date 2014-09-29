@@ -1,5 +1,7 @@
 package com.fivehundredtwelve.langassist;
 
+import java.io.Serializable;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -8,8 +10,10 @@ import com.google.common.base.Preconditions;
  * <p>
  * Created by eliseev on 19/09/14.
  */
-public class User {
-    private final String email;
+public class User implements Serializable{
+    
+	private static final long serialVersionUID = 1373264240454974404L;
+	private final String email;
 
     /**
      * Creates a {@link User} object with specified email.
