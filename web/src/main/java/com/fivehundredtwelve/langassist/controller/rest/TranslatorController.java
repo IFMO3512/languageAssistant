@@ -9,8 +9,7 @@ import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.controller.rest.response.AddTranslationResponse;
 import com.fivehundredtwelve.langassist.controller.rest.response.GetTranslationResponse;
-import com.fivehundredtwelve.langassist.interfaces.DictionaryManager;
-import com.google.common.base.Preconditions;
+import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 
 /**
  * Receives restful requests to manage translations of words.
@@ -18,11 +17,11 @@ import com.google.common.base.Preconditions;
  * @author igor-ryabchikov
  */
 @RestController
-@RequestMapping("/translator")
+@RequestMapping("/rest/translator")
 public class TranslatorController {
 	
 	@Autowired
-	public DictionaryManager translatorManager;
+	private DictionaryManager translatorManager;
 	
 	/**
 	 * Adds translation of word. Also adds word and word-translation in dictionary if they are not exist in it.
@@ -35,16 +34,16 @@ public class TranslatorController {
 	 */
 	@RequestMapping("/add")
 	public AddTranslationResponse addTranslation(@RequestParam(value = "word", required = true) String word,
-			@RequestParam(value = "wordLanquage", required = true) String language,
+			@RequestParam(value = "wordLanguage", required = true) String language,
 			@RequestParam(value = "translationWord", required = true) String translationWord,
-			@RequestParam(value = "translationLanquage", required = true) String translationLanguage
+			@RequestParam(value = "translationLanguage", required = true) String translationLanguage
 			) {
 		
 		try {
-			translatorManager.addTranslation(new Word(word, new Languages(language)), new Word(translationWord, new Languages(translationLanguage)));
+			translatorManager.addTranslation(new Word(word, Languages.getLanguage(language)), new Word(translationWord, Languages.getLanguage(translationLanguage)));
 		}catch(IllegalArgumentException e) {
 			// Wrong language name
-			return new AddTranslationResponse(AddTranslationResponse.ERROR);
+			return new AddTranslationResponse(AddTranslationResponse.ERROR, e.getMessage());
 		}catch(RuntimeException e) {
 			return new AddTranslationResponse(AddTranslationResponse.ERROR);
 		}
@@ -61,26 +60,25 @@ public class TranslatorController {
 	 * @return status of operation and word-translation, if status is 0
 	 */
 	@RequestMapping("/get")
-	public GetTranslationResponse getTranslations(@RequestParam(value = "word", required = true) String word,
-			@RequestParam(value = "wordLanquage", required = true) String language,
-			@RequestParam(value = "translationLanquage", required = true) String translationLanguage) {
+	public GetTranslationResponse getTranslation(@RequestParam(value = "word", required = true) String word,
+			@RequestParam(value = "wordLanguage", required = true) String language,
+			@RequestParam(value = "translationLanguage", required = true) String translationLanguage) {
 		
 		Word translation = null;
 		try {
-			translation = translatorManager.getTranslation(new Word(word, new Languages(language)), new Languages(translationLanguage));
+			translation = translatorManager.getTranslation(new Word(word, Languages.getLanguage(language)), Languages.getLanguage(translationLanguage));
 		}catch(IllegalArgumentException e) {
 			// Wrong language name
-			return new GetTranslationResponse(GetTranslationResponse.ERROR);
+			return new GetTranslationResponse(GetTranslationResponse.ERROR, e.getMessage());
 		}catch(RuntimeException e) {
-			return new GetTranslationResponse(GetTranslationResponse.ERROR);
+			
+			return new GetTranslationResponse(GetTranslationResponse.ERROR, e.toString());
 		}
 		
-		return new GetTranslationResponse(GetTranslationResponse.NO_TRANSLATION);
+		if (translation == null) new GetTranslationResponse(GetTranslationResponse.NO_TRANSLATION, "error");
 		
-		GetTranslationResponse response = new GetTranslationResponse(GetTranslationResponse.SUCCESS);
-		response.setTranslation(translation);
+		return new GetTranslationResponse(GetTranslationResponse.SUCCESS, translation);
 		
-		return response;
 	}
 	
 }

@@ -7,9 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.controller.rest.response.AddTranslationResponse;
 import com.fivehundredtwelve.langassist.controller.rest.response.AddWordResponse;
-import com.fivehundredtwelve.langassist.interfaces.DictionaryManager;
+import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 
 /**
  * Receives restful requests to manage words.
@@ -17,11 +16,11 @@ import com.fivehundredtwelve.langassist.interfaces.DictionaryManager;
  * @author igor-ryabchikov
  */
 @RestController
-@RequestMapping("/word")
+@RequestMapping("/rest/word")
 public class WordController {
 	
 	@Autowired
-	public DictionaryManager translatorManager;
+	private DictionaryManager translatorManager;
 	
 	/**
 	 * Adds word in system dictionary.
@@ -36,10 +35,10 @@ public class WordController {
 			) {
 		
 		try {
-			translatorManager.addWord(new Word(word, new Languages(language)));
+			translatorManager.addWord(new Word(word, Languages.getLanguage(language)));
 		}catch(IllegalArgumentException e) {
 			// Wrong language name
-			return new AddWordResponse(AddWordResponse.ERROR);
+			return new AddWordResponse(AddWordResponse.ERROR, e.getMessage());
 		}catch(RuntimeException e) {
 			return new AddWordResponse(AddWordResponse.ERROR);
 		}

@@ -1,16 +1,21 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-		
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<bean id="accountManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
-	    <property name="serviceUrl" value="http://localhost:8080/accountManager"/>
-	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.interfaces.AccountManager"/>
+	    <property name="serviceUrl" value="${core.hessian.domain.addr}/accountManager"/>
+	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.accounts.AccountManager"/>
 	</bean>
 	
 	<bean id="translatorManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
-	    <property name="serviceUrl" value="http://localhost:8080/dictionaryManager"/>
-	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.interfaces.DictionaryManager"/>
+	    <property name="serviceUrl" value="${core.hessian.domain.addr}/dictionaryManager"/>
+	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
+	</bean>
+	
+	<bean class = "org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name = "location" value = "config/web.properties" />
 	</bean>
 	
 </beans>

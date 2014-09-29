@@ -1,31 +1,30 @@
 package com.fivehundredtwelve.langassist.controller.rest.response;
 
-public class AddTranslationResponse {
+final public class AddTranslationResponse {
 	
 	public static final int SUCCESS = 0;
 	public static final int ERROR = 1;
 	public static final int TRANSLATION_IS_ALREADY_EXISTS = 2;
 	
-	private int status;
-	private String description;
+	private final int status;
+	private final String description;
 	
-	public AddTranslationResponse() {}
+	public AddTranslationResponse(final int status, final String description) {
+		this.status = status;
+		this.description = description;
+	}
 	
-	public AddTranslationResponse(int status) {
-		setStatus(status);
+	public AddTranslationResponse(final int status) {
+		this.status = status;
+		this.description = "";
 	}
 	
 	public int getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
+	
 	public String getDescription() {
 		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
 	}
 	
 }

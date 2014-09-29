@@ -3,8 +3,6 @@ package com.fivehundredtwelve.langassist.accounts;
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.interfaces.AccountManager;
-
 import org.junit.Before;
 import org.junit.Test;
 

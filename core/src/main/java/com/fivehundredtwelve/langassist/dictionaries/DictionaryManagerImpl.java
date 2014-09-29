@@ -2,7 +2,7 @@ package com.fivehundredtwelve.langassist.dictionaries;
 
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.interfaces.DictionaryManager;
+import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nonnull;

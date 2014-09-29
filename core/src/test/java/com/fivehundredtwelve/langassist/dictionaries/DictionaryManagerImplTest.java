@@ -2,8 +2,6 @@ package com.fivehundredtwelve.langassist.dictionaries;
 
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.interfaces.DictionaryManager;
-
 import org.junit.Before;
 import org.junit.Test;
 

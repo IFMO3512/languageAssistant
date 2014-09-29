@@ -1,6 +1,9 @@
 package com.fivehundredtwelve.langassist;
 
+import java.io.Serializable;
+
 import com.google.common.base.Preconditions;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -9,8 +12,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * <p>
  * Created by eliseev on 19/09/14.
  */
-public class Word {
-    private final String word;
+public class Word implements Serializable{
+    
+	private final String word;
     private final Languages language;
 
     /**

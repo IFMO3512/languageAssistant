@@ -2,38 +2,49 @@ package com.fivehundredtwelve.langassist.controller.rest.response;
 
 import com.fivehundredtwelve.langassist.Word;
 
-public class GetFromUserDictionaryResponse {
+final public class GetFromUserDictionaryResponse {
 	
 	public static final int SUCCESS = 0;
 	public static final int ERROR = 1;
 	
-	private int status;
-	private String description;
-	private Word[] words;
+	private final int status;
+	private final String description;
+	private final Word[] words;
 	
-	public GetFromUserDictionaryResponse() {}
+	public GetFromUserDictionaryResponse(final int status, final String description) {
+		this.status = status;
+		this.description = description;
+		this.words = null;
+	}
+	
+	public GetFromUserDictionaryResponse(int status, String description, final Word[] words) {
+		this.status = status;
+		this.description = description;
+		this.words = words;
+	}
+	
+	public GetFromUserDictionaryResponse(int status, final Word[] words) {
+		this.status = status;
+		this.description = "";
+		this.words = words;
+	}
 	
 	public GetFromUserDictionaryResponse(int status) {
-		setStatus(status);
+		this.status = status;
+		this.description = "";
+		this.words = null;
 	}
 
 	public int getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
+	
 	public String getDescription() {
 		return description;
 	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	
 	public Word[] getWords() {
 		return words;
-	}
-	public void setWords(Word[] words) {
-		this.words = words;
 	}
 	
 }

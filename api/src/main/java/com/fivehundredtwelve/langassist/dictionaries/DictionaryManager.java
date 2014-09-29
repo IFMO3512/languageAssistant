@@ -1,4 +1,4 @@
-package com.fivehundredtwelve.langassist.interfaces;
+package com.fivehundredtwelve.langassist.dictionaries;
 
 import com.fivehundredtwelve.langassist.Languages;
 import com.fivehundredtwelve.langassist.Word;
@@ -14,8 +14,7 @@ import java.util.Map;
  * @author eliseev
  */
 public interface DictionaryManager {
-    
-	public void addWord(@Nonnull Word word);
+    public void addWord(@Nonnull Word word);
 
     @Nonnull
     public Collection<Word> getWords();

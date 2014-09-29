@@ -9,7 +9,7 @@ import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.controller.rest.response.AddInUserDictionaryResponse;
 import com.fivehundredtwelve.langassist.controller.rest.response.AddUserResponse;
 import com.fivehundredtwelve.langassist.controller.rest.response.GetFromUserDictionaryResponse;
-import com.fivehundredtwelve.langassist.interfaces.AccountManager;
+import com.fivehundredtwelve.langassist.accounts.AccountManager;
 
 /**
  * Receives restful requests to manage users.
@@ -17,7 +17,7 @@ import com.fivehundredtwelve.langassist.interfaces.AccountManager;
  * @author igor-ryabchikov
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/rest/user")
 public class UserController {
 	
 	@Autowired
@@ -29,7 +29,7 @@ public class UserController {
 	 * @param email email of user
 	 * @return status of operation
 	 */
-	@RequestMapping("/add")
+	@RequestMapping(value = "/add")
 	public AddUserResponse addUser(@RequestParam(value = "email", required = true) String email) {
 		
 		try {
@@ -60,7 +60,7 @@ public class UserController {
 	 * @return status of adding word to user
 	 */
 	@RequestMapping("/dictionary/add")
-	public AddInUserDictionaryResponse addInUserDictionary(@RequestParam(value = "word", required = true) String word, @RequestParam(value = "word", required = true) int lanquage) {
+	public AddInUserDictionaryResponse addInUserDictionary(@RequestParam(value = "word", required = true) String word, @RequestParam(value = "word", required = true) String lanquage) {
 		
 		// TODO - request appropriate accountManager method, return body
 		throw new UnsupportedOperationException();
@@ -83,7 +83,7 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/dictionary/get")
-	public GetFromUserDictionaryResponse getFromUserDictionary(@RequestParam(value = "language", required = true) int languige) {
+	public GetFromUserDictionaryResponse getFromUserDictionary(@RequestParam(value = "language", required = true) String languige) {
 		
 		// TODO - request appropriate accountManager method, return body
 		throw new UnsupportedOperationException();
