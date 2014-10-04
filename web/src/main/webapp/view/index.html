@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="index">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Hello, my lovely world</title>
@@ -16,18 +16,35 @@
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
     <!--<script type="text/javascript">-->
-    <!--var app = angular.module('index')-->
+    <!--var app = angular.module('index', [])-->
+    <!--.controller('RegistrationForm', ['$scope', function($scope) {-->
+    <!---->
+    <!--}])-->
     <!--</script>-->
 
 </head>
-<body ng-app>
+<body>
 <div class="container">
-    <div class="form-group">
-        <label for="inputEmail">Email address</label>
-        <input ng-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="Enter email">
-    </div>
-    <button type="submit" class="btn btn-default">Submit</button>
-    <p>{{user}}</p>
+    <form role="form">
+        <div class="form-group">
+            <label for="inputEmail">Email address</label>
+            <input ng-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        <p>{{user}}</p>
+    </form>
+</div>
+<div class="container">
+    <form role="form">
+        <div class="form-group">
+            <label for="addWord">New word</label>
+            <input ng-model="word.value" type="text" class="form-control" id="addWord" placeholder="Enter word">
+            <input ng-model="word.translation" type="text" class="form-control" id="addTranslation"
+                   placeholder="Enter translation"/>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="addWord()">Add</button>
+    </form>
+    <p>{{word}}</p>
 </div>
 </body>
 </html>

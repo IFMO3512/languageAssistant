@@ -1,15 +1,11 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
+import com.fivehundredtwelve.langassist.User;
+import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fivehundredtwelve.langassist.User;
-import com.fivehundredtwelve.langassist.controller.rest.response.AddInUserDictionaryResponse;
-import com.fivehundredtwelve.langassist.controller.rest.response.AddUserResponse;
-import com.fivehundredtwelve.langassist.controller.rest.response.GetFromUserDictionaryResponse;
-import com.fivehundredtwelve.langassist.accounts.AccountManager;
 
 /**
  * Receives restful requests to manage users.
@@ -30,18 +26,18 @@ public class UserController {
 	 * @return status of operation
 	 */
 	@RequestMapping(value = "/add")
-	public AddUserResponse addUser(@RequestParam(value = "email", required = true) String email) {
-		
-		try {
-			accountManager.addUser(new User(email));
+    public Container addUser(@RequestParam(value = "email", required = true) String email) {
+
+        try {
+            accountManager.addUser(new User(email));
 		} catch(RuntimeException e) {
-			return new AddUserResponse(AddUserResponse.ERROR);
-		}
-		
-		return new AddUserResponse(AddUserResponse.SUCCESS);
-	}
-	
-	// TODO - implement, add appropriate parameters
+            return new Container(ResponseCode.ERROR);
+        }
+
+        return new Container(ResponseCode.OK);
+    }
+
+    // TODO - implement, add appropriate parameters
 	/**
 	 * Updates user account.
 	 */
@@ -60,10 +56,10 @@ public class UserController {
 	 * @return status of adding word to user
 	 */
 	@RequestMapping("/dictionary/add")
-	public AddInUserDictionaryResponse addInUserDictionary(@RequestParam(value = "word", required = true) String word, @RequestParam(value = "word", required = true) String lanquage) {
-		
-		// TODO - request appropriate accountManager method, return body
-		throw new UnsupportedOperationException();
+    public Container addInUserDictionary(@RequestParam(value = "word", required = true) String word, @RequestParam(value = "word", required = true) String lanquage) {
+
+        // TODO - request appropriate accountManager method, return body
+        throw new UnsupportedOperationException();
 	}
 
 	/*
@@ -83,10 +79,10 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping("/dictionary/get")
-	public GetFromUserDictionaryResponse getFromUserDictionary(@RequestParam(value = "language", required = true) String languige) {
-		
-		// TODO - request appropriate accountManager method, return body
-		throw new UnsupportedOperationException();
+    public Container getFromUserDictionary(@RequestParam(value = "language", required = true) String languige) {
+
+        // TODO - request appropriate accountManager method, return body
+        throw new UnsupportedOperationException();
 		
 	}
 }

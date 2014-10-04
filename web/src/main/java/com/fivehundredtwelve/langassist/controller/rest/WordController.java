@@ -1,14 +1,12 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
+import com.fivehundredtwelve.langassist.Languages;
+import com.fivehundredtwelve.langassist.Word;
+import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fivehundredtwelve.langassist.Languages;
-import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.controller.rest.response.AddWordResponse;
-import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 
 /**
  * Receives restful requests to manage words.
@@ -30,20 +28,20 @@ public class WordController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public AddWordResponse addWord(@RequestParam(value = "word", required = true) String word,
-			@RequestParam(value = "language", required = true) String language
-			) {
+    public Container addWord(@RequestParam(value = "word", required = true) String word,
+                             @RequestParam(value = "language", required = true) String language
+    ) {
 		
 		try {
 			translatorManager.addWord(new Word(word, Languages.getLanguage(language)));
 		}catch(IllegalArgumentException e) {
 			// Wrong language name
-			return new AddWordResponse(AddWordResponse.ERROR, e.getMessage());
-		}catch(RuntimeException e) {
-			return new AddWordResponse(AddWordResponse.ERROR);
-		}
-		
-		return new AddWordResponse(AddWordResponse.SUCCESS);
-	}
-	
+            return new Container(ResponseCode.ERROR, e.getMessage());
+        } catch (RuntimeException e) {
+            return new Container(ResponseCode.ERROR);
+        }
+
+        return new Container(ResponseCode.OK);
+    }
+
 }
