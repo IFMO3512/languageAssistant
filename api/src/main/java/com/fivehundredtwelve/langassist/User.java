@@ -2,13 +2,16 @@ package com.fivehundredtwelve.langassist;
 
 import com.google.common.base.Preconditions;
 
+import java.io.Serializable;
+
 /**
  * Class that represents User with.
  * This class is immutable.
  * <p>
  * Created by eliseev on 19/09/14.
  */
-public class User {
+public class User implements Serializable {
+    private static final long serialVersionUID = 1373264240454974404L;
     private final String email;
 
     /**

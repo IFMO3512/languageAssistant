@@ -4,6 +4,7 @@ import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author igor-ryabchikov
  */
 @RestController
-@RequestMapping("/rest/user")
+@RequestMapping("/user")
 public class UserController {
 	
 	@Autowired
@@ -25,7 +26,7 @@ public class UserController {
 	 * @param email email of user
 	 * @return status of operation
 	 */
-	@RequestMapping(value = "/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Container addUser(@RequestParam(value = "email", required = true) String email) {
 
         try {

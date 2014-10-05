@@ -5,6 +5,7 @@ import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,31 +15,24 @@ import org.springframework.web.bind.annotation.RestController;
  * @author igor-ryabchikov
  */
 @RestController
-@RequestMapping("/rest/translator")
-public class TranslatorController {
-	
-	@Autowired
-	private DictionaryManager translatorManager;
-	
-	/**
+@RequestMapping("/dictionary")
+public class DictionaryController {
+
+    @Autowired
+    private DictionaryManager dictionaryManager;
+
+    /**
 	 * Adds translation of word. Also adds word and word-translation in dictionary if they are not exist in it.
-	 * 
-	 * @param word the word itself
-	 * @param language language of the word
-	 * @param translationWord word-translation
-	 * @param translationLanguage language of translation
-	 * @return status of adding translation
+     *
+     * @return status of adding translation
 	 */
-	@RequestMapping("/add")
-    public Container addTranslation(@RequestParam(value = "word", required = true) String word,
-                                    @RequestParam(value = "wordLanguage", required = true) String language,
-                                    @RequestParam(value = "translationWord", required = true) String translationWord,
-			@RequestParam(value = "translationLanguage", required = true) String translationLanguage
-			) {
-		
-		try {
-			translatorManager.addTranslation(new Word(word, Languages.getLanguage(language)), new Word(translationWord, Languages.getLanguage(translationLanguage)));
-		}catch(IllegalArgumentException e) {
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public Container addTranslation(@RequestParam(value = "source", required = true) Word source,
+                                    @RequestParam(value = "translation", required = true) Word translation) {
+
+        try {
+            dictionaryManager.addTranslation(source, translation);
+        }catch(IllegalArgumentException e) {
 			// Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
         } catch (RuntimeException e) {
@@ -63,8 +57,8 @@ public class TranslatorController {
 
         final Word translation;
         try {
-            translation = translatorManager.getTranslation(new Word(word, Languages.getLanguage(language)), Languages.getLanguage(translationLanguage));
-		}catch(IllegalArgumentException e) {
+            translation = dictionaryManager.getTranslation(new Word(word, Languages.getLanguage(language)), Languages.getLanguage(translationLanguage));
+        }catch(IllegalArgumentException e) {
 			// Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
         } catch (RuntimeException e) {

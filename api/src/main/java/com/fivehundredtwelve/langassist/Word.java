@@ -1,10 +1,9 @@
 package com.fivehundredtwelve.langassist;
 
-import java.io.Serializable;
-
 import com.google.common.base.Preconditions;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.io.Serializable;
 
 /**
  * Class that represent the word entity.
@@ -12,15 +11,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * <p>
  * Created by eliseev on 19/09/14.
  */
-public class Word implements Serializable{
-    
-	private final String word;
+public class Word implements Serializable {
+
+    private static final long serialVersionUID = -5075958923027437396L;
+    private final String word;
     private final Languages language;
 
     /**
      * Creates a {@link Word} object with specified email.
      *
-     * @param word     
      * @param language language, bounded to this word
      * @throws java.lang.NullPointerException if word is null
      */
@@ -47,9 +46,8 @@ public class Word implements Serializable{
 
         Word word1 = (Word) o;
 
-        if (!word.equals(word1.word)) return false;
+        return word.equals(word1.word);
 
-        return true;
     }
 
     @Override
