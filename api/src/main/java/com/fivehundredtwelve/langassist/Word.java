@@ -3,6 +3,7 @@ package com.fivehundredtwelve.langassist;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import javax.annotation.Nonnull;
 import java.io.Serializable;
 
 /**
@@ -15,7 +16,7 @@ public class Word implements Serializable {
 
     private static final long serialVersionUID = -5075958923027437396L;
     private final String word;
-    private final Languages language;
+    private final Language language;
 
     /**
      * Creates a {@link Word} object with specified email.
@@ -23,7 +24,7 @@ public class Word implements Serializable {
      * @param language language, bounded to this word
      * @throws java.lang.NullPointerException if word is null
      */
-    public Word(final String word, final Languages language) {
+    public Word(final @Nonnull String word, final @Nonnull Language language) {
         Preconditions.checkNotNull(word);
         Preconditions.checkNotNull(language);
 
@@ -31,7 +32,15 @@ public class Word implements Serializable {
         this.word = word;
     }
 
-    public Languages getLanguage() {
+    public Word(final @Nonnull String word, final @Nonnull String language) {
+        Preconditions.checkNotNull(word);
+        Preconditions.checkNotNull(language);
+
+        this.word = word;
+        this.language = Language.getLanguage(language);
+    }
+
+    public Language getLanguage() {
         return language;
     }
 

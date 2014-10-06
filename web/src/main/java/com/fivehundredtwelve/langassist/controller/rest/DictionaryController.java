@@ -1,6 +1,6 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
-import com.fivehundredtwelve.langassist.Languages;
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
 
 /**
  * Receives restful requests to manage translations of words.
@@ -29,7 +31,7 @@ public class DictionaryController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Container addTranslation(@RequestParam(value = "source", required = true) Word source,
                                     @RequestParam(value = "translation", required = true) Word translation) {
-
+        // TODO add jackson serializers
         try {
             dictionaryManager.addTranslation(source, translation);
         }catch(IllegalArgumentException e) {
@@ -57,7 +59,7 @@ public class DictionaryController {
 
         final Word translation;
         try {
-            translation = dictionaryManager.getTranslation(new Word(word, Languages.getLanguage(language)), Languages.getLanguage(translationLanguage));
+            translation = dictionaryManager.getTranslation(new Word(word, Language.getLanguage(language)), Language.getLanguage(translationLanguage));
         }catch(IllegalArgumentException e) {
 			// Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
@@ -71,6 +73,19 @@ public class DictionaryController {
 
         return new DataContainer<>(ResponseCode.OK, translation);
 
+    }
+
+
+    @RequestMapping("/getall")
+    public Container getWords() {
+        final Collection<Word> words;
+        try {
+            words = dictionaryManager.getWords();
+        } catch (Exception ex) {
+            return new Container(ResponseCode.ERROR, ex.getMessage());
+        }
+
+        return new DataContainer<>(ResponseCode.OK, words);
     }
 
 }

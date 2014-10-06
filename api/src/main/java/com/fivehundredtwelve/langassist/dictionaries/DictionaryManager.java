@@ -1,6 +1,6 @@
 package com.fivehundredtwelve.langassist.dictionaries;
 
-import com.fivehundredtwelve.langassist.Languages;
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
 
 import javax.annotation.Nonnull;
@@ -22,7 +22,7 @@ public interface DictionaryManager {
     public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation);
 
     @Nullable
-    public Word getTranslation(final @Nonnull Word word, final @Nonnull Languages language);
+    public Word getTranslation(final @Nonnull Word word, final @Nonnull Language language);
 
     @Nonnull
     public Map<Word, java.util.List<Word>> getTranslations();

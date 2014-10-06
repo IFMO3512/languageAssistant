@@ -1,13 +1,11 @@
 package com.fivehundredtwelve.langassist.dictionaries;
 
-import com.fivehundredtwelve.langassist.Languages;
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -55,7 +53,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
     @Override
     @Nullable
-    public Word getTranslation(final @Nonnull Word word, final @Nonnull Languages language) {
+    public Word getTranslation(final @Nonnull Word word, final @Nonnull Language language) {
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");
         Preconditions.checkNotNull(language, "Language shouldn't be null");
 
