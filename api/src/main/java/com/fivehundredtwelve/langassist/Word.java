@@ -1,5 +1,7 @@
 package com.fivehundredtwelve.langassist;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -32,7 +34,9 @@ public class Word implements Serializable {
         this.word = word;
     }
 
-    public Word(final @Nonnull String word, final @Nonnull String language) {
+    @JsonCreator
+    public Word(final @JsonProperty("word") @Nonnull String word,
+                final @JsonProperty("language") @Nonnull String language) {
         Preconditions.checkNotNull(word);
         Preconditions.checkNotNull(language);
 

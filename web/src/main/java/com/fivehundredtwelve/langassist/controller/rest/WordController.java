@@ -1,6 +1,5 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
-import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ public class WordController {
      *
      * @param word     the word itself
      * @param language language of the word
-     * @return
      */
     @RequestMapping("/add")
     public Container addWord(@RequestParam(value = "word", required = true) String word,
@@ -33,7 +31,7 @@ public class WordController {
     ) {
 
         try {
-            translatorManager.addWord(new Word(word, Language.getLanguage(language)));
+            translatorManager.addWord(new Word(word, language));
         } catch (IllegalArgumentException e) {
             // Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());

@@ -4,10 +4,7 @@ import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -29,11 +26,9 @@ public class DictionaryController {
      * @return status of adding translation
 	 */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Container addTranslation(@RequestParam(value = "source", required = true) Word source,
-                                    @RequestParam(value = "translation", required = true) Word translation) {
-        // TODO add jackson serializers
+    public Container addTranslation(@RequestBody Translation translation) {
         try {
-            dictionaryManager.addTranslation(source, translation);
+            dictionaryManager.addTranslation(translation.getSource(), translation.getTranslation());
         }catch(IllegalArgumentException e) {
 			// Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
@@ -55,11 +50,12 @@ public class DictionaryController {
 	@RequestMapping("/get")
     public Container getTranslation(@RequestParam(value = "word", required = true) String word,
                                     @RequestParam(value = "wordLanguage", required = true) String language,
-                                    @RequestParam(value = "translationLanguage", required = true) String translationLanguage) {
-
+                                    @RequestParam(value = "translationLanguage", required = true) String
+                                            translationLanguage) {
         final Word translation;
         try {
-            translation = dictionaryManager.getTranslation(new Word(word, Language.getLanguage(language)), Language.getLanguage(translationLanguage));
+            translation = dictionaryManager.getTranslation(new Word(word, language),
+                    Language.getLanguage(translationLanguage));
         }catch(IllegalArgumentException e) {
 			// Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
