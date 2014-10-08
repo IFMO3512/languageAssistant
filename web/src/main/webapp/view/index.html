@@ -55,33 +55,38 @@
                 return s == null || s == "";
             };
 
-            $scope.addTranslation = function (source, translation) {
-                $http({method: 'POST', url: 'dictionary/add', params: {source: $scope.source,
-                    translation: $scope.translation}}).
-                        success(function (data, status, headers, config) {
-                            if (data.code == "OK") $scope.registrationResult = "You have been registered";
-                            else $scope.registrationResult = "There was an error during registration";
-                        }).
-                        error(function (data, status, headers, config) {
-                            $scope.registrationResult = "Can not connect to the server";
-                        });
-            };
-
             $scope.words = [
                 {'word': 'word', 'languageName': 'English'},
                 {'word': 'das Wort', 'languageName': 'Deutsch'},
                 {'word': 'слово', 'languageName': 'Русский'}
             ];
 
-//            $http({method: 'POST', url: 'dictionary/add', params: {source: $scope.source,
-//                translation: $scope.translation}}).
-//                    success(function (data, status, headers, config) {
-//                        if (data.code == "OK") $scope.registrationResult = "You have been registered";
-//                        else $scope.registrationResult = "There was an error during registration";
-//                    }).
-//                    error(function (data, status, headers, config) {
-//                        $scope.registrationResult = "Can not connect to the server";
-//                    });
+            $scope.addTranslation = function (source, translation) {
+                $http({method: 'POST', url: 'dictionary/add', data: {source: $scope.source,
+                    translation: $scope.translation}}).
+                        success(function (data, status, headers, config) {
+                            if (data.code == "OK") {
+                                $scope.registrationResult = "You have been registered";
+                            }
+                            else $scope.registrationResult = "There was an error during registration";
+                            $scope.refreshWords();
+                        }).
+                        error(function (data, status, headers, config) {
+                            $scope.registrationResult = "Can not connect to the server";
+                        });
+            };
+
+            $scope.refreshWords = function () {
+                $http({method: 'GET', url: 'dictionary/getall'}).
+                        success(function (data, status, headers, config) {
+                            if (data.code == "OK") $scope.words = data.data;
+                        }).
+                        error(function (data, status, headers, config) {
+
+                        });
+            };
+
+            $scope.refreshWords();
         }])
     </script>
 

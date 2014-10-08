@@ -37,4 +37,11 @@ public enum Language {
         return null;
     }
 
+    public String getLanguageEnglishName() {
+        return languageEnglishName;
+    }
+
+    public String getLanguageName() {
+        return languageName;
+    }
 }

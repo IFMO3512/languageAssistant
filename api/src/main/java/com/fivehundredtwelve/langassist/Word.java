@@ -52,6 +52,10 @@ public class Word implements Serializable {
         return word;
     }
 
+    public String getLanguageName() {
+        return language.getLanguageName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
