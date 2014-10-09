@@ -84,4 +84,14 @@ public class DictionaryController {
         return new DataContainer<>(ResponseCode.OK, words);
     }
 
+    @RequestMapping("/remove")
+    public Container removeWord(@RequestBody Word word) {
+        try {
+            dictionaryManager.removeWord(word);
+        } catch (Exception ex) {
+            return new Container(ResponseCode.ERROR, ex.getMessage());
+        }
+        return new Container(ResponseCode.OK);
+    }
+
 }

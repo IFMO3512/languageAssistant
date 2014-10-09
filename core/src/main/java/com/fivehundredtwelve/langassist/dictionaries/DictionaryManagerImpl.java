@@ -74,5 +74,10 @@ public class DictionaryManagerImpl implements DictionaryManager {
         return new HashMap<>(translations);
     }
 
+    @Override
+    public void removeWord(final @Nonnull Word word) {
+        words.remove(word);
+        translations.remove(word);
+    }
 
 }

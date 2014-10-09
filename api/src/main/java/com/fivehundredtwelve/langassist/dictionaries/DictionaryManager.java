@@ -26,4 +26,6 @@ public interface DictionaryManager {
 
     @Nonnull
     public Map<Word, java.util.List<Word>> getTranslations();
+
+    public void removeWord(final @Nonnull Word word);
 }

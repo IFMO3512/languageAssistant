@@ -87,6 +87,20 @@
             };
 
             $scope.refreshWords();
+
+            $scope.delete = function (word) {
+                $http({method: 'POST', url: 'dictionary/remove', data: cutWord(word)})
+                        .success(function () {
+                            $scope.refreshWords();
+                        });
+            };
+
+            cutWord = function (word) {
+                return {
+                    word: word.word,
+                    language: word.language
+                }
+            }
         }])
     </script>
 
@@ -130,7 +144,18 @@
     </form>
     <p>{{value}}</p>
 
-    <div ui-grid="{ data: words}" class="grid"></div>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Word</th>
+            <th>Language</th>
+            <th>Delete</th>
+        </tr>
+        <tr ng-repeat="word in words">
+            <td>{{word.word}}</td>
+            <td>{{word.languageName}}</td>
+            <td ng-click="delete(word)"><a>[X]</a></td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>
