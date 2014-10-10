@@ -1,6 +1,5 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:context="http://www.springframework.org/schema/context"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
 		xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 	
@@ -11,7 +10,8 @@
 	
 	<bean id="translatorManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
 	    <property name="serviceUrl" value="${core.hessian.domain.addr}/dictionaryManager"/>
-	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
+        <property name="overloadEnabled" value="true"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
 	</bean>
 	
 	<bean class = "org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

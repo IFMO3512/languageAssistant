@@ -71,6 +71,15 @@ public class DictionaryController {
 
     }
 
+    @RequestMapping("/translations/get")
+    public Container getTranslations(@RequestBody Word word) {
+        try {
+            return new DataContainer<>(ResponseCode.OK, dictionaryManager.getTranslations(word));
+        } catch (Exception ex) {
+            return new Container(ResponseCode.ERROR, ex.getMessage());
+        }
+    }
+
 
     @RequestMapping("/getall")
     public Container getWords() {

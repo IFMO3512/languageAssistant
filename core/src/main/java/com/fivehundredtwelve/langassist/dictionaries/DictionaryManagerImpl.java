@@ -75,6 +75,14 @@ public class DictionaryManagerImpl implements DictionaryManager {
     }
 
     @Override
+    @Nonnull
+    public List<Word> getTranslations(final @Nonnull Word word) {
+        Preconditions.checkNotNull(word);
+
+        return new ArrayList<>(translations.get(word));
+    }
+
+    @Override
     public void removeWord(final @Nonnull Word word) {
         words.remove(word);
         translations.remove(word);

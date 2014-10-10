@@ -1,0 +1,9 @@
+.myGrid {
+    width: 100%;
+    height: 150px;
+}
+
+.words {
+    height: 250px;
+    overflow: scroll;
+}
