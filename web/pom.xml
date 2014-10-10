@@ -12,8 +12,8 @@
 
     <artifactId>web</artifactId>
 
-	<dependencies>
-	
+    <dependencies>
+
         <dependency>
             <groupId>ifmo.3512</groupId>
             <artifactId>api</artifactId>
@@ -44,8 +44,8 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring-version}</version>
         </dependency>
-		
-		<dependency>
+
+        <dependency>
             <groupId>com.caucho</groupId>
             <artifactId>hessian</artifactId>
             <version>4.0.7</version>
@@ -84,7 +84,7 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
 
 </project>

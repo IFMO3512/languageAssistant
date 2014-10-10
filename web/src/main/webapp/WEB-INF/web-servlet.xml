@@ -10,8 +10,12 @@
   		http://www.springframework.org/schema/context/spring-context.xsd">
 
     <mvc:annotation-driven/>
+    <mvc:default-servlet-handler/>
 
     <mvc:resources mapping="/**" location="/view/"/>
+
+    <mvc:view-controller path="/" view-name="/index.html"/>
+
 
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">

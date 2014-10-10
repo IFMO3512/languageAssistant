@@ -2,11 +2,9 @@ package com.fivehundredtwelve.langassist.accounts;
 
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import com.google.common.base.Preconditions;
 
 import javax.annotation.Nonnull;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

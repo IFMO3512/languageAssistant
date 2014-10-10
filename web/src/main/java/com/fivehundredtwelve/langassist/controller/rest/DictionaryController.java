@@ -10,7 +10,7 @@ import java.util.Collection;
 
 /**
  * Receives restful requests to manage translations of words.
- * 
+ *
  * @author igor-ryabchikov
  */
 @RestController
@@ -21,16 +21,16 @@ public class DictionaryController {
     private DictionaryManager dictionaryManager;
 
     /**
-	 * Adds translation of word. Also adds word and word-translation in dictionary if they are not exist in it.
+     * Adds translation of word. Also adds word and word-translation in dictionary if they are not exist in it.
      *
      * @return status of adding translation
-	 */
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Container addTranslation(@RequestBody Translation translation) {
         try {
             dictionaryManager.addTranslation(translation.getSource(), translation.getTranslation());
-        }catch(IllegalArgumentException e) {
-			// Wrong language name
+        } catch (IllegalArgumentException e) {
+            // Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
         } catch (RuntimeException e) {
             return new Container(ResponseCode.ERROR);
@@ -40,14 +40,14 @@ public class DictionaryController {
     }
 
     /**
-	 * Returns translation of the word.
-	 * 
-	 * @param word the word itself
-	 * @param language language of the word
-	 * @param translationLanguage language of expected translation
-	 * @return status of operation and word-translation, if status is 0
-	 */
-	@RequestMapping("/get")
+     * Returns translation of the word.
+     *
+     * @param word                the word itself
+     * @param language            language of the word
+     * @param translationLanguage language of expected translation
+     * @return status of operation and word-translation, if status is 0
+     */
+    @RequestMapping("/get")
     public Container getTranslation(@RequestParam(value = "word", required = true) String word,
                                     @RequestParam(value = "wordLanguage", required = true) String language,
                                     @RequestParam(value = "translationLanguage", required = true) String
@@ -56,8 +56,8 @@ public class DictionaryController {
         try {
             translation = dictionaryManager.getTranslation(new Word(word, language),
                     Language.getLanguage(translationLanguage));
-        }catch(IllegalArgumentException e) {
-			// Wrong language name
+        } catch (IllegalArgumentException e) {
+            // Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
         } catch (RuntimeException e) {
 

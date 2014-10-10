@@ -45,7 +45,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         words.add(word);
         words.add(translation);
 
-        List<Word> newTranslations = translations.getOrDefault(word, new ArrayList<>());
+        List<Word> newTranslations = getTranslationList(word);
         newTranslations.add(translation);
 
         translations.put(word, newTranslations);
@@ -57,7 +57,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");
         Preconditions.checkNotNull(language, "Language shouldn't be null");
 
-        List<Word> _translations = translations.getOrDefault(word, new ArrayList<>());
+        List<Word> _translations = getTranslationList(word);
 
         for (Word translation : _translations) {
             if (translation.getLanguage().equals(language)) {
@@ -79,13 +79,26 @@ public class DictionaryManagerImpl implements DictionaryManager {
     public List<Word> getTranslations(final @Nonnull Word word) {
         Preconditions.checkNotNull(word);
 
-        return new ArrayList<>(translations.get(word));
+        return new ArrayList<>(getTranslationList(word));
     }
 
     @Override
     public void removeWord(final @Nonnull Word word) {
+        Preconditions.checkNotNull(word);
+
+        for (Word currentWord : words) {
+            List<Word> _translations = getTranslationList(currentWord);
+            if (_translations.remove(word)) {
+                translations.put(currentWord, _translations);
+            }
+        }
+
         words.remove(word);
         translations.remove(word);
+    }
+
+    private List<Word> getTranslationList(final Word currentWord) {
+        return translations.getOrDefault(currentWord, new ArrayList<>());
     }
 
 }

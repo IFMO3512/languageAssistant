@@ -49,12 +49,21 @@ public class DictionaryManagerImplTest {
         assertNull("Translation should be added to dictionaryManager and getTransaction() shouldn't contain " +
                 "translation's translation ", dictionaryManager.getTranslation(TRANSLATION, Language.ENGLISH));
 
+        dictionaryManager.removeWord(TRANSLATION);
+
+        assertEquals("List of translation for word should be empty after deleting the translation", 0,
+                dictionaryManager.getTranslations(WORD).size());
+        assertEquals("List of translation for word should be empty after deleting the translation", 1,
+                dictionaryManager.getWords().size());
+        assertFalse("After the remove of word, words list should contain only translation",
+                dictionaryManager.getWords().contains(TRANSLATION));
+
         dictionaryManager.removeWord(WORD);
         assertEquals("After the remove of word, translation list should be empty",
                 0, dictionaryManager.getTranslations().size());
-        assertEquals("After the remove of word, words list should contain only translation",
-                1, dictionaryManager.getWords().size());
-        assertFalse("After the remove of word, words list should contain only translation",
+        assertEquals("After the remove of word and translation, words list should be empty",
+                0, dictionaryManager.getWords().size());
+        assertFalse("After the remove of word, words list should be empty",
                 dictionaryManager.getWords().contains(WORD));
     }
 }
