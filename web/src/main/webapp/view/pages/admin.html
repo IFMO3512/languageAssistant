@@ -1,0 +1,50 @@
+<div class="container" ng-controller="words">
+    <form role="form">
+        <div class="form-group">
+            <label for="addWord">New word</label>
+
+            <div class="form-inline">
+                <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
+                <select class="form-control" ng-model="source.language" name="sourceLanguages">
+                    <option ng-repeat="languageName in languages" value="{{languageName}}">{{languageName}}</option>
+                </select>
+            </div>
+            <br/>
+
+            <div class="form-inline">
+                <input ng-model="translation.word" type="text" class="form-control" id="addTranslation"
+                       placeholder="Enter translation"/>
+                <select ng-init class="form-control" ng-model="translation.language" name="translationLanguage">
+                    <option ng-repeat="languageName in languages" value="{{languageName}}">{{languageName}}</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="addTranslation(source, translation)"
+                ng-disabled="isNotValid()">Add
+        </button>
+    </form>
+    <p>{{value}}</p>
+
+    <div class="words">
+        <table class="table table-striped table-bordered">
+            <thead class="table-fixed-header">
+            <tr>
+                <th>Word</th>
+                <th>Language</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="word in words" ng-click="getTranslations(word)">
+                <td>{{word.word}}</td>
+                <td>{{word.languageName}}</td>
+                <td><a ng-click="delete(word)">[X]</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Translations</h3>
+
+    <div ui-grid="{ data: translations }" class="myGrid"></div>
+</div>

@@ -38,7 +38,6 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
     @Override
     public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation) {
-        // TODO think about duplex translation
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");
         Preconditions.checkNotNull(translation, "Translation shouldn't be null");
 

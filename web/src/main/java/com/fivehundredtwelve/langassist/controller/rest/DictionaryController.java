@@ -29,6 +29,9 @@ public class DictionaryController {
     public Container addTranslation(@RequestBody Translation translation) {
         try {
             dictionaryManager.addTranslation(translation.getSource(), translation.getTranslation());
+
+            // TODO think about this decision
+            dictionaryManager.addTranslation(translation.getTranslation(), translation.getSource());
         } catch (IllegalArgumentException e) {
             // Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());
@@ -55,7 +58,7 @@ public class DictionaryController {
         final Word translation;
         try {
             translation = dictionaryManager.getTranslation(new Word(word, language),
-                    Language.getLanguage(translationLanguage));
+                    Language.getLanguage(translationLanguage)); // TODO error is better then npe
         } catch (IllegalArgumentException e) {
             // Wrong language name
             return new Container(ResponseCode.ERROR, e.getMessage());

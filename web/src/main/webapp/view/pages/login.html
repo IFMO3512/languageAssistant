@@ -1,0 +1,12 @@
+<div class="container" ng-controller="registrationForm">
+    <h3>Registration form</h3>
+
+    <form role="form">
+        <div class="form-group">
+            <label for="inputEmail">Email address</label>
+            <input ng-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+        </div>
+        <button ng-click="registerUser(user)" class="btn btn-default" ng-disabled="isNotValid()">Submit</button>
+        <div>{{registrationResult}}</div>
+    </form>
+</div>

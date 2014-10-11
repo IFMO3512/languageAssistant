@@ -1,181 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="main">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Hello, my lovely world</title>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/bootstrap-3.2.0-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/bootstrap-3.2.0-dist/css/bootstrap-theme.min.css">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="libs/jquery/jquery-1.11.1.js"></script>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
+    <script type="text/javascript" src="libs/bootstrap-3.2.0-dist/js/bootstrap.js"></script>
 
-    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <!-- Angular -->
+    <script type="text/javascript" src="libs/angular-1.2.26/angular.min.js"></script>
+    <script type="text/javascript" src="libs/angular-1.2.26/angular-route.min.js"></script>
+    <script type="text/javascript" src="libs/ui-grid/ui-grid.js"></script>
 
-    <link rel="styleSheet" href="ui-grid/ui-grid.css"/>
-    <script src="ui-grid/ui-grid.js"></script>
+    <link rel="styleSheet" href="libs/ui-grid/ui-grid.css"/>
 
+    <script type="text/javascript" src="scripts/main.js"></script>
     <link rel="stylesheet" href="styles/words.css"/>
 
-    <script type="text/javascript">
-        var app = angular.module('main', ['ui.grid'])
-                .controller('RegistrationForm', ['$scope', '$http', function ($scope, $http) {
-                    $scope.isNotValid = function () {
-                        return $scope.user == null || isBlank($scope.user.email);
-                    };
-
-                    var isBlank = function (s) {
-                        return s == null || s == ""
-                    };
-
-                    $scope.registerUser = function (user) {
-                        $http({method: 'POST', url: 'user/add', params: {email: $scope.user.email}}).
-                                success(function (data, status, headers, config) {
-                                    if (data.code == "OK") $scope.registrationResult = "You have been registered";
-                                    else $scope.registrationResult = "There was an error during registration";
-                                }).
-                                error(function (data, status, headers, config) {
-                                    $scope.registrationResult = "Can not connect to the server";
-                                });
-                    };
-                }]);
-        app.controller('Words', ['$scope', '$http', function ($scope, $http) {
-            $scope.languages = ['English', 'Russian', 'Spanish', 'Italian'];
-            // TODO download languages from web but not to delete this languages it will be smoother
-
-            $scope.isNotValid = function () {
-                return $scope.source == null || isBlank($scope.source.word) || isBlank($scope.source.language) ||
-                        $scope.translation == null || isBlank($scope.translation.word) ||
-                        isBlank($scope.translation.language);
-            };
-
-            var isBlank = function (s) {
-                return s == null || s == "";
-            };
-
-            $scope.words = [
-                {'word': 'word', 'languageName': 'English'},
-                {'word': 'das Wort', 'languageName': 'Deutsch'},
-                {'word': 'слово', 'languageName': 'Русский'}
-            ];
-
-            $scope.addTranslation = function (source, translation) {
-                $http({method: 'POST', url: 'dictionary/add', data: {source: $scope.source,
-                    translation: $scope.translation}}).
-                        success(function (data, status, headers, config) {
-                            if (data.code == "OK") {
-                                $scope.registrationResult = "You have been registered";
-                            }
-                            else $scope.registrationResult = "There was an error during registration";
-                            $scope.refreshWords();
-                        }).
-                        error(function (data, status, headers, config) {
-                            $scope.registrationResult = "Can not connect to the server";
-                        });
-            };
-
-            $scope.refreshWords = function () {
-                $http({method: 'GET', url: 'dictionary/getall'}).
-                        success(function (data, status, headers, config) {
-                            if (data.code == "OK") $scope.words = data.data;
-                        }).
-                        error(function (data, status, headers, config) {
-
-                        });
-            };
-
-            $scope.refreshWords();
-
-            $scope.delete = function (word) {
-                $http({method: 'POST', url: 'dictionary/remove', data: cutWord(word)})
-                        .success(function () {
-                            $scope.refreshWords();
-                        });
-            };
-
-            cutWord = function (word) {
-                return {
-                    word: word.word,
-                    language: word.language
-                }
-            };
-
-            $scope.translations = [
-                {word: 'love', languageName: 'English'}
-            ];
-
-            $scope.getTranslations = function (word) {
-                $http({method: 'POST', url: 'dictionary/translations/get', data: cutWord(word)})
-                        .success(function (data) {
-                            $scope.translations = data.data;
-                        });
-            };
-        }]);
-    </script>
-
 </head>
-<body ng-app="main">
-<div class="container" ng-controller="RegistrationForm">
-    <form role="form">
-        <div class="form-group">
-            <label for="inputEmail">Email address</label>
-            <input ng-model="user.email" type="email" class="form-control" id="inputEmail" placeholder="Enter email">
+<body>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Language assistant</a>
+            </div>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="#admin"><i class="fa fa-shield"></i> AdministrationPanel</a></li>
+            </ul>
         </div>
-        <button ng-click="registerUser(user)" class="btn btn-default" ng-disabled="isNotValid()">Submit</button>
-        <div>{{registrationResult}}</div>
-    </form>
+    </nav>
+</header>
+
+<div id="main">
+
+    <div ng-view></div>
+
 </div>
 
-<div class="container" ng-controller="Words">
-    <form role="form">
-        <div class="form-group">
-            <label for="addWord">New word</label>
-
-            <div class="form-inline">
-                <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
-                <select class="form-control" ng-model="source.language" name="sourceLanguages">
-                    <option ng-repeat="languageName in languages" value="{{languageName}}">{{languageName}}</option>
-                </select>
-            </div>
-            <br/>
-
-            <div class="form-inline">
-                <input ng-model="translation.word" type="text" class="form-control" id="addTranslation"
-                       placeholder="Enter translation"/>
-                <select ng-init class="form-control" ng-model="translation.language" name="translationLanguage">
-                    <option ng-repeat="languageName in languages" value="{{languageName}}">{{languageName}}</option>
-                </select>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-default" ng-click="addTranslation(source, translation)"
-                ng-disabled="isNotValid()">Add
-        </button>
-    </form>
-    <p>{{value}}</p>
-
-    <div class="words">
-        <table class="table table-striped table-bordered">
-            <thead class="table-fixed-header">
-            <tr>
-                <th>Word</th>
-                <th>Language</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="word in words" ng-click="getTranslations(word)">
-                <td>{{word.word}}</td>
-                <td>{{word.languageName}}</td>
-                <td><a ng-click="delete(word)">[X]</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div ui-grid="{ data: translations }" class="myGrid"></div>
-</div>
 </body>
 </html>
