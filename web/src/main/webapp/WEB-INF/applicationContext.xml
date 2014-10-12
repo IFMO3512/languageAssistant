@@ -3,8 +3,13 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="config/web.properties"/>
+    </bean>
+
     <bean id="accountManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
         <property name="serviceUrl" value="${core.hessian.domain.addr}/accountManager"/>
+        <property name="overloadEnabled" value="true"/>
         <property name="serviceInterface" value="com.fivehundredtwelve.langassist.accounts.AccountManager"/>
     </bean>
 
@@ -12,10 +17,6 @@
         <property name="serviceUrl" value="${core.hessian.domain.addr}/dictionaryManager"/>
         <property name="overloadEnabled" value="true"/>
         <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
-    </bean>
-
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="config/web.properties"/>
     </bean>
 
 </beans>

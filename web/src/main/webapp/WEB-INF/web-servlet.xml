@@ -10,25 +10,12 @@
   		http://www.springframework.org/schema/context/spring-context.xsd">
 
     <mvc:annotation-driven/>
-    <mvc:default-servlet-handler/>
+
+    <context:component-scan base-package="com.fivehundredtwelve.langassist.controller"/>
 
     <mvc:resources mapping="/**" location="/view/"/>
 
-    <!--suppress SpringModelInspection -->
+    <!-- index.html on start -->
     <mvc:view-controller path="/" view-name="/index.html"/>
-
-
-    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <ref bean="jsonMessageConverter"/>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="jsonMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-    </bean>
-
-    <context:component-scan base-package="com.fivehundredtwelve.langassist.controller"/>
 
 </beans>

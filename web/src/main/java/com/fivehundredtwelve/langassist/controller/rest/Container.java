@@ -14,14 +14,14 @@ public class Container {
     private String description;
 
     protected Container(final @Nonnull ResponseCode code) {
-        Preconditions.checkNotNull(code);
+        Preconditions.checkNotNull("Response code can't be null", code);
 
         this.code = code;
 
     }
 
     public Container(final @Nonnull ResponseCode code, final @Nullable String description) {
-        Preconditions.checkNotNull(code);
+        Preconditions.checkNotNull("Response code can't be null", code);
 
         this.code = code;
         this.description = description;
