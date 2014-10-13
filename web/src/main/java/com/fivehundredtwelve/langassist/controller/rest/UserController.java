@@ -1,12 +1,10 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
 import com.fivehundredtwelve.langassist.User;
+import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Receives restful requests to manage users.
@@ -38,6 +36,18 @@ public class UserController {
         return new Container(ResponseCode.OK);
     }
 
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
+    public Container checkUser(@RequestParam(value = "email", required = true) String email) {
+
+        try {
+            accountManager.addUser(new User(email));
+        } catch (RuntimeException e) {
+            return new Container(ResponseCode.ERROR);
+        }
+
+        return new Container(ResponseCode.OK);
+    }
+
     // TODO - implement, add appropriate parameters
 
     /**
@@ -54,14 +64,20 @@ public class UserController {
      * Adds word to user.
      *
      * @param word     the word itself
-     * @param lanquage language of the word
      * @return status of adding word to user
      */
     @RequestMapping("/dictionary/add")
-    public Container addInUserDictionary(@RequestParam(value = "word", required = true) String word, @RequestParam(value = "word", required = true) String lanquage) {
+    public Container addInUserDictionary(@RequestBody Word word, @CookieValue("user") String user) {
+        if(word == null || user == null) {
+            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
+        }
 
-        // TODO - request appropriate accountManager method, return body
-        throw new UnsupportedOperationException();
+        try {
+            accountManager.addWordToUser(new User(user), word);
+            return new Container(ResponseCode.OK);
+        } catch (Exception ex) {
+            return new Container(ResponseCode.ERROR, ex.getMessage());
+        }
     }
 
 	/*
@@ -81,7 +97,7 @@ public class UserController {
      * @return
      */
     @RequestMapping("/dictionary/get")
-    public Container getFromUserDictionary(@RequestParam(value = "language", required = true) String languige) {
+    public Container getFromUserDictionary(@RequestParam(value = "language", required = true) String language) {
 
         // TODO - request appropriate accountManager method, return body
         throw new UnsupportedOperationException();
