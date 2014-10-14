@@ -1,4 +1,4 @@
-var app = angular.module('main', ['ui.grid', 'ngRoute']);
+var app = angular.module('main', ['ui.grid', 'ngRoute', 'ngCookies']);
 
 app.config(function($routeProvider) {
     $routeProvider
@@ -14,20 +14,36 @@ app.config(function($routeProvider) {
         });
 });
 
-app.controller('registrationForm', ['$scope', '$http', function ($scope, $http) {
-    $scope.isNotValid = function () {
-        return $scope.user == null || isBlank($scope.user.email);
+app.controller('registrationForm', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
+    $scope.isNotValid = function (user) {
+        return user == null || isBlank(user.email);
     };
 
     var isBlank = function (s) {
         return s == null || s == ""
     };
 
-    $scope.registerUser = function (user) {
-        $http({method: 'POST', url: 'user/add', params: {email: $scope.user.email}}).
+    $scope.register = function (user) {
+        $http({method: 'POST', url: 'user/add', params: {email: user.email}}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.registrationResult = "You have been registered";
                 else $scope.registrationResult = "There was an error during registration";
+            }).
+            error(function (data, status, headers, config) {
+                $scope.registrationResult = "Can not connect to the server";
+            });
+    };
+
+    $scope.login = function (user) {
+        $http({method: 'POST', url: 'user/check', params: {email: user.email}}).
+            success(function (data, status, headers, config) {
+                if (data.code == "OK") {
+                    $cookies.email = user.email;
+                    $scope.loginResult = "All right";
+                } else if(data.code == "NOT_OK") {
+                    $scope.loginResult = "Invalid email";
+                }
+                else $scope.loginResult = "There was an error during registration";
             }).
             error(function (data, status, headers, config) {
                 $scope.registrationResult = "Can not connect to the server";

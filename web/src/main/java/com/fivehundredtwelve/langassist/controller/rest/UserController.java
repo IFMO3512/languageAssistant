@@ -26,6 +26,8 @@ public class UserController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Container addUser(@RequestParam(value = "email", required = true) String email) {
+        if(email == null)
+            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
 
         try {
             accountManager.addUser(new User(email));
@@ -38,14 +40,17 @@ public class UserController {
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public Container checkUser(@RequestParam(value = "email", required = true) String email) {
+        if(email == null)
+            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
 
         try {
-            accountManager.addUser(new User(email));
+            if(accountManager.checkUser(new User(email)))
+                return new Container(ResponseCode.OK);
+            else
+                return new Container(ResponseCode.NOT_OK);
         } catch (RuntimeException e) {
             return new Container(ResponseCode.ERROR);
         }
-
-        return new Container(ResponseCode.OK);
     }
 
     // TODO - implement, add appropriate parameters
@@ -93,8 +98,7 @@ public class UserController {
     /**
      * Returns all users words of specified language.
      *
-     * @param languige language of expected words
-     * @return
+     * @param language language of expected words
      */
     @RequestMapping("/dictionary/get")
     public Container getFromUserDictionary(@RequestParam(value = "language", required = true) String language) {

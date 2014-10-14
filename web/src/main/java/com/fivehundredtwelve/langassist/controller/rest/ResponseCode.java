@@ -4,7 +4,7 @@ package com.fivehundredtwelve.langassist.controller.rest;
  * @author eliseev
  */
 public enum ResponseCode {
-    OK(0), ERROR(1), NO_TRANSLATION(2), ILLEGAL_ARGUMENTS(3);
+    OK(0), ERROR(1), NOT_OK(2), ILLEGAL_ARGUMENTS(3);
 
     private final int code;
 

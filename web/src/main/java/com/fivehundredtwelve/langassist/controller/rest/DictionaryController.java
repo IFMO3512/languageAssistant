@@ -68,7 +68,7 @@ public class DictionaryController {
         }
 
         if (translation == null)
-            return new Container(ResponseCode.NO_TRANSLATION, "error");
+            return new Container(ResponseCode.NOT_OK, "error");
 
         return new DataContainer<>(ResponseCode.OK, translation);
 
