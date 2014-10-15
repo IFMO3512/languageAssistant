@@ -6,6 +6,8 @@ import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 /**
  * Receives restful requests to manage users.
  *
@@ -72,7 +74,7 @@ public class UserController {
      * @return status of adding word to user
      */
     @RequestMapping("/dictionary/add")
-    public Container addInUserDictionary(@RequestBody Word word, @CookieValue("user") String user) {
+    public Container addInUserDictionary(@RequestBody Word word, @CookieValue("email") String user) {
         if(word == null || user == null) {
             return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
         }
@@ -106,5 +108,21 @@ public class UserController {
         // TODO - request appropriate accountManager method, return body
         throw new UnsupportedOperationException();
 
+    }
+
+
+    @RequestMapping("/dictionary/getall")
+    public Container getUserDictionary(@CookieValue("email") String email) {
+        if (email == null)
+            return new Container(ResponseCode.NOT_OK);
+
+        User user = new User(email);
+
+        try {
+            Collection<Word> words = accountManager.getWords(user);
+            return new DataContainer<>(ResponseCode.OK, words);
+        } catch (Exception ex) {
+            return new Container(ResponseCode.ERROR, ex.getMessage());
+        }
     }
 }

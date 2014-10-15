@@ -57,25 +57,30 @@ public class Word implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (!(o instanceof Word)) return false;
 
-        Word word1 = (Word) o;
+        final Word word1 = (Word) o;
 
-        return word.equals(word1.word);
+        if (language != word1.language) return false;
+        if (!word.equals(word1.word)) return false;
 
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return word.hashCode();
+        int result = word.hashCode();
+        result = 31 * result + language.hashCode();
+        return result;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("word", word)
+                .append("language", language)
                 .toString();
     }
 }

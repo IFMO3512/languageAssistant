@@ -38,7 +38,7 @@
             <tr ng-repeat="word in words" ng-click="getTranslations(word)">
                 <td>{{word.word}}</td>
                 <td>{{word.languageName}}</td>
-                <td><a ng-click="delete(word)">[X]</a></td>
+                <td><a ng-click="deleteWord(word)">[X]</a></td>
             </tr>
             </tbody>
         </table>

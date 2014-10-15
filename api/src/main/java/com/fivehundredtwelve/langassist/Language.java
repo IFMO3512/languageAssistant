@@ -1,5 +1,8 @@
 package com.fivehundredtwelve.langassist;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -43,5 +46,14 @@ public enum Language {
 
     public String getLanguageName() {
         return languageName;
+    }
+
+    @Nonnull
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("languageEnglishName", languageEnglishName)
+                .append("languageName", languageName)
+                .toString();
     }
 }
