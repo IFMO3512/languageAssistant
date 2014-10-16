@@ -3,6 +3,8 @@ package com.fivehundredtwelve.langassist.controller.rest;
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/dictionary")
 public class DictionaryController {
+    private final static Logger LOGGER = LoggerFactory.getLogger(DictionaryController.class);
 
     @Autowired
     private DictionaryManager dictionaryManager;
@@ -27,19 +30,22 @@ public class DictionaryController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Container addTranslation(@RequestBody Translation translation) {
+        LOGGER.debug("Adding translation={}", translation);
+
         try {
             dictionaryManager.addTranslation(translation.getSource(), translation.getTranslation());
 
             // TODO think about this decision
             dictionaryManager.addTranslation(translation.getTranslation(), translation.getSource());
-        } catch (IllegalArgumentException e) {
-            // Wrong language name
-            return new Container(ResponseCode.ERROR, e.getMessage());
-        } catch (RuntimeException e) {
-            return new Container(ResponseCode.ERROR);
-        }
 
-        return new Container(ResponseCode.OK);
+            LOGGER.debug("Translation in both way is added");
+
+            return new Container(ResponseCode.OK);
+
+        } catch (RuntimeException e) {
+            LOGGER.debug("Exception occurred", e);
+            return new Container(ResponseCode.ERROR, e.getMessage());
+        }
     }
 
     /**
@@ -55,20 +61,24 @@ public class DictionaryController {
                                     @RequestParam(value = "wordLanguage", required = true) String language,
                                     @RequestParam(value = "translationLanguage", required = true) String
                                             translationLanguage) {
+        LOGGER.debug("Getting translation for word={} in language={} to language={}",
+                word, language, translationLanguage);
+
         final Word translation;
         try {
             translation = dictionaryManager.getTranslation(new Word(word, language),
                     Language.getLanguage(translationLanguage)); // TODO error is better then npe
-        } catch (IllegalArgumentException e) {
-            // Wrong language name
-            return new Container(ResponseCode.ERROR, e.getMessage());
-        } catch (RuntimeException e) {
 
-            return new Container(ResponseCode.ERROR, e.toString());
+        } catch (IllegalArgumentException e) {
+            LOGGER.debug("Exception occurred", e);
+            return new Container(ResponseCode.ERROR, e.getMessage());
         }
 
         if (translation == null)
             return new Container(ResponseCode.NOT_OK, "error");
+
+        LOGGER.debug("Returning not null translation={} from word={} in language={}",
+                translation, word, language);
 
         return new DataContainer<>(ResponseCode.OK, translation);
 
@@ -76,9 +86,15 @@ public class DictionaryController {
 
     @RequestMapping("/translations/get")
     public Container getTranslations(@RequestBody Word word) {
+        LOGGER.debug("Getting translation for word={}", word);
+
         try {
-            return new DataContainer<>(ResponseCode.OK, dictionaryManager.getTranslations(word));
+            Collection<Word> words = dictionaryManager.getTranslations(word);
+            LOGGER.debug("Word={} is translated as {}", word, words);
+
+            return new DataContainer<>(ResponseCode.OK, words);
         } catch (Exception ex) {
+            LOGGER.debug("Exception occurred", ex);
             return new Container(ResponseCode.ERROR, ex.getMessage());
         }
     }
@@ -86,24 +102,34 @@ public class DictionaryController {
 
     @RequestMapping("/getall")
     public Container getWords() {
-        final Collection<Word> words;
+        LOGGER.debug("Getting all words");
+
         try {
-            words = dictionaryManager.getWords();
+            Collection<Word> words = dictionaryManager.getWords();
+            LOGGER.debug("System words are {}", words);
+
+            return new DataContainer<>(ResponseCode.OK, words);
+
         } catch (Exception ex) {
+            LOGGER.debug("Exception occurred", ex);
             return new Container(ResponseCode.ERROR, ex.getMessage());
         }
-
-        return new DataContainer<>(ResponseCode.OK, words);
     }
 
     @RequestMapping("/remove")
     public Container removeWord(@RequestBody Word word) {
+        LOGGER.debug("Removing word={}", word);
+
         try {
             dictionaryManager.removeWord(word);
+
+            LOGGER.debug("Word have been removed");
+            return new Container(ResponseCode.OK);
+
         } catch (Exception ex) {
+            LOGGER.debug("Exception occurred", ex);
             return new Container(ResponseCode.ERROR, ex.getMessage());
         }
-        return new Container(ResponseCode.OK);
     }
 
 }

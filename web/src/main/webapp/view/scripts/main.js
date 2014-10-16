@@ -39,6 +39,8 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
             success(function (data, status, headers, config) {
                 if (data.code == "OK") {
                     $cookies.email = user.email;
+                    $cookies.name = user.email.split("@")[0];
+                    $cookies.domain = user.email.split("@")[1];
                     $scope.loginResult = "All right";
                 } else if (data.code == "NOT_OK") {
                     $scope.loginResult = "Invalid email";

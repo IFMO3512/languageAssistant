@@ -2,6 +2,8 @@ package com.fivehundredtwelve.langassist.controller.rest;
 
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rest/word")
 public class WordController {
+    private final Logger LOGGER = LoggerFactory.getLogger(WordController.class);
 
     @Autowired
     private DictionaryManager translatorManager;
@@ -27,19 +30,18 @@ public class WordController {
      */
     @RequestMapping("/add")
     public Container addWord(@RequestParam(value = "word", required = true) String word,
-                             @RequestParam(value = "language", required = true) String language
-    ) {
+                             @RequestParam(value = "language", required = true) String language) {
+        LOGGER.debug("Adding {} word={} to the system", language, word);
 
         try {
             translatorManager.addWord(new Word(word, language));
-        } catch (IllegalArgumentException e) {
-            // Wrong language name
-            return new Container(ResponseCode.ERROR, e.getMessage());
-        } catch (RuntimeException e) {
-            return new Container(ResponseCode.ERROR);
-        }
+            LOGGER.debug("Word has been added");
 
-        return new Container(ResponseCode.OK);
+            return new Container(ResponseCode.OK);
+        } catch (RuntimeException e) {
+            LOGGER.debug("Exception occurred", e);
+            return new Container(ResponseCode.ERROR, e.getMessage());
+        }
     }
 
 }
