@@ -11,6 +11,11 @@ app.config(function ($routeProvider) {
         .when('/admin', {
             templateUrl: 'pages/admin.html',
             controller: 'words'
+        })
+
+        .when('/word/:word', {
+            templateUrl: 'pages/word.html',
+            controller: 'word'
         });
 });
 
@@ -170,4 +175,15 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
                 $scope.translations = data.data;
             });
     };
+}]);
+
+app.controller('word', ['$scope', '$http', '$route', '$routeParams', function ($scope, $http, $route, $routeParams) {
+    $scope.word = $routeParams.word;
+
+    $scope.translation = '';
+
+    $scope.showTranslation = function () {
+        $scope.translation = 'Translation'
+    };
+
 }]);

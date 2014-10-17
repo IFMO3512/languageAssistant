@@ -28,7 +28,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="word in userWords">
-            <td>{{word.word}}</td>
+            <td><a href="#word/{{word.word}}">{{word.word}}</a></td>
             <td>{{word.languageName}}</td>
         </tr>
         </tbody>
