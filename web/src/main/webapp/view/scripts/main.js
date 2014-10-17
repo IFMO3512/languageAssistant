@@ -1,4 +1,4 @@
-var app = angular.module('main', ['ui.grid', 'ngRoute', 'ngCookies']);
+var app = angular.module('main', ['ui.grid', 'ngRoute', 'ngCookies', 'cfp.hotkeys']);
 
 app.config(function ($routeProvider) {
     $routeProvider
@@ -177,13 +177,25 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
     };
 }]);
 
-app.controller('word', ['$scope', '$http', '$route', '$routeParams', function ($scope, $http, $route, $routeParams) {
+app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys',
+    function ($scope, $http, $route, $routeParams, hotkeys) {
     $scope.word = $routeParams.word;
 
     $scope.translation = '';
 
     $scope.showTranslation = function () {
-        $scope.translation = 'Translation'
+        if ($scope.translation == '')
+            $scope.translation = 'Translation';
+        else
+            $scope.translation = '';
     };
+
+        hotkeys.bindTo($scope).add({
+            combo: 's',
+            description: 'Push down to see Translation',
+            callback: function () {
+                $scope.showTranslation();
+            }
+        });
 
 }]);
