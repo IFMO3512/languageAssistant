@@ -181,9 +181,10 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
     };
 }]);
 
-app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys',
-    function ($scope, $http, $route, $routeParams, hotkeys) {
-        $scope.word = $routeParams.word;
+app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', '$location',
+    function ($scope, $http, $route, $routeParams, hotkeys, $location) {
+        $scope.word = {};
+        $scope.word.word = $routeParams.word;
 
         $scope.translation = '';
 
@@ -218,12 +219,15 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys',
         });
 
         $scope.next = function () {
+            if ($scope.getNextId() == $scope.translations.length)
+                $location.path('/');
 
-            $scope.word = $scope.translations[$scope.getNextId()].word;
+            $scope.word = $scope.translations[$scope.getNextId()];
+            $routeParams.word = $scope.word.word;
             $scope.translation = '';
         };
 
         $scope.getNextId = function () {
-            return $scope.translations.indexOf($scope.word) + 1;
-        }
+            return $scope.translations.indexOf($scope.word) + 1; // When entry is not found returns -1
+        };
     }]);
