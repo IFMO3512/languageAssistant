@@ -125,8 +125,12 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
     ];
 
     $scope.addTranslation = function (source, translation) {
-        $http({method: 'POST', url: 'dictionary/add', data: {source: source,
-            translation: translation}}).
+        $http({
+            method: 'POST', url: 'dictionary/add', data: {
+                source: source,
+                translation: translation
+            }
+        }).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") {
                     $scope.registrationResult = "You have been registered";
@@ -179,16 +183,23 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
 
 app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys',
     function ($scope, $http, $route, $routeParams, hotkeys) {
-    $scope.word = $routeParams.word;
+        $scope.word = $routeParams.word;
 
-    $scope.translation = '';
+        $scope.translation = '';
 
-    $scope.showTranslation = function () {
-        if ($scope.translation == '')
-            $scope.translation = 'Translation';
-        else
-            $scope.translation = '';
-    };
+        $scope.translations = [
+            {word: 'Magic', languageName: 'English'},
+            {word: 'Love', languageName: 'English'},
+            {word: 'Moments', languageName: 'English'},
+            {word: 'Ololo', languageName: 'English'},
+        ];
+
+        $scope.showTranslation = function () {
+            if ($scope.translation == '')
+                $scope.translation = 'Translation';
+            else
+                $scope.translation = '';
+        };
 
         hotkeys.bindTo($scope).add({
             combo: 's',
@@ -198,4 +209,21 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys',
             }
         });
 
-}]);
+        hotkeys.bindTo($scope).add({
+            combo: 'd',
+            description: 'Next word',
+            callback: function () {
+                $scope.next();
+            }
+        });
+
+        $scope.next = function () {
+
+            $scope.word = $scope.translations[$scope.getNextId()].word;
+            $scope.translation = '';
+        };
+
+        $scope.getNextId = function () {
+            return $scope.translations.indexOf($scope.word) + 1;
+        }
+    }]);
