@@ -1,22 +1,22 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.springframework.org/schema/beans
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
-	
-	<import resource="spring-security.xml"/>
-	
-	<bean id="accountManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
-	    <property name="serviceUrl" value="${core.hessian.domain.addr}/accountManager"/>
-	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.accounts.AccountManager"/>
-	</bean>
-	
-	<bean id="translatorManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
-	    <property name="serviceUrl" value="${core.hessian.domain.addr}/dictionaryManager"/>
-	    <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
-	</bean>
-	
-	<bean class = "org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name = "location" value = "config/web.properties" />
-	</bean>
-	
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="config/web.properties"/>
+    </bean>
+
+    <bean id="accountManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+        <property name="serviceUrl" value="${core.hessian.domain.addr}/accountManager"/>
+        <property name="overloadEnabled" value="true"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.accounts.AccountManager"/>
+    </bean>
+
+    <bean id="translatorManager" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+        <property name="serviceUrl" value="${core.hessian.domain.addr}/dictionaryManager"/>
+        <property name="overloadEnabled" value="true"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
+    </bean>
+
 </beans>

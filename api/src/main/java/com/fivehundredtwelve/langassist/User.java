@@ -1,8 +1,10 @@
 package com.fivehundredtwelve.langassist;
 
-import java.io.Serializable;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
+
+import java.io.Serializable;
 
 /**
  * Class that represents User with.
@@ -10,10 +12,9 @@ import com.google.common.base.Preconditions;
  * <p>
  * Created by eliseev on 19/09/14.
  */
-public class User implements Serializable{
-    
-	private static final long serialVersionUID = 1373264240454974404L;
-	private final String email;
+public class User implements Serializable {
+    private static final long serialVersionUID = 1373264240454974404L;
+    private final String email;
 
     /**
      * Creates a {@link User} object with specified email.
@@ -21,7 +22,8 @@ public class User implements Serializable{
      * @param email string of user email, can not be null
      * @throws java.lang.NullPointerException if email is null
      */
-    public User(String email) {
+    @JsonCreator
+    public User(@JsonProperty("email") String email) {
         Preconditions.checkNotNull(email);
 
         this.email = email;

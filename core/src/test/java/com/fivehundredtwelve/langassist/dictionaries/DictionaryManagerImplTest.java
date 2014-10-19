@@ -1,6 +1,6 @@
 package com.fivehundredtwelve.langassist.dictionaries;
 
-import com.fivehundredtwelve.langassist.Languages;
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,9 +8,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DictionaryManagerImplTest {
-    private final static Word WORD = new Word("word", Languages.ENGLISH);
+    private final static Word WORD = new Word("word", Language.ENGLISH);
 
-    private final static Word TRANSLATION = new Word("das Wort", Languages.GERMAN);
+    private final static Word TRANSLATION = new Word("das Wort", Language.GERMAN);
 
     private DictionaryManager dictionaryManager;
 
@@ -43,10 +43,27 @@ public class DictionaryManagerImplTest {
                 "translation's translation ", dictionaryManager.getTranslations().get(TRANSLATION));
 
         assertEquals("Translation should be added to dictionaryManager and getTransaction() should contain it",
-                TRANSLATION, dictionaryManager.getTranslation(WORD, Languages.GERMAN));
+                TRANSLATION, dictionaryManager.getTranslation(WORD, Language.GERMAN));
         assertNull("Translation should be added to dictionaryManager and getTransaction() shouldn't contain " +
-                "translation to other language ", dictionaryManager.getTranslation(WORD, Languages.FRENCH));
+                "translation to other language ", dictionaryManager.getTranslation(WORD, Language.FRENCH));
         assertNull("Translation should be added to dictionaryManager and getTransaction() shouldn't contain " +
-                "translation's translation ", dictionaryManager.getTranslation(TRANSLATION, Languages.ENGLISH));
+                "translation's translation ", dictionaryManager.getTranslation(TRANSLATION, Language.ENGLISH));
+
+        dictionaryManager.removeWord(TRANSLATION);
+
+        assertEquals("List of translation for word should be empty after deleting the translation", 0,
+                dictionaryManager.getTranslations(WORD).size());
+        assertEquals("List of translation for word should be empty after deleting the translation", 1,
+                dictionaryManager.getWords().size());
+        assertFalse("After the remove of word, words list should contain only translation",
+                dictionaryManager.getWords().contains(TRANSLATION));
+
+        dictionaryManager.removeWord(WORD);
+        assertEquals("After the remove of word, translation list should be empty",
+                0, dictionaryManager.getTranslations().size());
+        assertEquals("After the remove of word and translation, words list should be empty",
+                0, dictionaryManager.getWords().size());
+        assertFalse("After the remove of word, words list should be empty",
+                dictionaryManager.getWords().contains(WORD));
     }
 }

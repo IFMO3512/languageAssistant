@@ -1,6 +1,6 @@
 package com.fivehundredtwelve.langassist.accounts;
 
-import com.fivehundredtwelve.langassist.Languages;
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
 import org.junit.Before;
@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class AccountManagerImplTest {
     private final static User user = new User("user@gmail.com");
 
-    private final static Word WORD = new Word("word", Languages.ENGLISH);
+    private final static Word WORD = new Word("word", Language.ENGLISH);
 
     private AccountManager accountManager;
 
