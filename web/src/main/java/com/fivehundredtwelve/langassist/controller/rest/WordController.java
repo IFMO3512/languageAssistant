@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/rest/word")
-public class WordController {
+public class WordController extends AbstractController {
     private final Logger LOGGER = LoggerFactory.getLogger(WordController.class);
 
     @Autowired
@@ -35,13 +35,15 @@ public class WordController {
 
         try {
             translatorManager.addWord(new Word(word, language));
-            LOGGER.debug("Word has been added");
 
-            return new Container(ResponseCode.OK);
+            return createSuccessContainer("Word has been added");
         } catch (RuntimeException e) {
-            LOGGER.debug("Exception occurred", e);
-            return new Container(ResponseCode.ERROR, e.getMessage());
+            return createErrorContainer(e);
         }
     }
 
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
 }

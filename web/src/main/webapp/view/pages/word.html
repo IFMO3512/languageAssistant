@@ -8,15 +8,28 @@
 
         <h2>{{translation}}</h2>
 
-        <p style="margin-top: 130px;margin-bottom: 50px;">
-            <button type="button" class="btn btn-lg btn-danger">Delete</button>
-            <button type="button" class="btn btn-lg btn-info" style="margin-left: 280px;"
-                    ng-click="showTranslation()">
-                Show translation (S)
-            </button>
-            <button type="button" class="btn btn-lg btn-success" style="margin-left: 270px;"
-                    ng-click="next()">Ok, Next!
-            </button>
-        </p>
+        <div class="row text-center" style="margin-top: 130px;margin-bottom: 50px;">
+            <div class="col-md-4 close-distance">
+                <button type="button" class="btn btn-lg btn-danger">Delete</button>
+            </div>
+            <div class="col-md-4 close-distance">
+                <button type="button" class="btn btn-lg btn-info" ng-click="showTranslation()">
+                    Show translation (S)
+                </button>
+            </div>
+            <div class="col-md-4 close-distance">
+                <button type="button" class="btn btn-lg btn-success"
+                        ng-click="next()">Ok, Next! (D)
+                </button>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <p>Your language is {{userLanguage}}, you can change it to
+            <span ng-repeat="language in languages">
+                <a ng-click="changeLanguage(language)">{{language}}</a>
+            </span>
+            </p>
+        </div>
     </div>
 </div>

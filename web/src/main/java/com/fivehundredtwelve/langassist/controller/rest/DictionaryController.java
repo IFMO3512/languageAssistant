@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-
 /**
  * Receives restful requests to manage translations of words.
  *
@@ -17,7 +15,7 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/dictionary")
-public class DictionaryController {
+public class DictionaryController extends AbstractController {
     private final static Logger LOGGER = LoggerFactory.getLogger(DictionaryController.class);
 
     @Autowired
@@ -35,16 +33,13 @@ public class DictionaryController {
         try {
             dictionaryManager.addTranslation(translation.getSource(), translation.getTranslation());
 
-            // TODO think about this decision
+            // TODO think about duplex translation
             dictionaryManager.addTranslation(translation.getTranslation(), translation.getSource());
 
-            LOGGER.debug("Translation in both way is added");
-
-            return new Container(ResponseCode.OK);
+            return createSuccessContainer("Translation in both way is added");
 
         } catch (RuntimeException e) {
-            LOGGER.debug("Exception occurred", e);
-            return new Container(ResponseCode.ERROR, e.getMessage());
+            return createErrorContainer(e);
         }
     }
 
@@ -66,16 +61,19 @@ public class DictionaryController {
 
         final Word translation;
         try {
-            translation = dictionaryManager.getTranslation(new Word(word, language),
-                    Language.getLanguage(translationLanguage)); // TODO error is better then npe
+            Language foundLanguage = Language.getLanguage(translationLanguage);
+            if (foundLanguage == null) {
+                return new Container(ResponseCode.NOT_OK, "Language is not found");
+            }
+
+            translation = dictionaryManager.getTranslation(new Word(word, language), foundLanguage);
 
         } catch (IllegalArgumentException e) {
-            LOGGER.debug("Exception occurred", e);
-            return new Container(ResponseCode.ERROR, e.getMessage());
+            return createErrorContainer(e);
         }
 
         if (translation == null)
-            return new Container(ResponseCode.NOT_OK, "error");
+            return new Container(ResponseCode.NOT_OK, "Translation is not found");
 
         LOGGER.debug("Returning not null translation={} from word={} in language={}",
                 translation, word, language);
@@ -89,13 +87,9 @@ public class DictionaryController {
         LOGGER.debug("Getting translation for word={}", word);
 
         try {
-            Collection<Word> words = dictionaryManager.getTranslations(word);
-            LOGGER.debug("Word={} is translated as {}", word, words);
-
-            return new DataContainer<>(ResponseCode.OK, words);
+            return createSuccessContainer("The translations are found: {}", dictionaryManager.getTranslations(word));
         } catch (Exception ex) {
-            LOGGER.debug("Exception occurred", ex);
-            return new Container(ResponseCode.ERROR, ex.getMessage());
+            return createErrorContainer(ex);
         }
     }
 
@@ -105,14 +99,9 @@ public class DictionaryController {
         LOGGER.debug("Getting all words");
 
         try {
-            Collection<Word> words = dictionaryManager.getWords();
-            LOGGER.debug("System words are {}", words);
-
-            return new DataContainer<>(ResponseCode.OK, words);
-
+            return createSuccessContainer("System words are {}", dictionaryManager.getWords());
         } catch (Exception ex) {
-            LOGGER.debug("Exception occurred", ex);
-            return new Container(ResponseCode.ERROR, ex.getMessage());
+            return createErrorContainer(ex);
         }
     }
 
@@ -123,13 +112,15 @@ public class DictionaryController {
         try {
             dictionaryManager.removeWord(word);
 
-            LOGGER.debug("Word have been removed");
-            return new Container(ResponseCode.OK);
+            return createSuccessContainer("Word have been removed");
 
         } catch (Exception ex) {
-            LOGGER.debug("Exception occurred", ex);
-            return new Container(ResponseCode.ERROR, ex.getMessage());
+            return createErrorContainer(ex);
         }
     }
 
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
+    }
 }

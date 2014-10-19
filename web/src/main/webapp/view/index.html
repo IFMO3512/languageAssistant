@@ -39,10 +39,26 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
                 <li><a href="#admin"><i class="fa fa-shield"></i> AdministrationPanel</a></li>
-                <li><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Login</a>
+                <li><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Log In</a>
 
                     <div class="dropdown-menu spaces" ng-controller="user-forms">
+
                         <form role="form" class="form form-group wide">
+                            <label for="registerEmail" class="close-distance">Register</label>
+                            <input ng-model="register.user.email" type="email" class="form-control close-distance"
+                                   id="registerEmail" placeholder="Enter email">
+                            <button ng-click="register(register.user)" class="btn btn-default close-distance"
+                                    ng-disabled="isNotValid(register.user)">
+                                Submit
+                            </button>
+                            <div>{{registrationResult}}</div>
+                        </form>
+
+                        <form class="norm-distance">
+                            <a href="#" id="btnNewUser" data-toggle="collapse" data-target="#formLogin">Log in.</a>
+                        </form>
+
+                        <form role="form" id="formLogin" class="form form-group collapse">
                             <label for="loginEmail" class="close-distance">Login</label>
                             <input ng-model="login.user.email" type="email" class="form-control close-distance"
                                    id="loginEmail" placeholder="Enter email">
@@ -53,20 +69,6 @@
                             <div>{{loginResult}}</div>
                         </form>
 
-                        <form class="norm-distance">
-                            <a href="#" id="btnNewUser" data-toggle="collapse" data-target="#formRegister">Sign Up.</a>
-                        </form>
-
-                        <form role="form" id="formRegister" class="form form-group collapse">
-                            <label for="registerEmail" class="close-distance">Register</label>
-                            <input ng-model="register.user.email" type="email" class="form-control close-distance"
-                                   id="registerEmail" placeholder="Enter email">
-                            <button ng-click="register(register.user)" class="btn btn-default close-distance"
-                                    ng-disabled="isNotValid(register.user)">
-                                Submit
-                            </button>
-                            <div>{{registrationResult}}</div>
-                        </form>
                     </div>
                 </li>
             </ul>

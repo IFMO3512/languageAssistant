@@ -13,7 +13,7 @@ app.config(function ($routeProvider) {
             controller: 'words'
         })
 
-        .when('/word/:word', {
+        .when('/word/:word/:language', {
             templateUrl: 'pages/word.html',
             controller: 'word'
         });
@@ -31,7 +31,12 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
     $scope.register = function (user) {
         $http({method: 'POST', url: 'user/add', params: {email: user.email}}).
             success(function (data, status, headers, config) {
-                if (data.code == "OK") $scope.registrationResult = "You have been registered";
+                if (data.code == "OK") {
+                    $scope.registrationResult = "You have been logged in and registered";
+                    $cookies.email = user.email;
+                    $cookies.name = user.email.split("@")[0];
+                    $cookies.domain = user.email.split("@")[1];
+                }
                 else $scope.registrationResult = "There was an error during registration";
             }).
             error(function (data, status, headers, config) {
@@ -130,16 +135,11 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
                 source: source,
                 translation: translation
             }
-        }).
-            success(function (data, status, headers, config) {
+        })
+            .success(function (data, status, headers, config) {
                 if (data.code == "OK") {
-                    $scope.registrationResult = "You have been registered";
+                    $scope.refreshWords();
                 }
-                else $scope.registrationResult = "There was an error during registration";
-                $scope.refreshWords();
-            }).
-            error(function (data, status, headers, config) {
-                $scope.registrationResult = "Can not connect to the server";
             });
     };
 
@@ -185,19 +185,25 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
     function ($scope, $http, $route, $routeParams, hotkeys, $location) {
         $scope.word = {};
         $scope.word.word = $routeParams.word;
+        $scope.word.languageName = $routeParams.language;
 
+        $scope.userLanguage = 'Russian';        // TODO get from user session
         $scope.translation = '';
+        $scope.hiddenTranslation = 'Translation';
 
-        $scope.translations = [
+        $scope.translations = [                 // TODO there is a problem with language
+            {word: 'Patience', languageName: 'English'},
             {word: 'Magic', languageName: 'English'},
             {word: 'Love', languageName: 'English'},
             {word: 'Moments', languageName: 'English'},
-            {word: 'Ololo', languageName: 'English'},
+            {word: 'Ololo', languageName: 'English'}
         ];
+
+        $scope.languages = ['English', 'Russian', 'Spanish', 'Italian'];
 
         $scope.showTranslation = function () {
             if ($scope.translation == '')
-                $scope.translation = 'Translation';
+                $scope.translation = $scope.hiddenTranslation;
             else
                 $scope.translation = '';
         };
@@ -218,16 +224,51 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             }
         });
 
+        $scope.refreshWords = function () {
+            $http({method: 'GET', url: 'user/dictionary/getall'}).
+                success(function (data, status, headers, config) {
+                    if (data.code == "OK") $scope.translations = data.data;
+                });
+        };
+
         $scope.next = function () {
             if ($scope.getNextId() == $scope.translations.length)
                 $location.path('/');
 
             $scope.word = $scope.translations[$scope.getNextId()];
             $routeParams.word = $scope.word.word;
-            $scope.translation = '';
+            $scope.hideTranslation = 'translation';
+
+            $scope.refreshTranslation();
         };
 
-        $scope.getNextId = function () {
-            return $scope.translations.indexOf($scope.word) + 1; // When entry is not found returns -1
+        $scope.getNextId = function () {    // TODO can not find the entry ignoring additional parameter
+            return $scope.translations.indexOf($scope.word) + 1; // When entry is not found returns 0
         };
+
+        $scope.refreshTranslation = function () {
+            $scope.hideTranslation = '';
+            $http({
+                method: 'GET', url: 'dictionary/get', params: {
+                    'word': $scope.word.word,
+                    'wordLanguage': $scope.word.languageName,
+                    'translationLanguage': $scope.userLanguage
+                }
+            }).
+                success(function (data, status, headers, config) {
+                    if (data.code == "OK") {
+                        $scope.hiddenTranslation = data.data.word;
+                        if ($scope.translation != '') $scope.translation = $scope.hiddenTranslation;
+                    }
+                });
+        };
+
+        $scope.changeLanguage = function (language) {
+            $scope.userLanguage = language;
+
+            $scope.refreshTranslation();
+        };
+
+        $scope.refreshWords();
+        $scope.refreshTranslation();
     }]);

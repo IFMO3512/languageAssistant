@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends AbstractController {
     private final static Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
@@ -40,8 +40,7 @@ public class UserController {
             LOGGER.debug("Adding user with email={}", email);
             accountManager.addUser(new User(email));
         } catch (RuntimeException e) {
-            LOGGER.warn("An error occurred", e);
-            return new Container(ResponseCode.ERROR);
+            return createErrorContainer(e);
         }
 
         LOGGER.debug("User with email={} successfully registered", email);
@@ -65,7 +64,7 @@ public class UserController {
                 return new Container(ResponseCode.NOT_OK);
             }
         } catch (RuntimeException e) {
-            return new Container(ResponseCode.ERROR);
+            return createErrorContainer(e);
         }
     }
 
@@ -106,8 +105,7 @@ public class UserController {
             return new Container(ResponseCode.OK);
 
         } catch (Exception ex) {
-            LOGGER.warn("Exception occurred during addition the word", ex);
-            return new Container(ResponseCode.ERROR, ex.getMessage());
+            return createErrorContainer(ex);
         }
     }
 
@@ -155,13 +153,16 @@ public class UserController {
             return new DataContainer<>(ResponseCode.OK, words);
 
         } catch (Exception ex) {
-            LOGGER.debug("Exception occurred in getUserDictionary method", ex);
-
-            return new Container(ResponseCode.ERROR, ex.getMessage());
+            return createErrorContainer(ex);
         }
     }
 
     private String getEmail(final String name, final String domain) {
         return String.format("%s@%s", name, domain);
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return LOGGER;
     }
 }
