@@ -55,7 +55,6 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Adding word={} to user with email={}", user, word);
 
-        // TODO in cookie is value without a @gmail
         if (checkUser(user)) {
             LOGGER.debug("User is correct, adding the word");
 
@@ -77,5 +76,26 @@ public class AccountManagerImpl implements AccountManager {
         LOGGER.debug("Found {} words for {}", userWords.size(), user.getEmail());
 
         return userWords;
+    }
+
+    @Override
+    public void removerUserWord(final @Nonnull User user, final @Nonnull Word word) {
+        Preconditions.checkNotNull(user, "User should be not null");
+        Preconditions.checkNotNull(word, "Word should be not null");
+
+        LOGGER.debug("Removing from user={} the word={}", user, word);
+
+        if(checkUser(user)) {
+            LOGGER.debug("User is correct, adding the word");
+
+            List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
+
+            userWords.remove(word);
+            translations.put(user, userWords);
+
+            LOGGER.debug("Word={} was removed", word);
+        } else {
+            LOGGER.debug("Can't find the user={}", user);
+        }
     }
 }

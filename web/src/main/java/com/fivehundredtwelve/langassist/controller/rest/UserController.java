@@ -109,15 +109,13 @@ public class UserController extends AbstractController {
         }
     }
 
-	/*
-    // TODO - implement, maybe
-	@RequestMapping("/dictionary/delete")
+
+	@RequestMapping("/dictionary/remove")
 	public void deleteFromDictionary() {
 		
 		throw new UnsupportedOperationException();
 		
 	}
-	*/
 
     /**
      * Returns all users words of specified language.

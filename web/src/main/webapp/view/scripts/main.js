@@ -112,7 +112,10 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
 
 app.controller('words', ['$scope', '$http', function ($scope, $http) {
     $scope.languages = ['English', 'Russian', 'Spanish', 'Italian'];
-    // TODO download languages from web but not to delete this languages it will be smoother
+
+    $scope.translations = [
+        {word: 'love', languageName: 'English'}
+    ];
 
     $scope.isNotValid = function () {
         return $scope.source == null || isBlank($scope.source.word) || isBlank($scope.source.language) ||
@@ -147,38 +150,31 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
         $http({method: 'GET', url: 'dictionary/getall'}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.words = data.data;
-            }).
-            error(function (data, status, headers, config) {
-
             });
     };
 
-    $scope.refreshWords();
-
     $scope.deleteWord = function (word) {
-        $http({method: 'POST', url: 'dictionary/remove', data: cutWord(word)})
+        $http({method: 'POST', url: 'dictionary/remove', data: $scope.cutWord(word)})
             .success(function () {
                 $scope.refreshWords();
             });
     };
 
-    var cutWord = function (word) {
+    $scope.cutWord = function (word) {
         return {
             word: word.word,
             language: word.language
         }
     };
 
-    $scope.translations = [
-        {word: 'love', languageName: 'English'}
-    ];
-
     $scope.getTranslations = function (word) {
-        $http({method: 'POST', url: 'dictionary/translations/get', data: cutWord(word)})
+        $http({method: 'POST', url: 'dictionary/translations/get', data: $scope.cutWord(word)})
             .success(function (data) {
                 $scope.translations = data.data;
             });
     };
+
+    $scope.refreshWords();
 }]);
 
 app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', '$location',
@@ -224,9 +220,17 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             }
         });
 
+        hotkeys.bindTo($scope).add({
+            combo: 'x',
+            description: 'Delete word',
+            callback: function () {
+                $scope.next();
+            }
+        });
+
         $scope.refreshWords = function () {
             $http({method: 'GET', url: 'user/dictionary/getall'}).
-                success(function (data, status, headers, config) {
+                success(function (data) {
                     if (data.code == "OK") $scope.translations = data.data;
                 });
         };
@@ -247,7 +251,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         };
 
         $scope.refreshTranslation = function () {
-            $scope.hideTranslation = '';
+            $scope.hiddenTranslation = 'Translation';
             $http({
                 method: 'GET', url: 'dictionary/get', params: {
                     'word': $scope.word.word,
@@ -255,7 +259,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
                     'translationLanguage': $scope.userLanguage
                 }
             }).
-                success(function (data, status, headers, config) {
+                success(function (data) {
                     if (data.code == "OK") {
                         $scope.hiddenTranslation = data.data.word;
                         if ($scope.translation != '') $scope.translation = $scope.hiddenTranslation;

@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class AccountManagerImplTest {
@@ -39,6 +40,11 @@ public class AccountManagerImplTest {
         accountManager.addWordToUser(user, WORD);
 
         assertTrue("Translation should be visible at user Translations",
+                accountManager.getWords(user).contains(WORD));
+
+        accountManager.removerUserWord(user, WORD);
+
+        assertFalse("Translation shouldn't be visible when it was removed",
                 accountManager.getWords(user).contains(WORD));
     }
 }

@@ -20,4 +20,6 @@ public interface AccountManager {
 
     @Nonnull
     List<Word> getWords(final @Nonnull User user);
+
+    void removerUserWord(final @Nonnull User user, final @Nonnull Word word);
 }
