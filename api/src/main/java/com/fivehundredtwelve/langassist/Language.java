@@ -59,5 +59,5 @@ public enum Language {
                 .toString();
     }
 
-    }
+}
 

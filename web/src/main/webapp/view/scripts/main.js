@@ -66,12 +66,13 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
 
 app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
 
-    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},{"languageEnglishName":"French","languageName":"Français"},{"languageEnglishName":"German","languageName":"Deutsch"},{"languageEnglishName":"Italian","languageName":"Italiano"}];
+    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
+                        {"languageEnglishName":"French","languageName":"Français"},
+                        {"languageEnglishName":"German","languageName":"Deutsch"},
+                        {"languageEnglishName":"Italian","languageName":"Italiano"}];
 
-    $scope.userWords = [
-        {'word': 'word', 'languageName': 'English'},
-        {'word': 'das Wort', 'languageName': 'Deutsch'}
-    ];
+    $scope.userWords = [{'word': 'word', 'languageName': 'English'},
+                        {'word': 'das Wort', 'languageName': 'Deutsch'}];
 
     var sayHi = function () {
         if ($cookies.email == null) {
@@ -102,9 +103,6 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
         $http({method: 'GET', url: 'languages/getLanguages'}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.languages = data.data;
-            }).
-            error(function (data, status, headers, config) {
-
             });
     };
 
@@ -112,9 +110,6 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
         $http({method: 'GET', url: 'user/dictionary/getall'}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.userWords = data.data;
-            }).
-            error(function (data, status, headers, config) {
-
             });
     };
 
@@ -132,22 +127,20 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
 
 app.controller('words', ['$scope', '$http', function ($scope, $http) {
 
+    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
+                        {"languageEnglishName":"French","languageName":"Français"},
+                        {"languageEnglishName":"German","languageName":"Deutsch"},
+                        {"languageEnglishName":"Italian","languageName":"Italiano"}];
+
+    $scope.words = [{'word': 'word', 'languageName': 'English'},
+                    {'word': 'das Wort', 'languageName': 'Deutsch'}
+    ];
+
+    $scope.translations = [{word: 'love', languageName: 'English'}];
+
     var isBlank = function (s) {
         return s == null || s == "";
     };
-
-    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},{"languageEnglishName":"French","languageName":"Français"},{"languageEnglishName":"German","languageName":"Deutsch"},{"languageEnglishName":"Italian","languageName":"Italiano"}];
-
-    $scope.words = [
-        {'word': 'word', 'languageName': 'English'},
-        {'word': 'das Wort', 'languageName': 'Deutsch'}
-    ];
-
-    $scope.translations = [
-        {word: 'love', languageName: 'English'}
-    ];
-
-
     // TODO download languages from web but not to delete this languages it will be smoother
 
     $scope.isNotValid = function () {
@@ -174,9 +167,6 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
         $http({method: 'GET', url: 'languages/getLanguages'}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.languages = data.data;
-            }).
-            error(function (data, status, headers, config) {
-
             });
     };
 
@@ -184,12 +174,8 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
         $http({method: 'GET', url: 'dictionary/getall'}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.words = data.data;
-            }).
-            error(function (data, status, headers, config) {
-
             });
     };
-
 
     $scope.deleteWord = function (word) {
         $http({method: 'POST', url: 'dictionary/remove', data: cutWord(word)})
@@ -204,7 +190,6 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
                 $scope.translations = data.data;
             });
     };
-
 
     $scope.refreshWords();
     $scope.refreshLanguages();
@@ -229,7 +214,11 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             {word: 'Ololo', languageName: 'English'}
         ];
 
-        $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},{"languageEnglishName":"French","languageName":"Français"},{"languageEnglishName":"German","languageName":"Deutsch"},{"languageEnglishName":"Italian","languageName":"Italiano"}];
+        $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
+                            {"languageEnglishName":"French","languageName":"Français"},
+                            {"languageEnglishName":"German","languageName":"Deutsch"},
+                            {"languageEnglishName":"Italian","languageName":"Italiano"}];
+
         $scope.showTranslation = function () {
             if ($scope.translation == '')
                 $scope.translation = $scope.hiddenTranslation;
@@ -257,9 +246,6 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             $http({method: 'GET', url: 'languages/getLanguages'}).
                 success(function (data, status, headers, config) {
                     if (data.code == "OK") $scope.languages = data.data;
-                }).
-                error(function (data, status, headers, config) {
-
                 });
         };
 
