@@ -10,7 +10,9 @@
 
         <div class="row text-center" style="margin-top: 130px;margin-bottom: 50px;">
             <div class="col-md-4 close-distance">
-                <button type="button" class="btn btn-lg btn-danger">Delete</button>
+                <button type="button" class="btn btn-lg btn-danger" ng-click="removeWord()">
+                    Delete (X)
+                </button>
             </div>
             <div class="col-md-4 close-distance">
                 <button type="button" class="btn btn-lg btn-info" ng-click="showTranslation()">
@@ -18,8 +20,8 @@
                 </button>
             </div>
             <div class="col-md-4 close-distance">
-                <button type="button" class="btn btn-lg btn-success"
-                        ng-click="next()">Ok, Next! (D)
+                <button type="button" class="btn btn-lg btn-success" ng-click="next()">
+                    Ok, Next! (D)
                 </button>
             </div>
         </div>

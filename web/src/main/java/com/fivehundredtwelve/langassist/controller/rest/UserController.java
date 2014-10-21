@@ -110,12 +110,29 @@ public class UserController extends AbstractController {
     }
 
 
-	@RequestMapping("/dictionary/remove")
-	public void deleteFromDictionary() {
-		
-		throw new UnsupportedOperationException();
-		
-	}
+    @RequestMapping(value = "/dictionary/remove", method = RequestMethod.POST)
+    public Container deleteFromDictionary(@CookieValue("name") final String name,
+                                          @CookieValue("domain") final String domain,
+                                          @RequestBody final Word word) {
+        LOGGER.debug("Removing word={} in language={} from user dictionary for user with name={} and domain={}",
+                word, name, domain);
+
+        if (name == null || domain == null || word == null)
+            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
+
+        final String email = getEmail(name, domain);
+
+        final User user = new User(email);
+        LOGGER.debug("Created user={}", user);
+
+        try {
+            accountManager.removerUserWord(user, word);
+            return createSuccessContainer("Word should be removed");
+        } catch (Exception ex) {
+            return createErrorContainer(ex);
+        }
+
+    }
 
     /**
      * Returns all users words of specified language.

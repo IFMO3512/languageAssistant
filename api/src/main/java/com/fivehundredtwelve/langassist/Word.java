@@ -42,6 +42,8 @@ public class Word implements Serializable {
 
         this.word = word;
         this.language = Language.getLanguage(language);
+
+        if (this.language == null) throw new NullPointerException("Language not found");
     }
 
     public Language getLanguage() {

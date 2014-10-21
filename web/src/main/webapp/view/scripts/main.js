@@ -224,7 +224,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             combo: 'x',
             description: 'Delete word',
             callback: function () {
-                $scope.next();
+                $scope.removeWord();
             }
         });
 
@@ -240,7 +240,6 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
                 $location.path('/');
 
             $scope.word = $scope.translations[$scope.getNextId()];
-            $routeParams.word = $scope.word.word;
             $scope.hideTranslation = 'translation';
 
             $scope.refreshTranslation();
@@ -271,6 +270,21 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             $scope.userLanguage = language;
 
             $scope.refreshTranslation();
+        };
+
+        $scope.removeWord = function () {
+            $http({method: 'POST', url: 'user/dictionary/remove', data: $scope.cutWord($scope.word)}).
+                success(function (data) {
+                    if (data.code == "OK")
+                        $scope.next();
+                });
+        };
+
+        $scope.cutWord = function (word) {
+            return {
+                word: word.word,
+                language: word.languageName
+            }
         };
 
         $scope.refreshWords();

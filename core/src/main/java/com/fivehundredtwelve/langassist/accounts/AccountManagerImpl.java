@@ -44,7 +44,14 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Checking user with email={}", user.getEmail());
 
-        return users.get(user.getEmail()) != null;
+
+        if (users.get(user.getEmail()) != null) {
+            LOGGER.debug("User={} is found", user);
+            return true;
+        } else {
+            LOGGER.debug("User={} is not found", user);
+            return false;
+        }
     }
 
 
