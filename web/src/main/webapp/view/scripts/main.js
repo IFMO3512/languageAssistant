@@ -21,12 +21,12 @@ app.config(function ($routeProvider) {
 
 app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
 
-    var isBlank = function (s) {
+    $scope.isBlank = function (s) {
         return s == null || s == ""
     };
 
     $scope.isNotValid = function (user) {
-        return user == null || isBlank(user.email);
+        return user == null || $scope.isBlank(user.email);
     };
 
     $scope.register = function (user) {
@@ -74,7 +74,7 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
     $scope.userWords = [{'word': 'word', 'languageName': 'English'},
                         {'word': 'das Wort', 'languageName': 'Deutsch'}];
 
-    var sayHi = function () {
+    $scope.sayHi = function () {
         if ($cookies.email == null) {
             $scope.hi = "Hi, just login, my friend";
             $scope.more = "And here will be fun";
@@ -84,19 +84,19 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
         }
     };
 
-    var cutWord = function (word) {
+    $scope.cutWord = function (word) {
         return {
             word: word.word,
             language: word.language
         }
     };
 
-    var isBlank = function (s) {
+    $scope.isBlank = function (s) {
         return s == null || s == "";        // TODO check
     };
 
     $scope.isNotValid = function () {
-        return $scope.word == null || isBlank($scope.word.word) || isBlank($scope.word.language);
+        return $scope.word == null || $scope.isBlank($scope.word.word) || $scope.isBlank($scope.word.language);
     };
 
     $scope.refreshLanguages = function () {
@@ -122,7 +122,7 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
 
     $scope.refreshWords();
     $scope.refreshLanguages();
-    sayHi();
+    $scope.sayHi();
 }]);
 
 app.controller('words', ['$scope', '$http', function ($scope, $http) {
