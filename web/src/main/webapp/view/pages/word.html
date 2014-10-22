@@ -27,7 +27,7 @@
         <div class="row-fluid">
             <p>Your language is {{userLanguage}}, you can change it to
             <span ng-repeat="language in languages">
-                <a ng-click="changeLanguage(language)">{{language}}</a>
+                <a ng-click="changeLanguage(language.languageName)">{{language.languageName}}</a>
             </span>
             </p>
         </div>
