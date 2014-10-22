@@ -31,7 +31,7 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
 
     $scope.register = function (user) {
         $http({method: 'POST', url: 'user/add', params: {email: user.email}}).
-            success(function (data, status, headers, config) {
+            success(function (data) {
                 if (data.code == "OK") {
                     $scope.registrationResult = "You have been logged in and registered";
                     $cookies.email = user.email;
@@ -40,14 +40,14 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
                 }
                 else $scope.registrationResult = "There was an error during registration";
             }).
-            error(function (data, status, headers, config) {
+            error(function () {
                 $scope.registrationResult = "Can not connect to the server";
             });
     };
 
     $scope.login = function (user) {
         $http({method: 'POST', url: 'user/check', params: {email: user.email}}).
-            success(function (data, status, headers, config) {
+            success(function (data) {
                 if (data.code == "OK") {
                     $cookies.email = user.email;
                     $cookies.name = user.email.split("@")[0];
@@ -58,7 +58,7 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
                 }
                 else $scope.loginResult = "There was an error during registration";
             }).
-            error(function (data, status, headers, config) {
+            error(function () {
                 $scope.registrationResult = "Can not connect to the server";
             });
     };
@@ -101,21 +101,21 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
 
     $scope.refreshLanguages = function () {
         $http({method: 'GET', url: 'languages/getLanguages'}).
-            success(function (data, status, headers, config) {
+            success(function (data) {
                 if (data.code == "OK") $scope.languages = data.data;
             });
     };
 
     $scope.refreshWords = function () {
         $http({method: 'GET', url: 'user/dictionary/getall'}).
-            success(function (data, status, headers, config) {
+            success(function (data) {
                 if (data.code == "OK") $scope.userWords = data.data;
             });
     };
 
     $scope.addWord = function (word) {
         $http({method: 'POST', url: 'user/dictionary/add', data: word}).
-            success(function (data, status, headers, config) {
+            success(function () {
                 $scope.refreshWords();
             });
     };
@@ -139,9 +139,9 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
     $scope.translations = [{word: 'love', languageName: 'English'}];
 
     $scope.isNotValid = function () {
-        return $scope.source == null || isBlank($scope.source.word) || isBlank($scope.source.language) ||
-            $scope.translation == null || isBlank($scope.translation.word) ||
-            isBlank($scope.translation.language);
+        return $scope.source == null || $scope.isBlank($scope.source.word) || $scope.isBlank($scope.source.language) ||
+            $scope.translation == null || $scope.isBlank($scope.translation.word) ||
+            $scope.isBlank($scope.translation.language);
     };
 
     $scope.addTranslation = function (source, translation) {
@@ -151,7 +151,7 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
                 translation: translation
             }
         })
-            .success(function (data, status, headers, config) {
+            .success(function (data) {
                 if (data.code == "OK") {
                     $scope.refreshWords();
                 }
@@ -160,14 +160,14 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
 
     $scope.refreshLanguages = function () {
         $http({method: 'GET', url: 'languages/getLanguages'}).
-            success(function (data, status, headers, config) {
+            success(function (data) {
                 if (data.code == "OK") $scope.languages = data.data;
             });
     };
 
     $scope.refreshWords = function () {
         $http({method: 'GET', url: 'dictionary/getall'}).
-            success(function (data, status, headers, config) {
+            success(function (data) {
                 if (data.code == "OK") $scope.words = data.data;
             });
     };
@@ -254,7 +254,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
 
         $scope.refreshLanguages = function () {
             $http({method: 'GET', url: 'languages/getLanguages'}).
-                success(function (data, status, headers, config) {
+                success(function (data) {
                     if (data.code == "OK") $scope.languages = data.data;
                 });
         };
