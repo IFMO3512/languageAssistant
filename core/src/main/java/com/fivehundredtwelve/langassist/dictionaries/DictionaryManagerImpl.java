@@ -40,6 +40,8 @@ public class DictionaryManagerImpl implements DictionaryManager {
         return new HashSet<>(words);
     }
 
+
+
     @Override
     public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation) {
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");

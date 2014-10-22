@@ -20,12 +20,13 @@ app.config(function ($routeProvider) {
 });
 
 app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
-    $scope.isNotValid = function (user) {
-        return user == null || isBlank(user.email);
-    };
 
     var isBlank = function (s) {
         return s == null || s == ""
+    };
+
+    $scope.isNotValid = function (user) {
+        return user == null || isBlank(user.email);
     };
 
     $scope.register = function (user) {
@@ -64,12 +65,14 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
 }]);
 
 app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
-    $scope.languages = ['English', 'Russian', 'Spanish', 'Italian'];
 
-    $scope.userWords = [
-        {'word': 'word', 'languageName': 'English'},
-        {'word': 'das Wort', 'languageName': 'Deutsch'}
-    ];
+    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
+                        {"languageEnglishName":"French","languageName":"Français"},
+                        {"languageEnglishName":"German","languageName":"Deutsch"},
+                        {"languageEnglishName":"Italian","languageName":"Italiano"}];
+
+    $scope.userWords = [{'word': 'word', 'languageName': 'English'},
+                        {'word': 'das Wort', 'languageName': 'Deutsch'}];
 
     var sayHi = function () {
         if ($cookies.email == null) {
@@ -81,6 +84,13 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
         }
     };
 
+    var cutWord = function (word) {
+        return {
+            word: word.word,
+            language: word.language
+        }
+    };
+
     var isBlank = function (s) {
         return s == null || s == "";        // TODO check
     };
@@ -89,13 +99,17 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
         return $scope.word == null || isBlank($scope.word.word) || isBlank($scope.word.language);
     };
 
+    $scope.refreshLanguages = function () {
+        $http({method: 'GET', url: 'languages/getLanguages'}).
+            success(function (data, status, headers, config) {
+                if (data.code == "OK") $scope.languages = data.data;
+            });
+    };
+
     $scope.refreshWords = function () {
         $http({method: 'GET', url: 'user/dictionary/getall'}).
             success(function (data, status, headers, config) {
                 if (data.code == "OK") $scope.userWords = data.data;
-            }).
-            error(function (data, status, headers, config) {
-
             });
     };
 
@@ -107,30 +121,28 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
     };
 
     $scope.refreshWords();
+    $scope.refreshLanguages();
     sayHi();
 }]);
 
 app.controller('words', ['$scope', '$http', function ($scope, $http) {
-    $scope.languages = ['English', 'Russian', 'Spanish', 'Italian'];
+  
+    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
+        {"languageEnglishName":"French","languageName":"Français"},
+        {"languageEnglishName":"German","languageName":"Deutsch"},
+        {"languageEnglishName":"Italian","languageName":"Italiano"}];
 
-    $scope.translations = [
-        {word: 'love', languageName: 'English'}
+    $scope.words = [{'word': 'word', 'languageName': 'English'},
+        {'word': 'das Wort', 'languageName': 'Deutsch'}
     ];
+
+    $scope.translations = [{word: 'love', languageName: 'English'}];
 
     $scope.isNotValid = function () {
         return $scope.source == null || isBlank($scope.source.word) || isBlank($scope.source.language) ||
             $scope.translation == null || isBlank($scope.translation.word) ||
             isBlank($scope.translation.language);
     };
-
-    var isBlank = function (s) {
-        return s == null || s == "";
-    };
-
-    $scope.words = [
-        {'word': 'word', 'languageName': 'English'},
-        {'word': 'das Wort', 'languageName': 'Deutsch'}
-    ];
 
     $scope.addTranslation = function (source, translation) {
         $http({
@@ -143,6 +155,13 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
                 if (data.code == "OK") {
                     $scope.refreshWords();
                 }
+            });
+    };
+
+    $scope.refreshLanguages = function () {
+        $http({method: 'GET', url: 'languages/getLanguages'}).
+            success(function (data, status, headers, config) {
+                if (data.code == "OK") $scope.languages = data.data;
             });
     };
 
@@ -175,9 +194,11 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
     };
 
     $scope.refreshWords();
+    $scope.refreshLanguages();
 }]);
 
 app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', '$location',
+
     function ($scope, $http, $route, $routeParams, hotkeys, $location) {
         $scope.word = {};
         $scope.word.word = $routeParams.word;
@@ -195,7 +216,10 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             {word: 'Ololo', languageName: 'English'}
         ];
 
-        $scope.languages = ['English', 'Russian', 'Spanish', 'Italian'];
+        $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
+                            {"languageEnglishName":"French","languageName":"Français"},
+                            {"languageEnglishName":"German","languageName":"Deutsch"},
+                            {"languageEnglishName":"Italian","languageName":"Italiano"}];
 
         $scope.showTranslation = function () {
             if ($scope.translation == '')
@@ -227,6 +251,13 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
                 $scope.removeWord();
             }
         });
+
+        $scope.refreshLanguages = function () {
+            $http({method: 'GET', url: 'languages/getLanguages'}).
+                success(function (data, status, headers, config) {
+                    if (data.code == "OK") $scope.languages = data.data;
+                });
+        };
 
         $scope.refreshWords = function () {
             $http({method: 'GET', url: 'user/dictionary/getall'}).
@@ -289,4 +320,5 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
 
         $scope.refreshWords();
         $scope.refreshTranslation();
+        $scope.refreshLanguages();
     }]);

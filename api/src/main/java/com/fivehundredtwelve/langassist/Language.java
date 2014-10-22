@@ -1,5 +1,6 @@
 package com.fivehundredtwelve.langassist;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
@@ -8,6 +9,7 @@ import javax.annotation.Nullable;
 /**
  * @author eliseev
  */
+@JsonFormat(shape= JsonFormat.Shape.OBJECT)
 public enum Language {
 
     ENGLISH("English"),
@@ -56,4 +58,6 @@ public enum Language {
                 .append("languageName", languageName)
                 .toString();
     }
+
 }
+
