@@ -10,7 +10,9 @@
         <div class="form-inline">
             <input ng-model="word.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
             <select class="form-control" ng-model="word.language" name="sourceLanguages">
-                <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">{{languageName.languageName}}</option>
+                <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
+                    {{languageName.languageName}}
+                </option>
             </select>
         </div>
 
@@ -24,12 +26,14 @@
         <tr>
             <th>Word</th>
             <th>Language</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="word in userWords">
             <td><a href="#word/{{word.word}}/{{word.languageName}}">{{word.word}}</a></td>
             <td>{{word.languageName}}</td>
+            <td><a ng-click="removeWord(word)">[X]</a></td>
         </tr>
         </tbody>
     </table>

@@ -87,12 +87,12 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
     $scope.cutWord = function (word) {
         return {
             word: word.word,
-            language: word.language
+            language: word.languageName
         }
     };
 
     $scope.isBlank = function (s) {
-        return s == null || s == "";        // TODO check
+        return s == null || s == "";
     };
 
     $scope.isNotValid = function () {
@@ -117,6 +117,14 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
         $http({method: 'POST', url: 'user/dictionary/add', data: word}).
             success(function () {
                 $scope.refreshWords();
+            });
+    };
+
+    $scope.removeWord = function (word) {
+        $http({method: 'POST', url: 'user/dictionary/remove', data: $scope.cutWord(word)}).
+            success(function (data) {
+                if (data.code == "OK")
+                    $scope.refreshWords();
             });
     };
 
@@ -204,11 +212,11 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         $scope.word.word = $routeParams.word;
         $scope.word.languageName = $routeParams.language;
 
-        $scope.userLanguage = 'Russian';        // TODO get from user session
+        $scope.userLanguage = 'Russian';
         $scope.translation = '';
         $scope.hiddenTranslation = 'Translation';
 
-        $scope.translations = [                 // TODO there is a problem with language
+        $scope.translations = [
             {word: 'Patience', languageName: 'English'},
             {word: 'Magic', languageName: 'English'},
             {word: 'Love', languageName: 'English'},
@@ -276,7 +284,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             $scope.refreshTranslation();
         };
 
-        $scope.getNextId = function () {    // TODO can not find the entry ignoring additional parameter
+        $scope.getNextId = function () {
             return $scope.translations.indexOf($scope.word) + 1; // When entry is not found returns 0
         };
 
