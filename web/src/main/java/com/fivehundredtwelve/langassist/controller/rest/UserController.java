@@ -3,6 +3,7 @@ package com.fivehundredtwelve.langassist.controller.rest;
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
+import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class UserController extends AbstractController {
 
     @Autowired
     private AccountManager accountManager;
+
+    @Autowired
+    private DictionaryManager dictionaryManager;
 
     /**
      * Creates user account.
@@ -100,6 +104,8 @@ public class UserController extends AbstractController {
         try {
             accountManager.addWordToUser(new User(email), word);
 
+            dictionaryManager.addWord(word);
+
             LOGGER.debug("Word={} added to user with email={}", word, email);
 
             return new Container(ResponseCode.OK);
@@ -131,19 +137,6 @@ public class UserController extends AbstractController {
         } catch (Exception ex) {
             return createErrorContainer(ex);
         }
-
-    }
-
-    /**
-     * Returns all users words of specified language.
-     *
-     * @param language language of expected words
-     */
-    @RequestMapping("/dictionary/get")
-    public Container getFromUserDictionary(@RequestParam(value = "language", required = true) String language) {
-
-        // TODO - request appropriate accountManager method, return body
-        throw new UnsupportedOperationException();
 
     }
 

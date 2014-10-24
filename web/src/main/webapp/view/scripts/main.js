@@ -146,6 +146,10 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
 
     $scope.translations = [{word: 'love', languageName: 'English'}];
 
+    $scope.isBlank = function (s) {
+        return s == null || s == "";
+    };
+
     $scope.isNotValid = function () {
         return $scope.source == null || $scope.isBlank($scope.source.word) || $scope.isBlank($scope.source.language) ||
             $scope.translation == null || $scope.isBlank($scope.translation.word) ||
@@ -190,7 +194,7 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
     $scope.cutWord = function (word) {
         return {
             word: word.word,
-            language: word.language
+            language: word.languageName
         }
     };
 

@@ -24,27 +24,34 @@
         </button>
     </form>
     <p>{{value}}</p>
-
-    <div class="words">
-        <table class="table table-striped table-bordered">
-            <thead class="table-fixed-header">
-            <tr>
-                <th>Word</th>
-                <th>Language</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="word in words" ng-click="getTranslations(word)">
-                <td>{{word.word}}</td>
-                <td>{{word.languageName}}</td>
-                <td><a ng-click="deleteWord(word)">[X]</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h3>Translations</h3>
-
-    <div ui-grid="{ data: translations }" class="myGrid"></div>
+    <table class="table table-striped table-bordered">
+        <thead class="table-fixed-header">
+        <tr>
+            <th>Word</th>
+            <th>Language</th>
+            <th>Translation</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="word in words">
+            <td>{{word.word}}</td>
+            <td>{{word.languageName}}</td>
+            <td>
+                <div class="dropdown">
+                    <a data-toggle="dropdown">Translation <span class="caret"></span></a>
+                    <div class="dropdown-menu" role="menu" style="padding: 15px; min-width: 300px;">
+                        <div>First translation</div>
+                        <div>Second translation</div>
+                        <div><label>
+                            <input type="text"/>
+                            <button></button>
+                        </label></div>
+                    </div>
+                </div>
+            </td>
+            <td><a ng-click="deleteWord(word)">[X]</a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>
