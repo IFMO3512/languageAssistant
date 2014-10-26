@@ -156,7 +156,12 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
             $scope.isBlank($scope.translation.language);
     };
 
-    $scope.addTranslation = function (source, translation) {
+    $scope.isNewTranslationInvalid = function () {
+        return $scope.newTranslation == null || $scope.isBlank($scope.newTranslation.word) ||
+            $scope.isBlank($scope.newTranslation.language);
+    };
+
+    $scope.addTranslation = function (source, translation, refresh) {
         $http({
             method: 'POST', url: 'dictionary/add', data: {
                 source: source,
@@ -164,8 +169,8 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
             }
         })
             .success(function (data) {
-                if (data.code == "OK") {
-                    $scope.refreshWords();
+                if (typeof refresh === "function" && data.code == "OK") {
+                    refresh();
                 }
             });
     };
@@ -198,11 +203,18 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
         }
     };
 
-    $scope.getTranslations = function (word) {
+    $scope.refreshTranslations = function (word) {
+        $scope.newTranslation = {};
         $http({method: 'POST', url: 'dictionary/translations/get', data: $scope.cutWord(word)})
             .success(function (data) {
                 $scope.translations = data.data;
             });
+    };
+
+    $scope.delegateFunction = function (fun, arg) { // TODO костыль, посмотреть что-то подобное средствами языка
+        return function() {
+            fun(arg);
+        }
     };
 
     $scope.refreshWords();
