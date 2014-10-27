@@ -1,4 +1,4 @@
-var app = angular.module('main', ['ui.grid', 'ngRoute', 'ngCookies', 'cfp.hotkeys']);
+var app = angular.module('main', ['ui.grid', 'ngRoute', 'ngCookies', 'cfp.hotkeys', 'ui.bootstrap']);
 
 app.config(function ($routeProvider) {
     $routeProvider
@@ -133,7 +133,7 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
     $scope.sayHi();
 }]);
 
-app.controller('words', ['$scope', '$http', function ($scope, $http) {
+app.controller('words', ['$scope', '$http', '$modal', function ($scope, $http, $modal) {
   
     $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
         {"languageEnglishName":"French","languageName":"Français"},
@@ -144,7 +144,25 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
         {'word': 'das Wort', 'languageName': 'Deutsch'}
     ];
 
-    $scope.translations = [{word: 'love', languageName: 'English'}];
+    $scope.open = function (word) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'pages/translations-modal.html',
+            controller: 'LanguageController',
+            resolve: {
+                items: function () {
+                    return {
+                        languages: $scope.languages,
+                        word: word
+                    };
+                }
+            }
+        });
+
+        modalInstance.result.then(function () {
+            $scope.refreshWords();
+        });
+    };
 
     $scope.isBlank = function (s) {
         return s == null || s == "";
@@ -156,12 +174,7 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
             $scope.isBlank($scope.translation.language);
     };
 
-    $scope.isNewTranslationInvalid = function () {
-        return $scope.newTranslation == null || $scope.isBlank($scope.newTranslation.word) ||
-            $scope.isBlank($scope.newTranslation.language);
-    };
-
-    $scope.addTranslation = function (source, translation, refresh) {
+    $scope.addTranslation = function (source, translation) {
         $http({
             method: 'POST', url: 'dictionary/add', data: {
                 source: source,
@@ -169,8 +182,8 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
             }
         })
             .success(function (data) {
-                if (typeof refresh === "function" && data.code == "OK") {
-                    refresh();
+                if (data.code == "OK") {
+                    $scope.refreshWords();
                 }
             });
     };
@@ -200,20 +213,6 @@ app.controller('words', ['$scope', '$http', function ($scope, $http) {
         return {
             word: word.word,
             language: word.languageName
-        }
-    };
-
-    $scope.refreshTranslations = function (word) {
-        $scope.newTranslation = {};
-        $http({method: 'POST', url: 'dictionary/translations/get', data: $scope.cutWord(word)})
-            .success(function (data) {
-                $scope.translations = data.data;
-            });
-    };
-
-    $scope.delegateFunction = function (fun, arg) { // TODO костыль, посмотреть что-то подобное средствами языка
-        return function() {
-            fun(arg);
         }
     };
 
@@ -346,3 +345,52 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         $scope.refreshTranslation();
         $scope.refreshLanguages();
     }]);
+
+
+app.controller('LanguageController', function($scope, $http, $modalInstance, items) {
+    $scope.languages = items.languages;
+
+    $scope.word = items.word;
+
+    $scope.translations = [{word: 'love', languageName: 'English'}];
+
+    $scope.isNewTranslationInvalid = function () {
+        return $scope.newTranslation == null || $scope.isBlank($scope.newTranslation.word) ||
+            $scope.isBlank($scope.newTranslation.language);
+    };
+
+    $scope.isBlank = function (s) {
+        return s == null || s == "";
+    };
+
+    $scope.refreshTranslations = function (word) {
+        $scope.newTranslation = {};
+        $http({method: 'POST', url: 'dictionary/translations/get', data: $scope.cutWord(word)})
+            .success(function (data) {
+                $scope.translations = data.data;
+            });
+    };
+
+    $scope.addTranslation = function (source, translation) {
+        $http({
+            method: 'POST', url: 'dictionary/add', data: {
+                source: source,
+                translation: translation
+            }
+        })
+            .success(function (data) {
+                if (data.code == "OK") {
+                    $scope.refreshTranslations($scope.word);
+                }
+            });
+    };
+
+    $scope.cutWord = function (word) {
+        return {
+            word: word.word,
+            language: word.languageName
+        }
+    };
+
+    $scope.refreshTranslations($scope.word);
+});

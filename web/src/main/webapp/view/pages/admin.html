@@ -23,7 +23,7 @@
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-default" ng-click="addTranslation(source, translation, refreshWords)"
+        <button type="submit" class="btn btn-default" ng-click="addTranslation(source, translation)"
                 ng-disabled="isNotValid()">Add
         </button>
     </form>
@@ -43,45 +43,9 @@
             <td>{{word.languageName}}</td>
             <td>
                 <!-- Button trigger modal -->
-                <a ng-click="refreshTranslations(word)" data-toggle="modal" data-target="#{{word.word}}Modal">
+                <a ng-click="open(word)">
                     Show translations
                 </a>
-
-                <!-- Modal -->
-                <div class="modal fade" id="{{word.word}}Modal" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span aria-hidden="true">&times;</span>
-                                    <span class="sr-only">Close</span>
-                                </button>
-                                <h4 class="modal-title" id="myModalLabel">{{word.word}} translations</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div ng-repeat="translation in translations">
-                                    {{translation.word}} - {{translation.languageName}}
-                                </div>
-                                <div>
-                                    <div class="form-inline">
-                                        <input type="text" class="form-control" ng-model="newTranslation.word"
-                                               id="add{{word.word}}Translation" placeholder="Enter word">
-                                        <select class="form-control" name="sourceLanguages"
-                                                ng-model="newTranslation.language">
-                                            <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
-                                                {{languageName.languageName}}
-                                            </option>
-                                        </select>
-                                        <button class="btn btn-success" ng-disabled="isNewTranslationInvalid()"
-                                                ng-click="addTranslation(cutWord(word), newTranslation,
-                                                delegateFunction(refreshTranslations,word))">Add</button>
-                                        {{newTranslation}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </td>
             <td><a ng-click="deleteWord(word)">[X]</a></td>
         </tr>
