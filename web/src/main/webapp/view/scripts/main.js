@@ -64,7 +64,7 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
     };
 }]);
 
-app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
+app.controller('user-dictionary', ['$scope', '$http', '$cookies', '$modal', function ($scope, $http, $cookies, $modal) {
 
     $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
                         {"languageEnglishName":"French","languageName":"Français"},
@@ -82,6 +82,26 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
             $scope.hi = "Hi, " + $cookies.email;
             $scope.more = "You are logged, so have fun!";
         }
+    };
+
+    $scope.open = function (word) {
+
+        var modalInstance = $modal.open({
+            templateUrl: 'pages/translations-modal.html',
+            controller: 'LanguageController',
+            resolve: {
+                items: function () {
+                    return {
+                        languages: $scope.languages,
+                        word: word
+                    };
+                }
+            }
+        });
+
+        modalInstance.result.then(function () {
+            $scope.refreshWords();
+        });
     };
 
     $scope.cutWord = function (word) {
@@ -221,7 +241,6 @@ app.controller('words', ['$scope', '$http', '$modal', function ($scope, $http, $
 }]);
 
 app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', '$location',
-
     function ($scope, $http, $route, $routeParams, hotkeys, $location) {
         $scope.word = {};
         $scope.word.word = $routeParams.word;
@@ -231,7 +250,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         $scope.translation = '';
         $scope.hiddenTranslation = 'Translation';
 
-        $scope.translations = [
+        $scope.words = [
             {word: 'Patience', languageName: 'English'},
             {word: 'Magic', languageName: 'English'},
             {word: 'Love', languageName: 'English'},
@@ -243,6 +262,8 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
                             {"languageEnglishName":"French","languageName":"Français"},
                             {"languageEnglishName":"German","languageName":"Deutsch"},
                             {"languageEnglishName":"Italian","languageName":"Italiano"}];
+
+        $scope.nextId = 0;
 
         $scope.showTranslation = function () {
             if ($scope.translation == '')
@@ -285,22 +306,24 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         $scope.refreshWords = function () {
             $http({method: 'GET', url: 'user/dictionary/getall'}).
                 success(function (data) {
-                    if (data.code == "OK") $scope.translations = data.data;
+                    if (data.code == "OK") {
+                        $scope.words = data.data;
+
+                        $scope.refreshNextIndex();
+                    }
                 });
         };
 
         $scope.next = function () {
-            if ($scope.getNextId() == $scope.translations.length)
+            if ($scope.nextId >= $scope.words.length)
                 $location.path('/');
 
-            $scope.word = $scope.translations[$scope.getNextId()];
+            $scope.word = $scope.words[$scope.nextId];
             $scope.hideTranslation = 'translation';
 
-            $scope.refreshTranslation();
-        };
+            $scope.nextId++;
 
-        $scope.getNextId = function () {
-            return $scope.translations.indexOf($scope.word) + 1; // When entry is not found returns 0
+            $scope.refreshTranslation();
         };
 
         $scope.refreshTranslation = function () {
@@ -341,9 +364,20 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             }
         };
 
+        $scope.refreshNextIndex = function() {
+            for (var i = 0; i < $scope.words.length; i++) {
+                if ($scope.word.word === $scope.words[i].word &&
+                    "undefined" !== typeof $scope.words[i].language &&
+                    $scope.words[i].language.languageName === $scope.word.languageName) {
+                    $scope.nextId = i+1;
+                }
+            }
+        };
+
         $scope.refreshWords();
         $scope.refreshTranslation();
         $scope.refreshLanguages();
+        $scope.refreshNextIndex();
     }]);
 
 

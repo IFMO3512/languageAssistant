@@ -35,12 +35,7 @@
             <td><a href="#word/{{word.word}}/{{word.languageName}}">{{word.word}}</a></td>
             <td>{{word.languageName}}</td>
             <td>
-                <div class="dropdown" id="wordDropdown">
-                    <a data-toggle="dropdown">Translation <span class="caret"></span></a>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                        Translation
-                    </ul>
-                </div>
+                <a ng-click="open(word)">Translation</a>
             </td>
             <td>
                 <a ng-click="removeWord(word)">[X]</a>
