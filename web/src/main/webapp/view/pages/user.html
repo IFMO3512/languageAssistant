@@ -8,7 +8,8 @@
         <label for="addWord">New word</label>
 
         <div class="form-inline">
-            <input ng-model="word.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
+            <input ng-model="word.word" type="text" class="form-control" id="addWord" placeholder="Enter word"
+                   autofocus>
             <select class="form-control" ng-model="word.language" name="sourceLanguages">
                 <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
                     {{languageName.languageName}}
@@ -18,7 +19,7 @@
 
         <button type="submit" class="btn btn-default" ng-click="addWord(word)"
                 ng-disabled="isNotValid()">Add
-        </button>
+        </button>   <!-- TODO показать обязательные поля -->
     </div>
 
     <table class="table table-striped table-bordered">
@@ -32,13 +33,19 @@
         </thead>
         <tbody>
         <tr ng-repeat="word in userWords">
-            <td><a href="#word/{{word.word}}/{{word.languageName}}">{{word.word}}</a></td>
-            <td>{{word.languageName}}</td>
             <td>
-                <a ng-click="open(word)">Translation</a>
+                <a href="#word/{{word.word}}/{{word.languageName}}">
+                    <button class="btn-link">{{word.word}}</button>
+                </a>
             </td>
             <td>
-                <a ng-click="removeWord(word)">[X]</a>
+                <div style="margin-top: 4px;margin-left: 6px;">{{word.languageName}}</div>
+            </td>
+            <td>
+                <button class="btn-link" ng-click="open(word)">Translation</button>
+            </td>
+            <td>
+                <button class="btn-link" ng-click="removeWord(word)">[X]</button>
             </td>
         </tr>
         </tbody>

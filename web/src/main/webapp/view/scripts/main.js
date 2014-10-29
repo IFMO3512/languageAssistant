@@ -240,15 +240,15 @@ app.controller('words', ['$scope', '$http', '$modal', function ($scope, $http, $
     $scope.refreshLanguages();
 }]);
 
-app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', '$location',
-    function ($scope, $http, $route, $routeParams, hotkeys, $location) {
+app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', '$location', '$modal',
+    function ($scope, $http, $route, $routeParams, hotkeys, $location, $modal) {
         $scope.word = {};
         $scope.word.word = $routeParams.word;
-        $scope.word.languageName = $routeParams.language;
+        $scope.word.languageName = $routeParams.language;       // TODO encode russian language!!!
 
         $scope.userLanguage = 'Russian';
         $scope.translation = '';
-        $scope.hiddenTranslation = 'Translation';
+        $scope.hidden = true;
 
         $scope.words = [
             {word: 'Patience', languageName: 'English'},
@@ -266,15 +266,21 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         $scope.nextId = 0;
 
         $scope.showTranslation = function () {
-            if ($scope.translation == '')
-                $scope.translation = $scope.hiddenTranslation;
-            else
-                $scope.translation = '';
+            if ($scope.translation != '')
+                $scope.hidden = !$scope.hidden;
         };
 
         hotkeys.bindTo($scope).add({
             combo: 's',
-            description: 'Push down to see Translation',
+            description: 'Show or hide translation',
+            callback: function () {
+                $scope.showTranslation();
+            }
+        });
+
+        hotkeys.bindTo($scope).add({
+            combo: 'ы',
+            description: 'Show or hide translation',
             callback: function () {
                 $scope.showTranslation();
             }
@@ -289,10 +295,42 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         });
 
         hotkeys.bindTo($scope).add({
+            combo: 'в',
+            description: 'Next word',
+            callback: function () {
+                $scope.next();
+            }
+        });
+
+        hotkeys.bindTo($scope).add({
             combo: 'x',
             description: 'Delete word',
             callback: function () {
                 $scope.removeWord();
+            }
+        });
+
+        hotkeys.bindTo($scope).add({
+            combo: 'ч',
+            description: 'Delete word',
+            callback: function () {
+                $scope.removeWord();
+            }
+        });
+
+        hotkeys.bindTo($scope).add({
+            combo: 'a',
+            description: 'Show translations window',
+            callback: function () {
+                $scope.open($scope.word);
+            }
+        });
+
+        hotkeys.bindTo($scope).add({
+            combo: 'ф',
+            description: 'Show translations window',
+            callback: function () {
+                $scope.open($scope.word);
             }
         });
 
@@ -314,20 +352,28 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
                 });
         };
 
+        $scope.isHidden = function () {
+            return $scope.hidden;
+        };
+
         $scope.next = function () {
             if ($scope.nextId >= $scope.words.length)
                 $location.path('/');
 
             $scope.word = $scope.words[$scope.nextId];
-            $scope.hideTranslation = 'translation';
+            $scope.hidden = true;
+            $scope.translation = '';
 
             $scope.nextId++;
 
             $scope.refreshTranslation();
         };
 
+        $scope.isShowDisabled = function() {
+            return $scope.translation == '';
+        };
+
         $scope.refreshTranslation = function () {
-            $scope.hiddenTranslation = 'Translation';
             $http({
                 method: 'GET', url: 'dictionary/get', params: {
                     'word': $scope.word.word,
@@ -337,10 +383,30 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             }).
                 success(function (data) {
                     if (data.code == "OK") {
-                        $scope.hiddenTranslation = data.data.word;
-                        if ($scope.translation != '') $scope.translation = $scope.hiddenTranslation;
+                        $scope.translation = data.data.word;
+                        $scope.hidden = true;
                     }
                 });
+        };
+
+        $scope.open = function (word) {
+
+            var modalInstance = $modal.open({
+                templateUrl: 'pages/translations-modal.html',
+                controller: 'LanguageController',
+                resolve: {
+                    items: function () {
+                        return {
+                            languages: $scope.languages,
+                            word: word
+                        };
+                    }
+                }
+            });
+
+            modalInstance.result.then(function () {
+                $scope.refreshTranslation();
+            });
         };
 
         $scope.changeLanguage = function (language) {
@@ -382,6 +448,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
 
 
 app.controller('LanguageController', function($scope, $http, $modalInstance, items) {
+    // TODO add autofocus on load
     $scope.languages = items.languages;
 
     $scope.word = items.word;

@@ -4,7 +4,8 @@
             <label for="addWord">New word</label>
 
             <div class="form-inline">
-                <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
+                <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word"
+                       autofocus>
                 <select class="form-control" ng-model="source.language" name="sourceLanguages">
                     <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
                         {{languageName.languageName}}
