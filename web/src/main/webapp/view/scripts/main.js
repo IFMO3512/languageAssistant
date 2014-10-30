@@ -67,12 +67,12 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
 app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
 
     $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
-                        {"languageEnglishName":"French","languageName":"Français"},
-                        {"languageEnglishName":"German","languageName":"Deutsch"},
-                        {"languageEnglishName":"Italian","languageName":"Italiano"}];
+        {"languageEnglishName":"French","languageName":"Français"},
+        {"languageEnglishName":"German","languageName":"Deutsch"},
+        {"languageEnglishName":"Italian","languageName":"Italiano"}];
 
-    $scope.userWords = [{'word': 'word', 'languageName': 'English'},
-                        {'word': 'das Wort', 'languageName': 'Deutsch'}];
+    $scope.userWords = [{'word': 'word','language': {'languageName': 'English'}},
+        {'word': 'das Wort','language':{'languageName': 'Deutsch'}}]; 
 
     var sayHi = function () {
         if ($cookies.email == null) {
@@ -128,12 +128,12 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
 app.controller('words', ['$scope', '$http', function ($scope, $http) {
 
     $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
-                        {"languageEnglishName":"French","languageName":"Français"},
-                        {"languageEnglishName":"German","languageName":"Deutsch"},
-                        {"languageEnglishName":"Italian","languageName":"Italiano"}];
+        {"languageEnglishName":"French","languageName":"Français"},
+        {"languageEnglishName":"German","languageName":"Deutsch"},
+        {"languageEnglishName":"Italian","languageName":"Italiano"}];
 
     $scope.words = [{'word': 'word', 'languageName': 'English'},
-                    {'word': 'das Wort', 'languageName': 'Deutsch'}
+        {'word': 'das Wort', 'languageName': 'Deutsch'}
     ];
 
     $scope.translations = [{word: 'love', languageName: 'English'}];
@@ -200,7 +200,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
     function ($scope, $http, $route, $routeParams, hotkeys, $location) {
         $scope.word = {};
         $scope.word.word = $routeParams.word;
-        $scope.word.languageName = $routeParams.language;
+        $scope.word.language.languageName = $routeParams.language;
 
         $scope.userLanguage = 'Russian';        // TODO get from user session
         $scope.translation = '';
@@ -215,9 +215,9 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         ];
 
         $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
-                            {"languageEnglishName":"French","languageName":"Français"},
-                            {"languageEnglishName":"German","languageName":"Deutsch"},
-                            {"languageEnglishName":"Italian","languageName":"Italiano"}];
+            {"languageEnglishName":"French","languageName":"Français"},
+            {"languageEnglishName":"German","languageName":"Deutsch"},
+            {"languageEnglishName":"Italian","languageName":"Italiano"}];
 
         $scope.showTranslation = function () {
             if ($scope.translation == '')
@@ -276,7 +276,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             $http({
                 method: 'GET', url: 'dictionary/get', params: {
                     'word': $scope.word.word,
-                    'wordLanguage': $scope.word.languageName,
+                    'wordLanguage': $scope.word.language.languageName,
                     'translationLanguage': $scope.userLanguage
                 }
             }).
