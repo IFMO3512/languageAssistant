@@ -19,51 +19,6 @@ app.config(function ($routeProvider) {
         });
 });
 
-app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
-
-    $scope.isBlank = function (s) {
-        return s == null || s == ""
-    };
-
-    $scope.isNotValid = function (user) {
-        return user == null || $scope.isBlank(user.email);
-    };
-
-    $scope.register = function (user) {
-        $http({method: 'POST', url: 'user/add', params: {email: user.email}}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    $scope.registrationResult = "You have been logged in and registered";
-                    $cookies.email = user.email;
-                    $cookies.name = user.email.split("@")[0];
-                    $cookies.domain = user.email.split("@")[1];
-                }
-                else $scope.registrationResult = "There was an error during registration";
-            }).
-            error(function () {
-                $scope.registrationResult = "Can not connect to the server";
-            });
-    };
-
-    $scope.login = function (user) {
-        $http({method: 'POST', url: 'user/check', params: {email: user.email}}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    $cookies.email = user.email;
-                    $cookies.name = user.email.split("@")[0];
-                    $cookies.domain = user.email.split("@")[1];
-                    $scope.loginResult = "All right";
-                } else if (data.code == "NOT_OK") {
-                    $scope.loginResult = "Invalid email";
-                }
-                else $scope.loginResult = "There was an error during registration";
-            }).
-            error(function () {
-                $scope.registrationResult = "Can not connect to the server";
-            });
-    };
-}]);
-
 app.controller('user-dictionary', ['$scope', '$http', '$cookies', '$modal', function ($scope, $http, $cookies, $modal) {
 
     $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
@@ -107,7 +62,7 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', '$modal', func
     $scope.cutWord = function (word) {
         return {
             word: word.word,
-            language: word.languageName
+            language: word.language.languageName
         }
     };
 
@@ -159,10 +114,6 @@ app.controller('words', ['$scope', '$http', '$modal', function ($scope, $http, $
         {"languageEnglishName":"French","languageName":"Français"},
         {"languageEnglishName":"German","languageName":"Deutsch"},
         {"languageEnglishName":"Italian","languageName":"Italiano"}];
-
-    $scope.words = [{'word': 'word', 'languageName': 'English'},
-        {'word': 'das Wort', 'languageName': 'Deutsch'}
-    ];
 
     $scope.open = function (word) {
 
@@ -232,7 +183,7 @@ app.controller('words', ['$scope', '$http', '$modal', function ($scope, $http, $
     $scope.cutWord = function (word) {
         return {
             word: word.word,
-            language: word.languageName
+            language: word.language.languageName
         }
     };
 
@@ -427,7 +378,7 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
         $scope.cutWord = function (word) {
             return {
                 word: word.word,
-                language: word.languageName
+                language: word.language.languageName
             }
         };
 
@@ -454,11 +405,11 @@ app.controller('LanguageController', function($scope, $http, $modalInstance, ite
 
     $scope.word = items.word;
 
-    $scope.translations = [{word: 'love', languageName: 'English'}];
+    $scope.translations = [{word: 'love', language: {languageName: 'English'}}];
 
     $scope.isNewTranslationInvalid = function () {
         return $scope.newTranslation == null || $scope.isBlank($scope.newTranslation.word) ||
-            $scope.isBlank($scope.newTranslation.language);
+                $scope.newTranslation.language == null || $scope.isBlank($scope.newTranslation.language);
     };
 
     $scope.isBlank = function (s) {
@@ -490,7 +441,7 @@ app.controller('LanguageController', function($scope, $http, $modalInstance, ite
     $scope.cutWord = function (word) {
         return {
             word: word.word,
-            language: word.languageName
+            language: word.language.languageName
         }
     };
 
