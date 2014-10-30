@@ -41,7 +41,7 @@
         <tbody>
         <tr ng-repeat="word in words">
             <td>{{word.word}}</td>
-            <td>{{word.languageName}}</td>
+            <td>{{word.language.languageName}}</td>
             <td>
                 <!-- Button trigger modal -->
                 <a ng-click="open(word)">
