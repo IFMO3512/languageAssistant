@@ -1,4 +1,4 @@
-angular.module('main').controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
+angular.module('main').controller('UserForms', function ($scope, $http, $cookies) {
 
     $scope.isBlank = function (s) {
         return s == null || s == ""
@@ -41,4 +41,4 @@ angular.module('main').controller('user-forms', ['$scope', '$http', '$cookies', 
                 $scope.registrationResult = "Can not connect to the server";
             });
     };
-}]);
+});
