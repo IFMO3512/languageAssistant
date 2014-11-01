@@ -2,6 +2,20 @@ angular.module('main').controller('Words', function ($scope, $http, $modal, Lang
 
     $scope.languages = LanguageFactory.getLanguages();
 
+    $scope.language = 'Russian';
+
+    $scope.words = [{
+        source: {
+            word: "Магия",
+            language: {"languageEnglishName": "Russian", "languageName": "Русский"}
+        },
+        translation: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}}
+    }, {
+        source: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}},
+        translation: null
+    }];
+
+
     $scope.open = function (word) {
 
         var modalInstance = $modal.open({
@@ -54,7 +68,7 @@ angular.module('main').controller('Words', function ($scope, $http, $modal, Lang
     };
 
     $scope.refreshWords = function () {
-        $http({method: 'GET', url: 'dictionary/getall'}).
+        $http({method: 'GET', url: 'dictionary/translations/getall', params: {language: $scope.language}}).
             success(function (data) {
                 if (data.code == "OK") $scope.words = data.data;
             });

@@ -3,6 +3,8 @@
 
     <h2>{{more}}</h2>
 
+    <p>Your language is Russian, and you can not change it.</p>
+
 
     <div class="form-group">
         <label for="addWord">New word</label>
@@ -22,7 +24,7 @@
         </button>   <!-- TODO показать обязательные поля -->
     </div>
 
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped">
         <thead class="table-fixed-header">
         <tr>
             <th>Word</th>
@@ -34,7 +36,7 @@
         <tbody>
         <tr ng-repeat="word in userWords">
             <td>
-                <a href="#word/{{word.word}}/{{word.languageName}}">
+                <a href="#word/{{word.word}}/{{word.language.languageName}}">
                     <button class="btn-link">{{word.word}}</button>
                 </a>
             </td>

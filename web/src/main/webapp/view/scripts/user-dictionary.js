@@ -51,6 +51,8 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $co
     };
 
     $scope.refreshWords = function () {
+        if ($cookies.email == null) return;
+
         $http({method: 'GET', url: 'user/dictionary/getall'}).
             success(function (data) {
                 if (data.code == "OK") $scope.userWords = data.data;

@@ -28,4 +28,10 @@ public abstract class AbstractController {
 
         return new DataContainer<>(ResponseCode.OK, data);
     }
+
+    protected Container illegalArgumentsContainer(String message) {
+        getLogger().debug(message);
+
+        return new Container(ResponseCode.ILLEGAL_ARGUMENTS, message);
+    }
 }

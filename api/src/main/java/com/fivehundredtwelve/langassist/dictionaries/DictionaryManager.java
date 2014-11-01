@@ -2,6 +2,7 @@ package com.fivehundredtwelve.langassist.dictionaries;
 
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
+import com.fivehundredtwelve.langassist.WordWithTranslation;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -20,6 +21,9 @@ public interface DictionaryManager {
     @Nonnull
     public Collection<Word> getWords();
 
+    @Nonnull
+    public Collection<WordWithTranslation> getWordsWithTranslation(final @Nonnull Language language);
+
     public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation);
 
     @Nullable
@@ -32,4 +36,5 @@ public interface DictionaryManager {
     public List<Word> getTranslations(final @Nonnull Word word);
 
     public void removeWord(final @Nonnull Word word);
+
 }

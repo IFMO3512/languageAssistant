@@ -14,6 +14,7 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
     private static final long serialVersionUID = 1373264240454974404L;
+
     private final String email;
 
     /**

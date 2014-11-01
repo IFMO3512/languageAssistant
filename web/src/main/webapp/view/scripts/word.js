@@ -1,5 +1,5 @@
 angular.module('main').controller('Word', function ($scope, $http, $route, $routeParams, hotkeys, $location,
-                                                    $modal, LanguageFactory) {
+                                                    $modal, LanguageFactory, $cookies) {
     $scope.word = {};
     $scope.word.word = $routeParams.word;
     $scope.word.language = {};
@@ -9,13 +9,8 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     $scope.translation = '';
     $scope.hidden = true;
 
-    $scope.words = [
-        {word: 'Patience', languageName: 'English'},
-        {word: 'Magic', languageName: 'English'},
-        {word: 'Love', languageName: 'English'},
-        {word: 'Moments', languageName: 'English'},
-        {word: 'Ololo', languageName: 'English'}
-    ];
+    $scope.words = [{'word': 'word', 'language': {'languageName': 'English'}},
+        {'word': 'das Wort', 'language': {'languageName': 'Deutsch'}}];
 
     $scope.languages = LanguageFactory.getLanguages();
 
@@ -91,6 +86,8 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     });
 
     $scope.refreshWords = function () {
+        if ($cookies.email == null) return;
+
         $http({method: 'GET', url: 'user/dictionary/getall'}).
             success(function (data) {
                 if (data.code == "OK") {

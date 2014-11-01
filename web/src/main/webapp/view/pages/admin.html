@@ -29,7 +29,7 @@
         </button>
     </form>
     <p>{{value}}</p>
-    <table class="table table-striped table-bordered">
+    <table class="table table-responsive  table-striped">
         <thead class="table-fixed-header">
         <tr>
             <th>Word</th>
@@ -40,13 +40,17 @@
         </thead>
         <tbody>
         <tr ng-repeat="word in words">
-            <td>{{word.word}}</td>
-            <td>{{word.language.languageName}}</td>
+            <td>{{word.source.word}}</td>
+            <td>{{word.source.language.languageName}}</td>
             <td>
-                <!-- Button trigger modal -->
-                <a ng-click="open(word)">
-                    Show translations
-                </a>
+                <div class="col-lg-3">
+                    {{word.translation.word}}
+                </div>
+                <div class="col-lg-4 right">
+                    <a ng-click="open(word.source)">
+                        Show more translations
+                    </a>
+                </div>
             </td>
             <td><a ng-click="deleteWord(word)">[X]</a></td>
         </tr>
