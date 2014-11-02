@@ -25,10 +25,10 @@
     <table class="table table-striped">
         <thead class="table-fixed-header">
         <tr>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Word</div></th>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Language</div></th>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Translation</div></th>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Delete</div></th>
+            <th><div class="button-space">Word</div></th>
+            <th><div class="button-space">Language</div></th>
+            <th><div class="button-space">Translation</div></th>
+            <th><div class="button-space">Delete</div></th>
         </tr>
         </thead>
         <tbody>
@@ -39,10 +39,10 @@
                 </a>
             </td>
             <td>
-                <div style="margin-top: 4px;margin-left: 6px;">{{word.source.language.languageName}}</div>
+                <div class="button-space">{{word.source.language.languageName}}</div>
             </td>
             <td>
-                <div class="col-lg-3" style="margin-top: 4px;margin-left: 6px;">
+                <div class="col-lg-3 button-space left-button">
                     {{word.translation.word}}
                 </div>
                 <div class="col-lg-5 right">

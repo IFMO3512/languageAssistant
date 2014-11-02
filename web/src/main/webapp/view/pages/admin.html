@@ -32,16 +32,16 @@
     <table class="table table-responsive  table-striped">
         <thead class="table-fixed-header">
         <tr>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Word</div></th>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Language</div></th>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Translation</div></th>
-            <th><div style="margin-top: 4px;margin-left: 6px;">Delete</div></th>
+            <th><div class="button-space">Word</div></th>
+            <th><div class="button-space">Language</div></th>
+            <th><div class="button-space">Translation</div></th>
+            <th><div class="button-space">Delete</div></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="word in words">
-            <td><div style="margin-top: 4px;margin-left: 6px;">{{word.source.word}}</div></td>
-            <td><div style="margin-top: 4px;margin-left: 6px;">{{word.source.language.languageName}}</div></td>
+            <td><div class="button-space">{{word.source.word}}</div></td>
+            <td><div class="button-space">{{word.source.language.languageName}}</div></td>
             <td>
                 <div class="col-lg-3" style="margin-top: 4px;margin-left: 6px; text-align: left">
                     {{word.translation.word}}
