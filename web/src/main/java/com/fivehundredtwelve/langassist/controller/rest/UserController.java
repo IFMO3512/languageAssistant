@@ -1,7 +1,9 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
+import com.fivehundredtwelve.langassist.WordWithTranslation;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.slf4j.Logger;
@@ -65,7 +67,7 @@ public class UserController extends AbstractController {
                 return new Container(ResponseCode.OK);
             } else {
                 LOGGER.warn("User with email={} does not exist");
-                return new Container(ResponseCode.NOT_OK);
+                return addUser(email);      // TODO delete
             }
         } catch (RuntimeException e) {
             return createErrorContainer(e);
@@ -159,6 +161,41 @@ public class UserController extends AbstractController {
             LOGGER.debug("User with email={} have a dictionary={}", email, words);
 
             return new DataContainer<>(ResponseCode.OK, words);
+
+        } catch (Exception ex) {
+            return createErrorContainer(ex);
+        }
+    }
+
+
+    @RequestMapping("/dictionary/getall/translation")
+    public Container getUserDictionaryWithTranslation(@CookieValue("name") final String name,
+                                                      @CookieValue("domain") final String domain,
+                                                      @RequestParam final String language) {
+        LOGGER.debug("Getting user dictionary for user with name={} and domain={}", name, domain);
+
+        if (name == null || domain == null)
+            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
+
+        Language _language = Language.getLanguage(language);
+
+        if (_language == null) {
+            _language = Language.ENGLISH;   // TODO delete, Standard language
+        }
+
+        final String email = getEmail(name, domain);
+
+        User user = new User(email);
+
+        try {
+            Collection<Word> words = accountManager.getWords(user);
+
+            LOGGER.debug("User with email={} have a dictionary={}", email, words);
+
+            Collection<WordWithTranslation> wordsWithTranslation = dictionaryManager.getWordsWithTranslation(words,
+                                                                                                             _language);
+
+            return new DataContainer<>(ResponseCode.OK, wordsWithTranslation);
 
         } catch (Exception ex) {
             return createErrorContainer(ex);

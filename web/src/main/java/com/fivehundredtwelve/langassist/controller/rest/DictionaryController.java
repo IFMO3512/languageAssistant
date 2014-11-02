@@ -110,7 +110,7 @@ public class DictionaryController extends AbstractController {
     public Container getWordsWithTranslation(@RequestParam final String language) {
         LOGGER.debug("Getting all words with translation to {} language", language);
 
-        Language _language = Language.getLanguage(language);
+        final Language _language = Language.getLanguage(language);
 
         if (_language == null) {
             illegalArgumentsContainer("Language was not found");

@@ -2,16 +2,24 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $co
 
     $scope.languages = LanguageFactory.getLanguages();
 
-    $scope.userWords = [{'word': 'word', 'language': {'languageName': 'English'}},
-        {'word': 'das Wort', 'language': {'languageName': 'Deutsch'}}];
+    $scope.language = "Russian";
+
+    $scope.userWords = [{
+        source: {
+            word: "Love",
+            language: {"languageEnglishName": "English", "languageName": "English"}
+        },
+        translation: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}}
+    }, {
+        source: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}},
+        translation: null
+    }];
 
     $scope.sayHi = function () {
         if ($cookies.email == null) {
             $scope.hi = "Hi, just login, my friend";
-            $scope.more = "And here will be fun";
         } else {
             $scope.hi = "Hi, " + $cookies.email;
-            $scope.more = "You are logged, so have fun!";
         }
     };
 
@@ -53,7 +61,7 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $co
     $scope.refreshWords = function () {
         if ($cookies.email == null) return;
 
-        $http({method: 'GET', url: 'user/dictionary/getall'}).
+        $http({method: 'GET', url: 'user/dictionary/getall/translation', params: {language: $scope.language}}).
             success(function (data) {
                 if (data.code == "OK") $scope.userWords = data.data;
             });

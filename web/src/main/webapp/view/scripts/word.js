@@ -180,7 +180,7 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
         for (var i = 0; i < $scope.words.length; i++) {
             if ($scope.word.word === $scope.words[i].word &&
                 "undefined" !== typeof $scope.words[i].language &&
-                $scope.words[i].language.languageName === $scope.word.languageName) {
+                $scope.words[i].language.languageName === $scope.word.language.languageName) {
                 $scope.nextId = i + 1;
             }
         }

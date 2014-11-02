@@ -32,27 +32,27 @@
     <table class="table table-responsive  table-striped">
         <thead class="table-fixed-header">
         <tr>
-            <th>Word</th>
-            <th>Language</th>
-            <th>Translation</th>
-            <th>Delete</th>
+            <th><div style="margin-top: 4px;margin-left: 6px;">Word</div></th>
+            <th><div style="margin-top: 4px;margin-left: 6px;">Language</div></th>
+            <th><div style="margin-top: 4px;margin-left: 6px;">Translation</div></th>
+            <th><div style="margin-top: 4px;margin-left: 6px;">Delete</div></th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="word in words">
-            <td>{{word.source.word}}</td>
-            <td>{{word.source.language.languageName}}</td>
+            <td><div style="margin-top: 4px;margin-left: 6px;">{{word.source.word}}</div></td>
+            <td><div style="margin-top: 4px;margin-left: 6px;">{{word.source.language.languageName}}</div></td>
             <td>
-                <div class="col-lg-3">
+                <div class="col-lg-3" style="margin-top: 4px;margin-left: 6px; text-align: left">
                     {{word.translation.word}}
                 </div>
                 <div class="col-lg-4 right">
-                    <a ng-click="open(word.source)">
+                    <button class="btn-link" ng-click="open(word.source)">
                         Show more translations
-                    </a>
+                    </button>
                 </div>
             </td>
-            <td><a ng-click="deleteWord(word)">[X]</a></td>
+            <td><button class="btn-link" ng-click="deleteWord(word.source)">[X]</button></td>
         </tr>
         </tbody>
     </table>

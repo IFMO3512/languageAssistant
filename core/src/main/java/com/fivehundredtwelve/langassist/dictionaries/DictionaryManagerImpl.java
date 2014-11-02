@@ -24,7 +24,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
     private final Map<Word, List<Word>> translations;       // TODO recurrent words in translations =(
 
     public DictionaryManagerImpl() {
-        words = new CopyOnWriteArraySet<>();        // TODO compare with ConcurrentHashSet
+        words = new CopyOnWriteArraySet<>();                // TODO compare with ConcurrentHashSet
         translations = new ConcurrentHashMap<>();
     }
 
@@ -44,13 +44,21 @@ public class DictionaryManagerImpl implements DictionaryManager {
     @Nonnull
     @Override
     public Collection<WordWithTranslation> getWordsWithTranslation(final @Nonnull Language language) {
+        return getWordsWithTranslation(getWords(), language);
+    }
+
+
+    @Nonnull
+    @Override
+    public Collection<WordWithTranslation> getWordsWithTranslation(final @Nonnull Collection<Word> words,
+                                                                   final @Nonnull Language language) {
         Preconditions.checkNotNull(language, "Language can't be null");
 
         LOGGER.debug("Getting all words with translation to language={}", language);
 
         Collection<WordWithTranslation> wordsWithTranslation = new ArrayList<>();
 
-        for (final Word word : getWords()) {
+        for (final Word word : words) {
             Word translation = getTranslation(word, language);
 
             if (translation == null) {
