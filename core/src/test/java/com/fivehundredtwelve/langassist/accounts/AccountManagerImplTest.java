@@ -24,7 +24,7 @@ public class AccountManagerImplTest {
 
     @Test
     public void testAddUser() throws Exception {
-        accountManager.addUser(user);
+        accountManager.putUser(user);
 
         assertTrue("User should exist in accountManager after addition", accountManager.checkUser(user));
     }
@@ -36,7 +36,7 @@ public class AccountManagerImplTest {
         assertEquals("User's dictionary should be empty because user does not exist", 0,
                 accountManager.getWords(user).size());
 
-        accountManager.addUser(user);
+        accountManager.putUser(user);
         accountManager.addWordToUser(user, WORD);
 
         assertTrue("Translation should be visible at user Translations",

@@ -12,7 +12,10 @@ import java.util.List;
  * @author eliseev
  */
 public interface AccountManager {
-    public void addUser(final @Nonnull User user);
+    /**
+     * Puts user by email to the system.
+     */
+    public void putUser(final @Nonnull User user);
 
     public boolean checkUser(final @Nonnull User user);
 

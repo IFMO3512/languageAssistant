@@ -28,7 +28,7 @@ public class AccountManagerImpl implements AccountManager {
     }
 
     @Override
-    public void addUser(final @Nonnull User user) {
+    public void putUser(final @Nonnull User user) {
         Preconditions.checkNotNull(user);
 
         LOGGER.debug("Adding user with email={}", user.getEmail());
