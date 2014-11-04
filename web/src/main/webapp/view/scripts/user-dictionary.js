@@ -5,13 +5,12 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $co
     $scope.language = "Russian";
 
     $scope.userWords = [{
-        source: {
-            word: "Love",
-            language: {"languageEnglishName": "English", "languageName": "English"}
-        },
+        word: "Love",
+        language: {"languageEnglishName": "English", "languageName": "English"},
         translation: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}}
     }, {
-        source: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}},
+        "word": "Magic",
+        "language": {"languageEnglishName": "English", "languageName": "English"},
         translation: null
     }];
 

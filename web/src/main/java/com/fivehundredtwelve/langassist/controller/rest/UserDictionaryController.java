@@ -3,7 +3,6 @@ package com.fivehundredtwelve.langassist.controller.rest;
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.WordWithTranslation;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.slf4j.Logger;
@@ -132,7 +131,7 @@ public class UserDictionaryController extends AbstractController {
 
             LOGGER.debug("User with email={} have a dictionary={}", email, words);
 
-            Collection<WordWithTranslation> wordsWithTranslation = dictionaryManager.getWordsWithTranslation(words,
+            Collection<Word> wordsWithTranslation = dictionaryManager.getWordsWithTranslation(words,
                     _language);
 
             return new DataContainer<>(ResponseCode.OK, wordsWithTranslation);

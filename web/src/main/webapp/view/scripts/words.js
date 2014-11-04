@@ -4,14 +4,13 @@ angular.module('main').controller('Words', function ($scope, $http, $modal, Lang
 
     $scope.language = 'Russian';
 
-    $scope.words = [{
-        source: {
-            word: "Магия",
-            language: {"languageEnglishName": "Russian", "languageName": "Русский"}
-        },
+    $scope.userWords = [{
+        word: "Love",
+        language: {"languageEnglishName": "English", "languageName": "English"},
         translation: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}}
     }, {
-        source: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}},
+        "word": "Magic",
+        "language": {"languageEnglishName": "English", "languageName": "English"},
         translation: null
     }];
 
@@ -41,16 +40,16 @@ angular.module('main').controller('Words', function ($scope, $http, $modal, Lang
     };
 
     $scope.isNotValid = function () {
-        return $scope.source == null || $scope.isBlank($scope.source.word) || $scope.isBlank($scope.source.language) ||
-            $scope.translation == null || $scope.isBlank($scope.translation.word) ||
-            $scope.isBlank($scope.translation.language);
+        return $scope.word == null || $scope.isBlank($scope.word.word) || $scope.isBlank($scope.word.language) ||
+            $scope.word.translation == null || $scope.isBlank($scope.word.translation.word) ||
+            $scope.isBlank($scope.word.translation.language);
     };
 
-    $scope.addTranslation = function (source, translation) {
+    $scope.addTranslation = function (word) {
         $http({
             method: 'POST', url: 'dictionary/add', data: {
-                source: source,
-                translation: translation
+                source: $scope.cutWord(word),
+                translation: $scope.cutWord(word.translation)
             }
         })
             .success(function (data) {

@@ -2,7 +2,6 @@ package com.fivehundredtwelve.langassist.controller.rest;
 
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.WordWithTranslation;
 import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +27,17 @@ public class DictionaryController extends AbstractController {
      * @return status of adding translation
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Container addTranslation(@RequestBody WordWithTranslation wordWithTranslation) {
-        LOGGER.debug("Adding translation={}", wordWithTranslation);
+    public Container addTranslation(@RequestBody Word word) {
+        LOGGER.debug("Adding translation={}", word);
+
+        if (word.getTranslation() == null)
+            illegalArgumentsContainer("Translation should be setted");
 
         try {
-            dictionaryManager.addTranslation(wordWithTranslation.getSource(), wordWithTranslation.getTranslation());
+            dictionaryManager.addTranslation(word, word.getTranslation());
 
             // TODO think about duplex translation
-            dictionaryManager.addTranslation(wordWithTranslation.getTranslation(), wordWithTranslation.getSource());
+            dictionaryManager.addTranslation(word.getTranslation(), word);
 
             return createSuccessContainer("Translation in both way is added");
 

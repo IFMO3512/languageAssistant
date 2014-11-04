@@ -4,9 +4,9 @@
             <label for="addWord">New word</label>
 
             <div class="form-inline">
-                <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word"
+                <input ng-model="word.word" type="text" class="form-control" id="addWord" placeholder="Enter word"
                        autofocus>
-                <select class="form-control" ng-model="source.language" name="sourceLanguages">
+                <select class="form-control" ng-model="word.language" name="sourceLanguages">
                     <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
                         {{languageName.languageName}}
                     </option>
@@ -15,16 +15,16 @@
             <br/>
 
             <div class="form-inline">
-                <input ng-model="translation.word" type="text" class="form-control" id="addTranslation"
+                <input ng-model="word.translation.word" type="text" class="form-control" id="addTranslation"
                        placeholder="Enter translation"/>
-                <select ng-init class="form-control" ng-model="translation.language" name="translationLanguage">
+                <select ng-init class="form-control" ng-model="word.translation.language" name="wtranslationLanguage">
                     <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
                         {{languageName.languageName}}
                     </option>
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-default" ng-click="addTranslation(source, translation)"
+        <button type="submit" class="btn btn-default" ng-click="addTranslation(word)"
                 ng-disabled="isNotValid()">Add
         </button>
     </form>
@@ -40,19 +40,19 @@
         </thead>
         <tbody>
         <tr ng-repeat="word in words">
-            <td><div class="button-space">{{word.source.word}}</div></td>
-            <td><div class="button-space">{{word.source.language.languageName}}</div></td>
+            <td><div class="button-space">{{word.word}}</div></td>
+            <td><div class="button-space">{{word.language.languageName}}</div></td>
             <td>
                 <div class="col-lg-3" style="margin-top: 4px;margin-left: 6px; text-align: left">
                     {{word.translation.word}}
                 </div>
                 <div class="col-lg-4 right">
-                    <button class="btn-link" ng-click="open(word.source)">
+                    <button class="btn-link" ng-click="open(word)">
                         Show more translations
                     </button>
                 </div>
             </td>
-            <td><button class="btn-link" ng-click="deleteWord(word.source)">[X]</button></td>
+            <td><button class="btn-link" ng-click="deleteWord(word)">[X]</button></td>
         </tr>
         </tbody>
     </table>

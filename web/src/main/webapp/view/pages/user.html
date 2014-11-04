@@ -34,23 +34,23 @@
         <tbody>
         <tr ng-repeat="word in userWords">
             <td>
-                <a href="#word/{{word.source.word}}/{{word.source.language.languageName}}">
-                    <button class="btn-link">{{word.source.word}}</button>
+                <a href="#word/{{word.word}}/{{word.language.languageName}}">
+                    <button class="btn-link">{{word.word}}</button>
                 </a>
             </td>
             <td>
-                <div class="button-space">{{word.source.language.languageName}}</div>
+                <div class="button-space">{{word.language.languageName}}</div>
             </td>
             <td>
                 <div class="col-lg-3 button-space left-button">
                     {{word.translation.word}}
                 </div>
                 <div class="col-lg-5 right">
-                    <button class="btn-link" ng-click="open(word.source)">Show more translations</button>
+                    <button class="btn-link" ng-click="open(word)">Show more translations</button>
                 </div>
             </td>
             <td>
-                <button class="btn-link" ng-click="removeWord(word.source)">[X]</button>
+                <button class="btn-link" ng-click="removeWord(word)">[X]</button>
             </td>
         </tr>
         </tbody>

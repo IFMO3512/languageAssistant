@@ -2,7 +2,6 @@ package com.fivehundredtwelve.langassist.dictionaries;
 
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.WordWithTranslation;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,28 +42,28 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
     @Nonnull
     @Override
-    public Collection<WordWithTranslation> getWordsWithTranslation(final @Nonnull Language language) {
+    public Collection<Word> getWordsWithTranslation(final @Nonnull Language language) {
         return getWordsWithTranslation(getWords(), language);
     }
 
 
     @Nonnull
     @Override
-    public Collection<WordWithTranslation> getWordsWithTranslation(final @Nonnull Collection<Word> words,
+    public Collection<Word> getWordsWithTranslation(final @Nonnull Collection<Word> words,
                                                                    final @Nonnull Language language) {
         Preconditions.checkNotNull(language, "Language can't be null");
 
         LOGGER.debug("Getting all words with translation to language={}", language);
 
-        Collection<WordWithTranslation> wordsWithTranslation = new ArrayList<>();
+        Collection<Word> wordsWithTranslation = new ArrayList<>();
 
         for (final Word word : words) {
             Word translation = getTranslation(word, language);
 
             if (translation == null) {
-                wordsWithTranslation.add(new WordWithTranslation(word));
+                wordsWithTranslation.add(word);
             } else {
-                wordsWithTranslation.add(new WordWithTranslation(word,translation));
+                wordsWithTranslation.add(word.withTranslation(translation));
             }
         }
 
@@ -81,8 +80,8 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
         LOGGER.debug("Adding word={} with translation={}", word, translation);
 
-        words.add(word);
-        words.add(translation);
+        words.add(word.getMinimal());
+        words.add(translation.getMinimal());
 
         final List<Word> newTranslations = getTranslationList(word);
         newTranslations.add(translation);

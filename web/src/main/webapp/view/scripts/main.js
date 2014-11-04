@@ -46,3 +46,7 @@ app.factory('LanguageFactory', function LanguageFactory($http, $rootScope) {
         refreshLanguages: LanguageFactory.refreshLanguages
     };
 });
+
+app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScope) {
+
+});

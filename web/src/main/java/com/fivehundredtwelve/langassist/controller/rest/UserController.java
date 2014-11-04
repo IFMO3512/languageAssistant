@@ -2,16 +2,11 @@ package com.fivehundredtwelve.langassist.controller.rest;
 
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.User;
-import com.fivehundredtwelve.langassist.Word;
-import com.fivehundredtwelve.langassist.WordWithTranslation;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
-import com.fivehundredtwelve.langassist.dictionaries.DictionaryManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 /**
  * Receives restful requests to manage users.
