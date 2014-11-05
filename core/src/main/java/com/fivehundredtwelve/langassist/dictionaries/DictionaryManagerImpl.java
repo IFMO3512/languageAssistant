@@ -80,8 +80,8 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
         LOGGER.debug("Adding word={} with translation={}", word, translation);
 
-        words.add(word.getMinimal());
-        words.add(translation.getMinimal());
+        words.add(word.minimal());
+        words.add(translation.minimal());
 
         final List<Word> newTranslations = getTranslationList(word);
         newTranslations.add(translation);

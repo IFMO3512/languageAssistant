@@ -47,10 +47,7 @@ angular.module('main').controller('Words', function ($scope, $http, $modal, Lang
 
     $scope.addTranslation = function (word) {
         $http({
-            method: 'POST', url: 'dictionary/add', data: {
-                source: $scope.cutWord(word),
-                translation: $scope.cutWord(word.translation)
-            }
+            method: 'POST', url: 'dictionary/add', data: word
         })
             .success(function (data) {
                 if (data.code == "OK") {

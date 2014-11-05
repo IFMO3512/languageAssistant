@@ -27,7 +27,7 @@ public class DictionaryController extends AbstractController {
      * @return status of adding translation
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Container addTranslation(@RequestBody Word word) {
+    public Container addTranslation(@RequestBody WordWithTranslation word) {
         LOGGER.debug("Adding translation={}", word);
 
         if (word.getTranslation() == null)

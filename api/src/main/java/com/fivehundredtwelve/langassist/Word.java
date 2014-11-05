@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 public class Word implements Serializable {
 
-    private static final long serialVersionUID = -5075958923027437396L;
+    private static final long serialVersionUID = -5075958923027437397L;
     private final String word;
     private final Language language;
     private final Word translation;
@@ -42,22 +42,6 @@ public class Word implements Serializable {
         this.word = word;
         this.language = Language.getLanguage(language);
         this.translation = null;
-        this.category = null;
-
-        if (this.language == null) throw new IllegalArgumentException("Language not found");
-    }
-
-    @JsonCreator
-    public Word(final @JsonProperty("word") @Nonnull String word,
-                final @JsonProperty("language") @Nonnull String language,
-                final @JsonProperty("translation") @Nonnull Word translation) {
-        Preconditions.checkNotNull(word);
-        Preconditions.checkNotNull(language);
-        Preconditions.checkNotNull(translation);
-
-        this.word = word;
-        this.language = Language.getLanguage(language);
-        this.translation = translation;
         this.category = null;
 
         if (this.language == null) throw new IllegalArgumentException("Language not found");
@@ -102,7 +86,7 @@ public class Word implements Serializable {
     }
 
     @Nonnull
-    public Word getMinimal() {
+    public Word minimal() {
         return new Word(word, language);
     }
 
