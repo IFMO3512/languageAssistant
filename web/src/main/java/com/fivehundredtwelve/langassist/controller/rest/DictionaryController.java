@@ -30,14 +30,14 @@ public class DictionaryController extends AbstractController {
     public Container addTranslation(@RequestBody WordWithTranslation word) {
         LOGGER.debug("Adding translation={}", word);
 
-        if (word.getTranslation() == null)
+        if (word.getWord().getTranslation() == null)
             illegalArgumentsContainer("Translation should be setted");
 
         try {
-            dictionaryManager.addTranslation(word, word.getTranslation());
+            dictionaryManager.addTranslation(word.getWord().minimal(), word.getWord().getTranslation());
 
             // TODO think about duplex translation
-            dictionaryManager.addTranslation(word.getTranslation(), word);
+            dictionaryManager.addTranslation(word.getWord().getTranslation(), word.getWord().minimal());
 
             return createSuccessContainer("Translation in both way is added");
 

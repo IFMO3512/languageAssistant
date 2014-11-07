@@ -79,6 +79,7 @@ public class UserController extends AbstractController {
     }
 
 
+    @RequestMapping("/language/set")
     public Container setLanguage(final @CookieValue("name") String name, final @CookieValue("domain") String domain,
                                  final @RequestBody String language) {
         LOGGER.debug("Setting language={} for user with name={} and domain={}", language, name, domain);
@@ -99,6 +100,31 @@ public class UserController extends AbstractController {
         try {
             accountManager.putUser(user);
             return createSuccessContainer("User have been updated");
+        } catch (Exception ex) {
+            return createErrorContainer(ex);
+        }
+    }
+
+
+    @RequestMapping("/language/get")
+    public Container getLanguage(final @CookieValue("name") String name, final @CookieValue("domain") String domain) {
+        LOGGER.debug("Getting language for user with name={} and domain={}", name, domain);
+
+        if (name == null || domain == null)
+            return illegalArgumentsContainer("Name or domain or language is null");
+
+        final String email = getEmail(name, domain);
+
+        try {
+            User user = accountManager.getUser(email);
+
+            LOGGER.debug("Found user={}", user);
+
+            if (user == null || user.getLanguage() == null) {
+                return createFailedContainer("Can't find user or language");
+            }
+
+            return createSuccessContainer("User have been updated", user.getLanguage().getLanguageName());
         } catch (Exception ex) {
             return createErrorContainer(ex);
         }

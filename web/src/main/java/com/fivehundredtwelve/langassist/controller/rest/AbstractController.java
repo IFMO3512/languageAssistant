@@ -34,4 +34,10 @@ public abstract class AbstractController {
 
         return new Container(ResponseCode.ILLEGAL_ARGUMENTS, message);
     }
+
+    protected Container createFailedContainer(String why) {
+        getLogger().debug("Failed because of {}", why);
+
+        return new Container(ResponseCode.NOT_OK, why);
+    }
 }

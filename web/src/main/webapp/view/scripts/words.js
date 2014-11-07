@@ -1,4 +1,4 @@
-angular.module('main').controller('Words', function ($scope, $http, $modal, LanguageFactory) {
+angular.module('main').controller('Words', function ($scope, $http, $modal, LanguageFactory, UserLanguageFactory) {
 
     $scope.languages = LanguageFactory.getLanguages();
 

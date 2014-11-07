@@ -47,6 +47,29 @@ app.factory('LanguageFactory', function LanguageFactory($http, $rootScope) {
     };
 });
 
-app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScope) {
+app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScope, $cookies) {
+    var language = "Russian";
 
+    var refreshLanguage = function () {
+        $http({method: 'GET', url: 'languages/getLanguages'}).
+            success(function (data) {
+                if (data.code == "OK") {
+                    language = data.data();
+                    $rootScope.$broadcast('userLanguage:refresh', data.data);
+                }
+            });
+    };
+
+    if ($cookies.domain && $cookies.email && $cookies.name) {   // TODO better check with user factory
+        refreshLanguage();
+    }
+
+    return {
+        getLanguage: function() {
+            return language;
+        },
+        refreshLanguage: refreshLanguage
+    }
 });
+
+// TODO add factory with user factory

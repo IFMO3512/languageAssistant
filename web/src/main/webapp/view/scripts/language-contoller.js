@@ -23,12 +23,9 @@ angular.module('main').controller('LanguageController', function($scope, $http, 
             });
     };
 
-    $scope.addTranslation = function (source, translation) {
+    $scope.addTranslation = function (word, translation) {
         $http({
-            method: 'POST', url: 'dictionary/add', data: {
-                source: source,
-                translation: translation
-            }
+            method: 'POST', url: 'dictionary/add', data: $scope.getWordWithTranslation(word, translation)
         })
             .success(function (data) {
                 if (data.code == "OK") {
@@ -41,6 +38,17 @@ angular.module('main').controller('LanguageController', function($scope, $http, 
         return {
             word: word.word,
             language: word.language.languageName
+        }
+    };
+
+    $scope.getWordWithTranslation = function(word, translation) {
+        return {
+            word: word.word,
+            language: word.language.languageName,
+            translation: {
+                word : translation.word,
+                language: translation.language
+            }
         }
     };
 

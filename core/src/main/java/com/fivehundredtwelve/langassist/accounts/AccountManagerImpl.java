@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,15 @@ public class AccountManagerImpl implements AccountManager {
         }
     }
 
+    @Nullable
+    @Override
+    public User getUser(final @Nonnull String email) {
+        Preconditions.checkNotNull(email);
+
+        LOGGER.debug("Getting user with email={}", email);
+
+        return users.get(email);
+    }
 
     @Override
     public void addWordToUser(final @Nonnull User user, final @Nonnull Word word) {
@@ -92,7 +102,7 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Removing from user={} the word={}", user, word);
 
-        if(checkUser(user)) {
+        if (checkUser(user)) {
             LOGGER.debug("User is correct, adding the word");
 
             List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
