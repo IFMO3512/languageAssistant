@@ -6,19 +6,22 @@ import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.Serializable;
 
 /**
  * Class that represent the word entity.
  * This class is immutable.
- * <p>
+ * <p/>
  * Created by eliseev on 19/09/14.
  */
 public class Word implements Serializable {
 
-    private static final long serialVersionUID = -5075958923027437396L;
+    private static final long serialVersionUID = -5075958923027437397L;
     private final String word;
     private final Language language;
+    private final Word translation;
+    private final Category category;
 
     /**
      * Creates a {@link Word} object with specified email.
@@ -27,11 +30,7 @@ public class Word implements Serializable {
      * @throws java.lang.NullPointerException if word is null
      */
     public Word(final @Nonnull String word, final @Nonnull Language language) {
-        Preconditions.checkNotNull(word);
-        Preconditions.checkNotNull(language);
-
-        this.language = language;
-        this.word = word;
+        this(word, language, null, null);
     }
 
     @JsonCreator
@@ -42,6 +41,25 @@ public class Word implements Serializable {
 
         this.word = word;
         this.language = Language.getLanguage(language);
+        this.translation = null;
+        this.category = null;
+
+        if (this.language == null) throw new IllegalArgumentException("Language not found");
+    }
+
+    public Word(final @Nonnull String word, final @Nonnull Language language,
+                final @Nullable Word translation, final @Nullable Category category) {
+        Preconditions.checkNotNull(word);
+        Preconditions.checkNotNull(language);
+
+        this.word = word;
+        this.language = language;
+        this.translation = translation;
+        this.category = category;
+    }
+
+    public Word(final String word, final Language language, final Word translation) {
+        this(word, language, translation, null);
     }
 
     public Language getLanguage() {
@@ -50,6 +68,26 @@ public class Word implements Serializable {
 
     public String getWord() {
         return word;
+    }
+
+    @Nullable
+    public Word getTranslation() {
+        return translation;
+    }
+
+    @Nullable
+    public Category getCategory() {
+        return category;
+    }
+
+    @Nonnull
+    public Word withTranslation(Word translation) {
+        return new Word(word, language, translation);
+    }
+
+    @Nonnull
+    public Word minimal() {
+        return new Word(word, language);
     }
 
     @Override
@@ -77,6 +115,8 @@ public class Word implements Serializable {
         return new ToStringBuilder(this)
                 .append("word", word)
                 .append("language", language)
+                .append("translation", translation)
+                .append("category", category)
                 .toString();
     }
 }

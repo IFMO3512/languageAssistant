@@ -1,14 +1,12 @@
 package com.fivehundredtwelve.langassist.controller.rest;
 
+import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.User;
-import com.fivehundredtwelve.langassist.Word;
 import com.fivehundredtwelve.langassist.accounts.AccountManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
 
 /**
  * Receives restful requests to manage users.
@@ -38,7 +36,7 @@ public class UserController extends AbstractController {
 
         try {
             LOGGER.debug("Adding user with email={}", email);
-            accountManager.addUser(new User(email));
+            accountManager.putUser(new User(email));
         } catch (RuntimeException e) {
             return createErrorContainer(e);
         }
@@ -61,7 +59,7 @@ public class UserController extends AbstractController {
                 return new Container(ResponseCode.OK);
             } else {
                 LOGGER.warn("User with email={} does not exist");
-                return new Container(ResponseCode.NOT_OK);
+                return addUser(email);      // TODO delete
             }
         } catch (RuntimeException e) {
             return createErrorContainer(e);
@@ -80,78 +78,53 @@ public class UserController extends AbstractController {
 
     }
 
-    /**
-     * Adds word to user.
-     *
-     * @param word the word itself
-     * @return status of adding word to user
-     */
-    @RequestMapping("/dictionary/add")
-    public Container addInUserDictionary(@RequestBody Word word, @CookieValue("name") String name,
-                                         @CookieValue("domain") String domain) {
-        LOGGER.debug("Adding word={} to the dictionary of user with name={} and domain={}", word, name, domain);
 
-        if (word == null || name == null || domain == null) {
-            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
-        }
+    @RequestMapping("/language/set")
+    public Container setLanguage(final @CookieValue("name") String name, final @CookieValue("domain") String domain,
+                                 final @RequestBody String language) {
+        LOGGER.debug("Setting language={} for user with name={} and domain={}", language, name, domain);
 
-        String email = getEmail(name, domain);
+        if (name == null || domain == null || language == null)
+            return illegalArgumentsContainer("Name or domain or language is null");
+
+        final Language userLanguage = Language.getLanguage(language);
+
+        if (userLanguage == null)
+            return illegalArgumentsContainer("Language not found");
+
+        final String email = getEmail(name, domain);
+
+        final User user = new User(email, userLanguage);
+        LOGGER.debug("Created user={}", user);
 
         try {
-            accountManager.addWordToUser(new User(email), word);
-
-            LOGGER.debug("Word={} added to user with email={}", word, email);
-
-            return new Container(ResponseCode.OK);
-
+            accountManager.putUser(user);
+            return createSuccessContainer("User have been updated");
         } catch (Exception ex) {
             return createErrorContainer(ex);
         }
     }
 
-	/*
-    // TODO - implement, maybe
-	@RequestMapping("/dictionary/delete")
-	public void deleteFromDictionary() {
-		
-		throw new UnsupportedOperationException();
-		
-	}
-	*/
 
-    /**
-     * Returns all users words of specified language.
-     *
-     * @param language language of expected words
-     */
-    @RequestMapping("/dictionary/get")
-    public Container getFromUserDictionary(@RequestParam(value = "language", required = true) String language) {
-
-        // TODO - request appropriate accountManager method, return body
-        throw new UnsupportedOperationException();
-
-    }
-
-
-    @RequestMapping("/dictionary/getall")
-    public Container getUserDictionary(@CookieValue("name") final String name,
-                                       @CookieValue("domain") final String domain) {
-        LOGGER.debug("Getting user dictionary for user with name={} and domain={}", name, domain);
+    @RequestMapping("/language/get")
+    public Container getLanguage(final @CookieValue("name") String name, final @CookieValue("domain") String domain) {
+        LOGGER.debug("Getting language for user with name={} and domain={}", name, domain);
 
         if (name == null || domain == null)
-            return new Container(ResponseCode.ILLEGAL_ARGUMENTS);
+            return illegalArgumentsContainer("Name or domain or language is null");
 
         final String email = getEmail(name, domain);
 
-        User user = new User(email);
-
         try {
-            Collection<Word> words = accountManager.getWords(user);
+            User user = accountManager.getUser(email);
 
-            LOGGER.debug("User with email={} have a dictionary={}", email, words);
+            LOGGER.debug("Found user={}", user);
 
-            return new DataContainer<>(ResponseCode.OK, words);
+            if (user == null || user.getLanguage() == null) {
+                return createFailedContainer("Can't find user or language");
+            }
 
+            return createSuccessContainer("User have been updated", user.getLanguage().getLanguageName());
         } catch (Exception ex) {
             return createErrorContainer(ex);
         }

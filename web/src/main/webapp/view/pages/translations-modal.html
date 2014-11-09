@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <h4 class="modal-title" id="myModalLabel">{{word.word}} translations</h4>
+</div>
+<div class="modal-body">
+    <div class="far-distance">
+        <div ng-repeat="translation in translations">
+            {{translation.word}} - {{translation.language.languageName}}
+        </div>
+    </div>
+    <div class="norm-distance">
+        <div class="form-inline">
+            <input type="text" class="form-control" ng-model="newTranslation.word"
+                   id="add{{word.word}}Translation" placeholder="Enter word" autofocus>
+            <select class="form-control" name="sourceLanguages"
+                    ng-model="newTranslation.language">
+                <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
+                    {{languageName.languageName}}
+                </option>
+            </select>
+            <button class="btn btn-success" ng-disabled="isNewTranslationInvalid()"
+                    ng-click="addTranslation(word, newTranslation)">Add
+            </button>
+        </div>
+    </div>
+</div>

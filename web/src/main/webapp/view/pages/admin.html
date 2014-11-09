@@ -1,50 +1,59 @@
-<div class="container" ng-controller="words">
+<div class="container" ng-controller="Words">
     <form role="form">
         <div class="form-group">
             <label for="addWord">New word</label>
 
             <div class="form-inline">
-                <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
-                <select class="form-control" ng-model="source.language" name="sourceLanguages">
-                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">{{languageName.languageName}}</option>
+                <input ng-model="word.word" type="text" class="form-control" id="addWord" placeholder="Enter word"
+                       autofocus>
+                <select class="form-control" ng-model="word.language" name="sourceLanguages">
+                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
+                        {{languageName.languageName}}
+                    </option>
                 </select>
             </div>
             <br/>
 
             <div class="form-inline">
-                <input ng-model="translation.word" type="text" class="form-control" id="addTranslation"
+                <input ng-model="word.translation.word" type="text" class="form-control" id="addTranslation"
                        placeholder="Enter translation"/>
-                <select ng-init class="form-control" ng-model="translation.language" name="translationLanguage">
-                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">{{languageName.languageName}}</option>
+                <select ng-init class="form-control" ng-model="word.translation.language" name="wtranslationLanguage">
+                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
+                        {{languageName.languageName}}
+                    </option>
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-default" ng-click="addTranslation(source, translation)"
+        <button type="submit" class="btn btn-default" ng-click="addTranslation(word)"
                 ng-disabled="isNotValid()">Add
         </button>
     </form>
     <p>{{value}}</p>
-
-    <div class="words">
-        <table class="table table-striped table-bordered">
-            <thead class="table-fixed-header">
-            <tr>
-                <th>Word</th>
-                <th>Language</th>
-                <th>Delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="word in words" ng-click="getTranslations(word)">
-                <td>{{word.word}}</td>
-                <td>{{word.language.languageName}}</td>
-                <td><a ng-click="deleteWord(word)">[X]</a></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <h3>Translations</h3>
-
-    <div ui-grid="{ data: translations }" class="myGrid"></div>
+    <table class="table table-responsive  table-striped">
+        <thead class="table-fixed-header">
+        <tr>
+            <th><div class="button-space">Word</div></th>
+            <th><div class="button-space">Language</div></th>
+            <th><div class="button-space">Translation</div></th>
+            <th><div class="button-space">Delete</div></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="word in words">
+            <td><div class="button-space">{{word.word}}</div></td>
+            <td><div class="button-space">{{word.language.languageName}}</div></td>
+            <td>
+                <div class="col-lg-3" style="margin-top: 4px;margin-left: 6px; text-align: left">
+                    {{word.translation.word}}
+                </div>
+                <div class="col-lg-4 right">
+                    <button class="btn-link" ng-click="open(word)">
+                        Show more translations
+                    </button>
+                </div>
+            </td>
+            <td><button class="btn-link" ng-click="deleteWord(word)">[X]</button></td>
+        </tr>
+        </tbody>
+    </table>
 </div>

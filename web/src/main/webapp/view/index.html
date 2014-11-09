@@ -18,12 +18,20 @@
     <script type="text/javascript" src="libs/angular-1.2.26/angular-cookies.min.js"></script>
     <script type="text/javascript" src="libs/ui-grid/ui-grid.js"></script>
     <script type="text/javascript" src="libs/angularjs-hotkeys-1.4.5/hotkeys.js"></script>
+    <script type="text/javascript" src="libs/angular-ui-0.11.2/ui-bootstrap-tpls-0.11.2.js"></script>
 
     <link rel="styleSheet" href="libs/ui-grid/ui-grid.css"/>
 
     <link rel="styleSheet" href="libs/angularjs-hotkeys-1.4.5/hotkeys.css"/>
 
     <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript" src="scripts/user-forms.js"></script>
+    <script type="text/javascript" src="scripts/language-contoller.js"></script>
+    <script type="text/javascript" src="scripts/user-dictionary.js"></script>
+    <script type="text/javascript" src="scripts/word.js"></script>
+    <script type="text/javascript" src="scripts/words.js"></script>
+
+
     <link rel="stylesheet" href="styles/words.css"/>
     <link rel="stylesheet" href="styles/distance.css"/>
 
@@ -41,7 +49,7 @@
                 <li><a href="#admin"><i class="fa fa-shield"></i> AdministrationPanel</a></li>
                 <li><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Log In</a>
 
-                    <div class="dropdown-menu spaces" ng-controller="user-forms">
+                    <div class="dropdown-menu spaces" ng-controller="UserForms">
 
                         <form role="form" class="form form-group wide">
                             <label for="registerEmail" class="close-distance">Register</label>

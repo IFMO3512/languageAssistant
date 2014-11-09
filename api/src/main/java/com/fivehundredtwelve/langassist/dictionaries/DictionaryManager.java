@@ -20,6 +20,13 @@ public interface DictionaryManager {
     @Nonnull
     public Collection<Word> getWords();
 
+    @Nonnull
+    public Collection<Word> getWordsWithTranslation(final @Nonnull Language language);
+
+    @Nonnull
+    public Collection<Word> getWordsWithTranslation(@Nonnull Collection<Word> words,
+                                                    @Nonnull Language language);
+
     public void addTranslation(final @Nonnull Word word, final @Nonnull Word translation);
 
     @Nullable
@@ -32,4 +39,5 @@ public interface DictionaryManager {
     public List<Word> getTranslations(final @Nonnull Word word);
 
     public void removeWord(final @Nonnull Word word);
+
 }

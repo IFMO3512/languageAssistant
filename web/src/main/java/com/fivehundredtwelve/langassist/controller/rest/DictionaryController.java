@@ -27,14 +27,17 @@ public class DictionaryController extends AbstractController {
      * @return status of adding translation
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public Container addTranslation(@RequestBody Translation translation) {
-        LOGGER.debug("Adding translation={}", translation);
+    public Container addTranslation(@RequestBody WordWithTranslation word) {
+        LOGGER.debug("Adding translation={}", word);
+
+        if (word.getWord().getTranslation() == null)
+            illegalArgumentsContainer("Translation should be setted");
 
         try {
-            dictionaryManager.addTranslation(translation.getSource(), translation.getTranslation());
+            dictionaryManager.addTranslation(word.getWord().minimal(), word.getWord().getTranslation());
 
             // TODO think about duplex translation
-            dictionaryManager.addTranslation(translation.getTranslation(), translation.getSource());
+            dictionaryManager.addTranslation(word.getWord().getTranslation(), word.getWord().minimal());
 
             return createSuccessContainer("Translation in both way is added");
 
@@ -100,6 +103,24 @@ public class DictionaryController extends AbstractController {
 
         try {
             return createSuccessContainer("System words are {}", dictionaryManager.getWords());
+        } catch (Exception ex) {
+            return createErrorContainer(ex);
+        }
+    }
+
+    @RequestMapping("/translations/getall")
+    public Container getWordsWithTranslation(@RequestParam final String language) {
+        LOGGER.debug("Getting all words with translation to {} language", language);
+
+        final Language _language = Language.getLanguage(language);
+
+        if (_language == null) {
+            illegalArgumentsContainer("Language was not found");
+        }
+
+        try {
+            return createSuccessContainer("Found translations are:",
+                    dictionaryManager.getWordsWithTranslation(_language));
         } catch (Exception ex) {
             return createErrorContainer(ex);
         }

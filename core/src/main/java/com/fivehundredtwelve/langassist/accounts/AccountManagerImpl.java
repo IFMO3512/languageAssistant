@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,7 @@ public class AccountManagerImpl implements AccountManager {
     }
 
     @Override
-    public void addUser(final @Nonnull User user) {
+    public void putUser(final @Nonnull User user) {
         Preconditions.checkNotNull(user);
 
         LOGGER.debug("Adding user with email={}", user.getEmail());
@@ -44,9 +45,25 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Checking user with email={}", user.getEmail());
 
-        return users.get(user.getEmail()) != null;
+
+        if (users.get(user.getEmail()) != null) {
+            LOGGER.debug("User={} is found", user);
+            return true;
+        } else {
+            LOGGER.debug("User={} is not found", user);
+            return false;
+        }
     }
 
+    @Nullable
+    @Override
+    public User getUser(final @Nonnull String email) {
+        Preconditions.checkNotNull(email);
+
+        LOGGER.debug("Getting user with email={}", email);
+
+        return users.get(email);
+    }
 
     @Override
     public void addWordToUser(final @Nonnull User user, final @Nonnull Word word) {
@@ -55,7 +72,6 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Adding word={} to user with email={}", user, word);
 
-        // TODO in cookie is value without a @gmail
         if (checkUser(user)) {
             LOGGER.debug("User is correct, adding the word");
 
@@ -77,5 +93,26 @@ public class AccountManagerImpl implements AccountManager {
         LOGGER.debug("Found {} words for {}", userWords.size(), user.getEmail());
 
         return userWords;
+    }
+
+    @Override
+    public void removerUserWord(final @Nonnull User user, final @Nonnull Word word) {
+        Preconditions.checkNotNull(user, "User should be not null");
+        Preconditions.checkNotNull(word, "Word should be not null");
+
+        LOGGER.debug("Removing from user={} the word={}", user, word);
+
+        if (checkUser(user)) {
+            LOGGER.debug("User is correct, adding the word");
+
+            List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
+
+            userWords.remove(word);
+            translations.put(user, userWords);
+
+            LOGGER.debug("Word={} was removed", word);
+        } else {
+            LOGGER.debug("Can't find the user={}", user);
+        }
     }
 }
