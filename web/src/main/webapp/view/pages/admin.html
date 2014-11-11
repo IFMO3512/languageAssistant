@@ -6,7 +6,9 @@
             <div class="form-inline">
                 <input ng-model="source.word" type="text" class="form-control" id="addWord" placeholder="Enter word">
                 <select class="form-control" ng-model="source.language" name="sourceLanguages">
-                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">{{languageName.languageName}}</option>
+                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
+                        {{languageName.languageName}}
+                    </option>
                 </select>
             </div>
             <br/>
@@ -15,7 +17,9 @@
                 <input ng-model="translation.word" type="text" class="form-control" id="addTranslation"
                        placeholder="Enter translation"/>
                 <select ng-init class="form-control" ng-model="translation.language" name="translationLanguage">
-                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">{{languageName.languageName}}</option>
+                    <option ng-repeat="languageName in languages" value="{{languageName.languageName}}">
+                        {{languageName.languageName}}
+                    </option>
                 </select>
             </div>
         </div>

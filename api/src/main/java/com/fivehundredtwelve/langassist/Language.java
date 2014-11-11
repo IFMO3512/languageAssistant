@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 /**
  * @author eliseev
  */
-@JsonFormat(shape= JsonFormat.Shape.OBJECT)
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum Language {
 
     ENGLISH("English"),

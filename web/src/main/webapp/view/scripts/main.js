@@ -66,13 +66,17 @@ app.controller('user-forms', ['$scope', '$http', '$cookies', function ($scope, $
 
 app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($scope, $http, $cookies) {
 
-    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
-        {"languageEnglishName":"French","languageName":"Français"},
-        {"languageEnglishName":"German","languageName":"Deutsch"},
-        {"languageEnglishName":"Italian","languageName":"Italiano"}];
+    $scope.languages = [
+        {"languageEnglishName": "Russian", "languageName": "Русский"},
+        {"languageEnglishName": "French", "languageName": "Français"},
+        {"languageEnglishName": "German", "languageName": "Deutsch"},
+        {"languageEnglishName": "Italian", "languageName": "Italiano"}
+    ];
 
-    $scope.userWords = [{'word': 'word','language': {'languageName': 'English'}},
-        {'word': 'das Wort','language':{'languageName': 'Deutsch'}}]; 
+    $scope.userWords = [
+        {'word': 'word', 'language': {'languageName': 'English'}},
+        {'word': 'das Wort', 'language': {'languageName': 'Deutsch'}}
+    ];
 
     var sayHi = function () {
         if ($cookies.email == null) {
@@ -127,16 +131,21 @@ app.controller('user-dictionary', ['$scope', '$http', '$cookies', function ($sco
 
 app.controller('words', ['$scope', '$http', function ($scope, $http) {
 
-    $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
-        {"languageEnglishName":"French","languageName":"Français"},
-        {"languageEnglishName":"German","languageName":"Deutsch"},
-        {"languageEnglishName":"Italian","languageName":"Italiano"}];
+    $scope.languages = [
+        {"languageEnglishName": "Russian", "languageName": "Русский"},
+        {"languageEnglishName": "French", "languageName": "Français"},
+        {"languageEnglishName": "German", "languageName": "Deutsch"},
+        {"languageEnglishName": "Italian", "languageName": "Italiano"}
+    ];
 
-    $scope.words = [{'word': 'word', 'languageName': 'English'},
+    $scope.words = [
+        {'word': 'word', 'languageName': 'English'},
         {'word': 'das Wort', 'languageName': 'Deutsch'}
     ];
 
-    $scope.translations = [{word: 'love', languageName: 'English'}];
+    $scope.translations = [
+        {word: 'love', languageName: 'English'}
+    ];
 
     var isBlank = function (s) {
         return s == null || s == "";
@@ -214,10 +223,12 @@ app.controller('word', ['$scope', '$http', '$route', '$routeParams', 'hotkeys', 
             {word: 'Ololo', languageName: 'English'}
         ];
 
-        $scope.languages = [{"languageEnglishName":"Russian","languageName":"Русский"},
-            {"languageEnglishName":"French","languageName":"Français"},
-            {"languageEnglishName":"German","languageName":"Deutsch"},
-            {"languageEnglishName":"Italian","languageName":"Italiano"}];
+        $scope.languages = [
+            {"languageEnglishName": "Russian", "languageName": "Русский"},
+            {"languageEnglishName": "French", "languageName": "Français"},
+            {"languageEnglishName": "German", "languageName": "Deutsch"},
+            {"languageEnglishName": "Italian", "languageName": "Italiano"}
+        ];
 
         $scope.showTranslation = function () {
             if ($scope.translation == '')

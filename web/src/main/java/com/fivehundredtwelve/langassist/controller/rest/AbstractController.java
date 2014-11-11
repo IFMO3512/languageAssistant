@@ -14,6 +14,12 @@ public abstract class AbstractController {
         return new Container(ResponseCode.ERROR, ex.getMessage());
     }
 
+    protected Container createErrorContainer(String description) {
+        getLogger().warn("Error occurred", description);
+
+        return new Container(ResponseCode.ERROR, description);
+    }
+
     protected Container createSuccessContainer(String message) {
         getLogger().debug(message);
 

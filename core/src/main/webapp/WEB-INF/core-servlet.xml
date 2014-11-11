@@ -12,4 +12,19 @@
         <property name="service" ref="dictionaryManager"/>
         <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
     </bean>
+
+    <bean name="/gameManager" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service" ref="gameManagerService"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.game.GameManager"/>
+    </bean>
+
+    <bean name="/gameContainer" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service" ref="gameContainerService"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.game.GameContainer"/>
+    </bean>
+
+    <bean name="/playerManager" class="org.springframework.remoting.caucho.HessianServiceExporter">
+        <property name="service" ref="playerManagerService"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.game.PlayerManager"/>
+    </bean>
 </beans>

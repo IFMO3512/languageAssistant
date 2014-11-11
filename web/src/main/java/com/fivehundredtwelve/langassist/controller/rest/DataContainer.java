@@ -13,14 +13,14 @@ public class DataContainer<T> extends Container {
 
     public DataContainer(final @Nonnull ResponseCode code, final @Nonnull T data) {
         super(code);
-        Preconditions.checkNotNull("Data can't be null",data);
+        Preconditions.checkNotNull("Data can't be null", data);
 
         this.data = data;
     }
 
     public DataContainer(final @Nonnull ResponseCode code, final @Nullable String description, final @Nonnull T data) {
         super(code, description);
-        Preconditions.checkNotNull("Data can't be null",data);
+        Preconditions.checkNotNull("Data can't be null", data);
 
         this.data = data;
     }

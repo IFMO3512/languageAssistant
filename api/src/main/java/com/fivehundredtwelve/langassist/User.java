@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * Class that represents User with.
  * This class is immutable.
- * <p>
+ * <p/>
  * Created by eliseev on 19/09/14.
  */
 public class User implements Serializable {

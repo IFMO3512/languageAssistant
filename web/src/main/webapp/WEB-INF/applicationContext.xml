@@ -19,4 +19,10 @@
         <property name="serviceInterface" value="com.fivehundredtwelve.langassist.dictionaries.DictionaryManager"/>
     </bean>
 
+    <bean id="gameContainer" class="org.springframework.remoting.caucho.HessianProxyFactoryBean">
+        <property name="serviceUrl" value="${core.hessian.domain.addr}/gameContainer"/>
+        <property name="overloadEnabled" value="true"/>
+        <property name="serviceInterface" value="com.fivehundredtwelve.langassist.game.GameContainer"/>
+    </bean>
+
 </beans>
