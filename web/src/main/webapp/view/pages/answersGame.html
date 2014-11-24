@@ -1,0 +1,40 @@
+<div class="container" ng-controller="Game">
+    <div class="jumbotron" style="text-align: center;">
+        <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0"
+                 aria-valuemax="100" style="width: {{progress}}%;"><span class="sr-only">{{progress}}% Complete (success)</span></div>
+        </div>
+
+        <div><h1 style="margin-top: 50px; margin-bottom: 100px;">Word</h1></div>
+
+        <div class="row text-center far-distance center-block">
+
+            <button type="button" class="btn btn-lg btn-default" style="width: 250px; margin-right: 50px"
+                    ng-class="style(1)" ng-click="choose(1)">
+                1. {{first}}
+            </button>
+            <button type="button" class="btn btn-lg btn-default" style="width: 250px;"
+                    ng-class="style(2)" ng-click="choose(2)">
+                2. {{second}}
+            </button>
+        </div>
+        <div class="row text-center far-distance center-block">
+
+            <button type="button" class="btn btn-lg btn-default" style="width: 250px; margin-right: 50px"
+                    ng-class="style(3)" ng-click="choose(3)">
+                3. {{third}}
+            </button>
+            <button type="button" class="btn btn-lg btn-default" style="width: 250px;"
+                    ng-class="style(4)" ng-click="choose(4)">
+                4. {{fourth}}
+            </button>
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-info" ng-disabled="!isAnswered()" style="width: 55%" ng-click="next()">
+                Continue (space to continue)
+            </button>
+        </div>
+
+    </div>
+</div>
