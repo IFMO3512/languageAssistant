@@ -1,5 +1,5 @@
 angular.module('main').controller('Word', function ($scope, $http, $route, $routeParams, hotkeys, $location,
-                                                    $modal, LanguageFactory, $cookies) {
+                                                    $modal, LanguageFactory, $cookies, UserWordFactory) {
     $scope.word = {};
     $scope.word.word = $routeParams.word;
     $scope.word.language = {};
@@ -9,12 +9,13 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     $scope.translation = '';
     $scope.hidden = true;
 
-    $scope.words = [{'word': 'word', 'language': {'languageName': 'English'}},
-        {'word': 'das Wort', 'language': {'languageName': 'Deutsch'}}];
+    $scope.words = UserWordFactory.getWords();
 
     $scope.languages = LanguageFactory.getLanguages();
 
     $scope.nextId = 0;
+
+    $scope.score = 0;
 
     $scope.showTranslation = function () {
         if ($scope.translation != '')
@@ -88,14 +89,16 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     $scope.refreshWords = function () {
         if ($cookies.email == null) return;
 
-        $http({method: 'GET', url: 'user/dictionary/getall'}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    $scope.words = data.data;
+        UserWordFactory.getWords();
 
-                    $scope.refreshNextIndex();
-                }
-            });
+        //$http({method: 'GET', url: 'user/dictionary/getall'}).
+        //    success(function (data) {
+        //        if (data.code == "OK") {
+        //            $scope.words = data.data;
+        //
+        //            $scope.refreshNextIndex();
+        //        }
+        //    });
     };
 
     $scope.isHidden = function () {
@@ -103,12 +106,13 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     };
 
     $scope.next = function () {
+        $scope.score = ($scope.nextId+1)/$scope.words.length*100;
+
         if ($scope.nextId >= $scope.words.length)
-            $location.path('/');
+            $location.path('/profile');
 
         $scope.word = $scope.words[$scope.nextId];
         $scope.hidden = true;
-        $scope.translation = '';
 
         $scope.nextId++;
 
@@ -131,7 +135,11 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
                 if (data.code == "OK") {
                     $scope.translation = data.data.word;
                     $scope.hidden = true;
+                } else {
+                    $scope.translation = '';
                 }
+            }).error(function (data) {
+                $scope.translation = '';
             });
     };
 
@@ -182,12 +190,19 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
                 "undefined" !== typeof $scope.words[i].language &&
                 $scope.words[i].language.languageName === $scope.word.language.languageName) {
                 $scope.nextId = i + 1;
+
+                $scope.score = ($scope.nextId)/$scope.words.length*100;
             }
         }
     };
 
     $scope.$on('language:refresh', function (event, data) {
         $scope.languages = data;
+    });
+
+
+    $scope.$on('user:word.refreshed', function (event, data) {
+        $scope.refreshNextIndex();
     });
 
     $scope.refreshWords();

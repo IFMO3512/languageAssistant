@@ -1,26 +1,11 @@
-angular.module('main').controller('UserDictionary', function ($scope, $http, $cookies, $modal, LanguageFactory) {
+angular.module('main').controller('UserDictionary', function ($scope, $http, $modal, LanguageFactory,
+                                                              UserLoginFactory, UserWordFactory) {
 
     $scope.languages = LanguageFactory.getLanguages();
 
     $scope.language = "Russian";
 
-    $scope.userWords = [{
-        word: "Love",
-        language: {"languageEnglishName": "English", "languageName": "English"},
-        translation: {"word": "Magic", "language": {"languageEnglishName": "English", "languageName": "English"}}
-    }, {
-        "word": "Magic",
-        "language": {"languageEnglishName": "English", "languageName": "English"},
-        translation: null
-    }];
-
-    $scope.sayHi = function () {
-        if ($cookies.email == null) {
-            $scope.hi = "Hi, just login, my friend";
-        } else {
-            $scope.hi = "Hi, " + $cookies.email;
-        }
-    };
+    $scope.userWords = UserWordFactory.getWords();
 
     $scope.open = function (word) {
 
@@ -58,12 +43,7 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $co
     };
 
     $scope.refreshWords = function () {
-        if ($cookies.email == null) return;
-
-        $http({method: 'GET', url: 'user/dictionary/getall/translation', params: {language: $scope.language}}).
-            success(function (data) {
-                if (data.code == "OK") $scope.userWords = data.data;
-            });
+        UserWordFactory.refreshWords();
     };
 
     $scope.addWord = function (word) {
@@ -83,8 +63,11 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $co
 
     $scope.$on('language:refresh', function (event, data) {
         $scope.languages = data;
+        $scope.languageName = {};
+        $scope.languageName.languageName = "English";
     });
 
-    $scope.refreshWords();
-    $scope.sayHi();
+    $scope.$on('user:word.refreshed', function (event, data) {
+        $scope.userWords = UserWordFactory.getWords();
+    });
 });

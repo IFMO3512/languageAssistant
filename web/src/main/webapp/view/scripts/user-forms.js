@@ -1,44 +1,50 @@
-angular.module('main').controller('UserForms', function ($scope, $http, $cookies) {
+angular.module('main').controller('UserForms', function ($scope, $http, $location, UserLoginFactory) {
 
     $scope.isBlank = function (s) {
         return s == null || s == ""
     };
 
+    $scope.isLogged = UserLoginFactory.isLogged;
+
     $scope.isNotValid = function (user) {
         return user == null || $scope.isBlank(user.email);
     };
 
-    $scope.register = function (user) {
-        $http({method: 'POST', url: 'user/add', params: {email: user.email}}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    $scope.registrationResult = "You have been logged in and registered";
-                    $cookies.email = user.email;
-                    $cookies.name = user.email.split("@")[0];
-                    $cookies.domain = user.email.split("@")[1];
-                }
-                else $scope.registrationResult = "There was an error during registration";
-            }).
-            error(function () {
-                $scope.registrationResult = "Can not connect to the server";
-            });
+    $scope.register = UserLoginFactory.register;
+
+    $scope.registerAndToMain = function (user) {
+        $scope.register(user);
+        $location.path("/profile");
     };
 
-    $scope.login = function (user) {
-        $http({method: 'POST', url: 'user/check', params: {email: user.email}}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    $cookies.email = user.email;
-                    $cookies.name = user.email.split("@")[0];
-                    $cookies.domain = user.email.split("@")[1];
-                    $scope.loginResult = "All right";
-                } else if (data.code == "NOT_OK") {
-                    $scope.loginResult = "Invalid email";
-                }
-                else $scope.loginResult = "There was an error during registration";
-            }).
-            error(function () {
-                $scope.registrationResult = "Can not connect to the server";
-            });
+    $scope.loginAndToMain = function (user) {
+        $scope.login(user);
+        $location.path("/profile");
+
     };
+
+    $scope.logout = function () {
+        UserLoginFactory.logout();
+        $location.path("/")
+    };
+
+    $scope.login = UserLoginFactory.login;
+
+    $scope.home = function () {
+        if ($scope.isLogged()) {
+            $location.path("/profile");
+        } else {
+            $location.path("/");
+        }
+    };
+
+    $scope.$on('user:login', function (event, data) {
+        $scope.loginResult = data;
+        $scope.logged = UserLoginFactory.isLogged();
+    });
+
+    $scope.$on('user:register', function (event, data) {
+        $scope.registerResult = data;
+        $scope.logged = UserLoginFactory.isLogged();
+    });
 });

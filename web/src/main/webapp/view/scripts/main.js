@@ -2,8 +2,12 @@ var app = angular.module('main', ['ui.grid', 'ngRoute', 'ngCookies', 'cfp.hotkey
 
 app.config(function ($routeProvider) {
     $routeProvider
-
         .when('/', {
+            templateUrl: 'pages/first.html',
+            controller: 'First'
+        })
+
+        .when('/profile', {
             templateUrl: 'pages/user.html',
             controller: 'UserDictionary'
         })
@@ -56,16 +60,17 @@ app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScop
     var language = "Russian";
 
     var refreshLanguage = function () {
-        $http({method: 'GET', url: 'languages/getLanguages'}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    language = data.data();
-                    $rootScope.$broadcast('userLanguage:refresh', data.data);
-                }
-            });
+        //$http({method: 'GET', url: 'languages/getLanguages'}).
+        //    success(function (data) {
+        //        if (data.code == "OK") {
+        //            language = data.data;
+        //            $rootScope.$broadcast('userLanguage:refresh', data.data);
+        //        }
+        //    });
+        // TODO
     };
 
-    if ($cookies.domain && $cookies.email && $cookies.name) {   // TODO better check with user factory
+    if ($cookies.domain && $cookies.email && $cookies.name) {
         refreshLanguage();
     }
 
@@ -77,72 +82,109 @@ app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScop
     }
 });
 
-angular.module('main').controller('Game', function ($scope) {
-    $scope.question = 'Find a good translation';
+app.factory('UserLoginFactory', function UserLoginFactory($http, $rootScope, $cookies, $location) {
+    var logged = false;
 
-    $scope.quests = [{
-        word: 'Word', options: [{word: 'Wort'}, {word: 'Morgen'}, {word: 'Platz'}, {word: 'Spiele'}],
-        answer: 0
-    }, {
-        word: 'Auge', options: [{word: 'Magic'}, {word: 'Morning'}, {word: 'Sun'}, {word: 'Eye'}],
-        answer: 3
-    }];
+    var login = function (user) {
+        var loginResult;
 
-    $scope.round = 0;
-    $scope.answered = false;
-    $scope.progress = 0;
+        $http({method: 'POST', url: 'user/check', params: {email: user.email}}).
+            success(function (data) {
+                if (data.code == "OK") {
+                    $cookies.email = user.email;
+                    $cookies.name = user.email.split("@")[0];
+                    $cookies.domain = user.email.split("@")[1];
+                    loginResult = "All right";
 
-    $scope.setState = function(i) {
-        var word = $scope.quests[i];
-        $scope.word = word.word;
+                    logged = true;
+                } else if (data.code == "NOT_OK") {
+                    loginResult = "Invalid email";
+                }
+                else loginResult = "There was an error during registration";
 
-        function extract(n) {
-            return word.options[n].word;
-        }
+                $rootScope.$broadcast('user:login', loginResult);
+            }).
+            error(function () {
+                loginResult = "Can not connect to the server";
 
-        $scope.first = extract(0);
-        $scope.second = extract(1);
-        $scope.third = extract(2);
-        $scope.fourth = extract(3);
-        $scope.writeAnswer = word.answer;
-
-        $scope.progress = (i/$scope.quests.length)*100
+                $rootScope.$broadcast('user:login', logged);
+            });
     };
 
-    $scope.style = function(i) {
-        if($scope.answered) {
-            if (i == $scope.writeAnswer+1) {
-                return "btn-success";
-            }
-            else if (i == $scope.choosen) {
-                return "btn-danger";
-            }
-            else {
-                return "btn-default";
-            }
-        } else {
-            return "btn-default";
-        }
+    var register = function (user) {
+        var registrationResult = "Problem";
+
+        $http({method: 'POST', url: 'user/add', params: {email: user.email}}).
+            success(function (data) {
+                if (data.code == "OK") {
+                    registrationResult = "You have been logged in and registered";
+                    $cookies.email = user.email;
+                    $cookies.name = user.email.split("@")[0];
+                    $cookies.domain = user.email.split("@")[1];
+
+                    logged = true;
+                }
+                else registrationResult = "There was an error during registration";
+
+                $rootScope.$broadcast('user:register', registrationResult);
+            }).
+            error(function () {
+                registrationResult = "Can not connect to the server";
+
+                $rootScope.$broadcast('user:register', registrationResult);
+            });
     };
 
-    $scope.choose = function(i) {
-        if (!$scope.answered) {
-            $scope.answered = true;
-            $scope.choosen = i;
-        }
+    var logout = function () {
+        logged = false;
+        delete $cookies.email;
+        delete $cookies.name;
+        delete $cookies.domain;
     };
 
-    $scope.isAnswered = function () {
-        return $scope.answered;
-    };
+    if ($cookies.domain && $cookies.email && $cookies.name) {
+        logged = true;
 
-    $scope.next = function () {
-        $scope.answered = false;
-        $scope.round += 1;
-        $scope.setState($scope.round);
-    };
+        $location.path("/");
+    }
 
-
-    $scope.setState($scope.round);
+    return {
+        login: login,
+        register: register,
+        isLogged: function () {
+            return logged;
+        },
+        logout: logout
+    }
 });
-// TODO add factory with user factory
+
+
+app.factory('UserWordFactory', function ($rootScope, $http, UserLanguageFactory, UserLoginFactory) {
+    var words;
+
+    var refreshWords = function (param) {
+        if (!param) param = UserLanguageFactory.getLanguage();
+
+        if (!UserLoginFactory.isLogged()) return;
+
+        $http({
+            method: 'GET', url: 'user/dictionary/getall/translation', params: {
+                language: UserLanguageFactory.getLanguage()
+            }
+        }).
+            success(function (data) {
+                if (data.code == "OK") words = data.data;
+
+                $rootScope.$broadcast('user:word.refreshed', words);
+            });
+    };
+
+    refreshWords(UserLanguageFactory.getLanguage());
+
+    return {
+        getWords: function () {
+            return words;
+        },
+        refreshWords: refreshWords
+    }
+});
