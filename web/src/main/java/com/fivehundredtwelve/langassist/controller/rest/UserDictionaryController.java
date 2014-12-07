@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -141,11 +142,8 @@ public class UserDictionaryController extends AbstractController {
         }
     }
 
-    private String getEmail(final String name, final String domain) {
-        return String.format("%s@%s", name, domain);
-    }
-
     @Override
+    @Nonnull
     protected Logger getLogger() {
         return LOGGER;
     }

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -86,7 +87,7 @@ public class AccountManagerImpl implements AccountManager {
 
     @Override
     @Nonnull
-    public List<Word> getWords(final @Nonnull User user) {
+    public Collection<Word> getWords(final @Nonnull User user) {
         LOGGER.debug("Getting the words for user with email={}", user.getEmail());
 
         List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());

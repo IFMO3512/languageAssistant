@@ -60,13 +60,6 @@ app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScop
     var language = "Russian";
 
     var refreshLanguage = function () {
-        //$http({method: 'GET', url: 'languages/getLanguages'}).
-        //    success(function (data) {
-        //        if (data.code == "OK") {
-        //            language = data.data;
-        //            $rootScope.$broadcast('userLanguage:refresh', data.data);
-        //        }
-        //    });
         // TODO
     };
 

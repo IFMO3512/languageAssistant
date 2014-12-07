@@ -1,13 +1,7 @@
-angular.module('main').controller('Game', function ($scope) {
-    $scope.question = 'Find a good translation';
+angular.module('main').controller('Game', function ($scope, $http, $location, UserWordFactory) {
+    $scope.question = 'Choose correct translation';
 
-    $scope.quests = [{
-        word: 'Word', options: [{word: 'Wort'}, {word: 'Morgen'}, {word: 'Platz'}, {word: 'Spiele'}],
-        answer: 0
-    }, {
-        word: 'Auge', options: [{word: 'Magic'}, {word: 'Morning'}, {word: 'Sun'}, {word: 'Eye'}],
-        answer: 3
-    }];
+    $scope.words = UserWordFactory.getWords();
 
     $scope.round = 0;
     $scope.answered = false;
@@ -60,9 +54,19 @@ angular.module('main').controller('Game', function ($scope) {
     $scope.next = function () {
         $scope.answered = false;
         $scope.round += 1;
+        if ($scope.round >= $scope.quests.length)
+            $location.path('/profile');     // TODO result
+
         $scope.setState($scope.round);
     };
 
+    $scope.refreshQuests = function () {
+        $http({method: 'GET', url: 'game/quests/'}).
+            success(function (data) {
+                $scope.quests = data.data;
+                $scope.setState($scope.round)
+            });
+    };
 
-    $scope.setState($scope.round);
+    $scope.refreshQuests();
 });

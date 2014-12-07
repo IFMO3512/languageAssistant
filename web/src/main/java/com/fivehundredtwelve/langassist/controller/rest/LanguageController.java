@@ -1,10 +1,14 @@
 package com.fivehundredtwelve.langassist.controller.rest;
+
 import com.fivehundredtwelve.langassist.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Nonnull;
+
 /**
  * @author anna_mukhina
  */
@@ -24,7 +28,9 @@ public class LanguageController extends AbstractController {
             return createErrorContainer(ex);
         }
     }
+
     @Override
+    @Nonnull
     protected Logger getLogger() {
         return LOGGER;
     }

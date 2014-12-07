@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Nonnull;
+
 /**
  * Receives restful requests to manage words.
  *
@@ -43,6 +45,7 @@ public class WordController extends AbstractController {
     }
 
     @Override
+    @Nonnull
     protected Logger getLogger() {
         return LOGGER;
     }

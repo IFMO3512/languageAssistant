@@ -1,11 +1,12 @@
 angular.module('main').controller('Word', function ($scope, $http, $route, $routeParams, hotkeys, $location,
-                                                    $modal, LanguageFactory, $cookies, UserWordFactory) {
+                                                    $modal, LanguageFactory, $cookies, UserWordFactory,
+                                                    UserLanguageFactory) {
     $scope.word = {};
     $scope.word.word = $routeParams.word;
     $scope.word.language = {};
     $scope.word.language.languageName = $routeParams.language;       // TODO encode russian language!!!
 
-    $scope.userLanguage = 'Russian';        // TODO get from user session
+    $scope.userLanguage = UserLanguageFactory.getLanguage();
     $scope.translation = '';
     $scope.hidden = true;
 
@@ -158,9 +159,7 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
             }
         });
 
-        modalInstance.result.then(function () {
-            $scope.refreshTranslation();
-        });
+        modalInstance.result.then($scope.refreshTranslation, $scope.refreshTranslation);
     };
 
     $scope.changeLanguage = function (language) {
@@ -201,7 +200,7 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     });
 
 
-    $scope.$on('user:word.refreshed', function (event, data) {
+    $scope.$on('user:word.refreshed', function () {
         $scope.refreshNextIndex();
     });
 

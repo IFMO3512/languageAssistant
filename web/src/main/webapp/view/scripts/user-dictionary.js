@@ -1,9 +1,9 @@
 angular.module('main').controller('UserDictionary', function ($scope, $http, $modal, LanguageFactory,
-                                                              UserLoginFactory, UserWordFactory) {
+                                                              UserLoginFactory, UserWordFactory, UserLanguageFactory) {
 
     $scope.languages = LanguageFactory.getLanguages();
 
-    $scope.language = "Russian";
+    $scope.language = UserLanguageFactory.getLanguage();
 
     $scope.userWords = UserWordFactory.getWords();
 
