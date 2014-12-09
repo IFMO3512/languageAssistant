@@ -91,15 +91,6 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
         if ($cookies.email == null) return;
 
         UserWordFactory.getWords();
-
-        //$http({method: 'GET', url: 'user/dictionary/getall'}).
-        //    success(function (data) {
-        //        if (data.code == "OK") {
-        //            $scope.words = data.data;
-        //
-        //            $scope.refreshNextIndex();
-        //        }
-        //    });
     };
 
     $scope.isHidden = function () {
@@ -107,17 +98,18 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     };
 
     $scope.next = function () {
-        $scope.score = ($scope.nextId+1)/$scope.words.length*100;
+        $scope.score = ($scope.nextId)/$scope.words.length*100;
 
-        if ($scope.nextId >= $scope.words.length)
-            $location.path('/profile');
+        if ($scope.nextId >= $scope.words.length) {
+            $scope.showResult();
+        } else {
+            $scope.word = $scope.words[$scope.nextId];
+            $scope.hidden = true;
 
-        $scope.word = $scope.words[$scope.nextId];
-        $scope.hidden = true;
+            $scope.nextId++;
 
-        $scope.nextId++;
-
-        $scope.refreshTranslation();
+            $scope.refreshTranslation();
+        }
     };
 
     $scope.isShowDisabled = function () {
@@ -162,6 +154,26 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
         modalInstance.result.then($scope.refreshTranslation, $scope.refreshTranslation);
     };
 
+    $scope.showResult = function () {
+        var modalInstance = $modal.open({
+            templateUrl: 'pages/word-result.html',
+            controller: 'WordResult',
+            resolve: {
+                items: function () {
+                    return {
+                        score: $scope.words.length
+                    };
+                }
+            }
+        });
+
+        var f = function() {
+            $location.path('/profile');
+        };
+
+        modalInstance.result.then(f, f);
+    };
+
     $scope.changeLanguage = function (language) {
         $scope.userLanguage = language;
 
@@ -190,7 +202,7 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
                 $scope.words[i].language.languageName === $scope.word.language.languageName) {
                 $scope.nextId = i + 1;
 
-                $scope.score = ($scope.nextId)/$scope.words.length*100;
+                $scope.score = ($scope.nextId-1)/$scope.words.length*100;
             }
         }
     };

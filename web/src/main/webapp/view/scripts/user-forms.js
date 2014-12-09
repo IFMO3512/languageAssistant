@@ -1,4 +1,5 @@
-angular.module('main').controller('UserForms', function ($scope, $http, $location, UserLoginFactory) {
+angular.module('main').controller('UserForms', function ($scope, $http, $location, UserLoginFactory, UserWordFactory,
+                                                         UserLanguageFactory) {
 
     $scope.isBlank = function (s) {
         return s == null || s == ""
@@ -32,7 +33,8 @@ angular.module('main').controller('UserForms', function ($scope, $http, $locatio
 
     $scope.home = function () {
         if ($scope.isLogged()) {
-            $location.path("/profile");
+            if ($location.path == "/")
+                $location.path("/profile");
         } else {
             $location.path("/");
         }
@@ -41,10 +43,15 @@ angular.module('main').controller('UserForms', function ($scope, $http, $locatio
     $scope.$on('user:login', function (event, data) {
         $scope.loginResult = data;
         $scope.logged = UserLoginFactory.isLogged();
+        UserLanguageFactory.refreshLanguage();
+        UserWordFactory.refreshWords(UserLanguageFactory.getLanguage());
     });
 
     $scope.$on('user:register', function (event, data) {
         $scope.registerResult = data;
         $scope.logged = UserLoginFactory.isLogged();
+        console.log($scope.logged);
+        UserLanguageFactory.refreshLanguage();
+        UserWordFactory.refreshWords(UserLanguageFactory.getLanguage());
     });
 });
