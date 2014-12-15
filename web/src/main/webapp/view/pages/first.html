@@ -1,0 +1,52 @@
+<div ng-controller="First">
+    <div class="col-md-1">
+
+    </div>
+    <div class="col-md-6">
+        <div style="margin-bottom: 50px;">
+            <h1>Learn languages by playing</h1></div>
+        <div>
+            <blockquote>
+                Those who know nothing of foreign languages know nothing of their own.
+                <footer>Johann Wolfgang von Goethe, Maxims and Reflections</footer>
+            </blockquote>
+        </div>
+    </div>
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-3 text-left">
+        <div style="margin-bottom: 50px;"><h2>Register</h2></div>
+        <div ng-controller="UserForms">
+
+            <form role="form" class="form form-group wide">
+                <label for="registerEmail" class="close-distance">Email</label>
+                <input ng-model="register.user.email" type="email" class="form-control close-distance"
+                       id="registerEmail" placeholder="Enter email">
+                <button ng-click="registerAndToMain(register.user)" class="btn btn-default close-distance"
+                        ng-disabled="isNotValid(register.user)">
+                    Submit
+                </button>
+                <div>{{registerResult}}</div>
+            </form>
+
+            <form class="norm-distance">
+                <a href="#" id="btnNewUser" data-toggle="collapse" data-target="#firstFormLogin">Log in.</a>
+            </form>
+
+            <form role="form" id="firstFormLogin" class="form form-group collapse wide">
+                <label for="loginEmail" class="close-distance">Login</label>
+                <input ng-model="login.user.email" type="email" class="form-control close-distance"
+                       id="loginEmail" placeholder="Enter email">
+                <button ng-click="loginAndToMain(login.user)" class="btn btn-default close-distance"
+                        ng-disabled="isNotValid(login.user)">
+                    Submit
+                </button>
+                <div>{{loginResult}}</div>
+            </form>
+
+        </div>
+    </div>
+    <div class="col-md-1">
+
+    </div>
+</div>

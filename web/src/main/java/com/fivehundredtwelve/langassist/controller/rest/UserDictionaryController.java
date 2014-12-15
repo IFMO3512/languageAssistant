@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 
 /**
@@ -61,7 +62,7 @@ public class UserDictionaryController extends AbstractController {
     @RequestMapping(value = "/remove", method = RequestMethod.POST)
     public Container deleteFromDictionary(@CookieValue("name") final String name,
                                           @CookieValue("domain") final String domain, @RequestBody final Word word) {
-        LOGGER.debug("Removing word={} in language={} from user dictionary for user with name={} and domain={}",
+        LOGGER.debug("Removing word={} from user dictionary for user with name={} and domain={}",
                 word, name, domain);
 
         if (name == null || domain == null || word == null)
@@ -141,12 +142,9 @@ public class UserDictionaryController extends AbstractController {
         }
     }
 
-    private String getEmail(final String name, final String domain) {
-        return String.format("%s@%s", name, domain);
-    }
-
     @Override
+    @Nonnull
     protected Logger getLogger() {
-        return null;
+        return LOGGER;
     }
 }

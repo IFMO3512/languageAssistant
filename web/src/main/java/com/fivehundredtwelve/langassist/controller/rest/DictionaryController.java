@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Nonnull;
+
 /**
  * Receives restful requests to manage translations of words.
  *
@@ -115,7 +117,7 @@ public class DictionaryController extends AbstractController {
         final Language _language = Language.getLanguage(language);
 
         if (_language == null) {
-            illegalArgumentsContainer("Language was not found");
+            return illegalArgumentsContainer("Language was not found");
         }
 
         try {
@@ -141,6 +143,7 @@ public class DictionaryController extends AbstractController {
     }
 
     @Override
+    @Nonnull
     protected Logger getLogger() {
         return LOGGER;
     }

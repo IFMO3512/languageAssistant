@@ -1,4 +1,4 @@
-angular.module('main').controller('LanguageController', function($scope, $http, $modalInstance, items) {
+angular.module('main').controller('LanguageController', function ($scope, $http, $modalInstance, items) {
     // TODO add autofocus on load
     $scope.languages = items.languages;
 
@@ -41,12 +41,12 @@ angular.module('main').controller('LanguageController', function($scope, $http, 
         }
     };
 
-    $scope.getWordWithTranslation = function(word, translation) {
+    $scope.getWordWithTranslation = function (word, translation) {
         return {
             word: word.word,
             language: word.language.languageName,
             translation: {
-                word : translation.word,
+                word: translation.word,
                 language: translation.language
             }
         }

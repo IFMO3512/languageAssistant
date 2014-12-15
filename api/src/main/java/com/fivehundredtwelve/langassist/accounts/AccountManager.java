@@ -5,6 +5,7 @@ import com.fivehundredtwelve.langassist.Word;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public interface AccountManager {
     void addWordToUser(final @Nonnull User user, final @Nonnull Word word);
 
     @Nonnull
-    List<Word> getWords(final @Nonnull User user);
+    Collection<Word> getWords(final @Nonnull User user);
 
     void removerUserWord(final @Nonnull User user, final @Nonnull Word word);
 }

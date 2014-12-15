@@ -1,20 +1,22 @@
 angular.module('main').controller('Word', function ($scope, $http, $route, $routeParams, hotkeys, $location,
-                                                    $modal, LanguageFactory, $cookies) {
+                                                    $modal, LanguageFactory, $cookies, UserWordFactory,
+                                                    UserLanguageFactory) {
     $scope.word = {};
     $scope.word.word = $routeParams.word;
     $scope.word.language = {};
     $scope.word.language.languageName = $routeParams.language;       // TODO encode russian language!!!
 
-    $scope.userLanguage = 'Russian';        // TODO get from user session
+    $scope.userLanguage = UserLanguageFactory.getLanguage();
     $scope.translation = '';
     $scope.hidden = true;
 
-    $scope.words = [{'word': 'word', 'language': {'languageName': 'English'}},
-        {'word': 'das Wort', 'language': {'languageName': 'Deutsch'}}];
+    $scope.words = UserWordFactory.getWords();
 
     $scope.languages = LanguageFactory.getLanguages();
 
     $scope.nextId = 0;
+
+    $scope.score = 0;
 
     $scope.showTranslation = function () {
         if ($scope.translation != '')
@@ -88,14 +90,7 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     $scope.refreshWords = function () {
         if ($cookies.email == null) return;
 
-        $http({method: 'GET', url: 'user/dictionary/getall'}).
-            success(function (data) {
-                if (data.code == "OK") {
-                    $scope.words = data.data;
-
-                    $scope.refreshNextIndex();
-                }
-            });
+        UserWordFactory.getWords();
     };
 
     $scope.isHidden = function () {
@@ -103,16 +98,18 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     };
 
     $scope.next = function () {
-        if ($scope.nextId >= $scope.words.length)
-            $location.path('/');
+        $scope.score = ($scope.nextId)/$scope.words.length*100;
 
-        $scope.word = $scope.words[$scope.nextId];
-        $scope.hidden = true;
-        $scope.translation = '';
+        if ($scope.nextId >= $scope.words.length) {
+            $scope.showResult();
+        } else {
+            $scope.word = $scope.words[$scope.nextId];
+            $scope.hidden = true;
 
-        $scope.nextId++;
+            $scope.nextId++;
 
-        $scope.refreshTranslation();
+            $scope.refreshTranslation();
+        }
     };
 
     $scope.isShowDisabled = function () {
@@ -131,7 +128,11 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
                 if (data.code == "OK") {
                     $scope.translation = data.data.word;
                     $scope.hidden = true;
+                } else {
+                    $scope.translation = '';
                 }
+            }).error(function (data) {
+                $scope.translation = '';
             });
     };
 
@@ -150,9 +151,27 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
             }
         });
 
-        modalInstance.result.then(function () {
-            $scope.refreshTranslation();
+        modalInstance.result.then($scope.refreshTranslation, $scope.refreshTranslation);
+    };
+
+    $scope.showResult = function () {
+        var modalInstance = $modal.open({
+            templateUrl: 'pages/word-result.html',
+            controller: 'WordResult',
+            resolve: {
+                items: function () {
+                    return {
+                        score: $scope.words.length
+                    };
+                }
+            }
         });
+
+        var f = function() {
+            $location.path('/profile');
+        };
+
+        modalInstance.result.then(f, f);
     };
 
     $scope.changeLanguage = function (language) {
@@ -182,12 +201,19 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
                 "undefined" !== typeof $scope.words[i].language &&
                 $scope.words[i].language.languageName === $scope.word.language.languageName) {
                 $scope.nextId = i + 1;
+
+                $scope.score = ($scope.nextId-1)/$scope.words.length*100;
             }
         }
     };
 
     $scope.$on('language:refresh', function (event, data) {
         $scope.languages = data;
+    });
+
+
+    $scope.$on('user:word.refreshed', function () {
+        $scope.refreshNextIndex();
     });
 
     $scope.refreshWords();

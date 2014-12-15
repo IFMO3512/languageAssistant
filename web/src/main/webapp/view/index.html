@@ -29,7 +29,11 @@
     <script type="text/javascript" src="scripts/language-contoller.js"></script>
     <script type="text/javascript" src="scripts/user-dictionary.js"></script>
     <script type="text/javascript" src="scripts/word.js"></script>
+    <script type="text/javascript" src="scripts/word-result.js"></script>
     <script type="text/javascript" src="scripts/words.js"></script>
+    <script type="text/javascript" src="scripts/first.js"></script>
+    <script type="text/javascript" src="scripts/game.js"></script>
+    <script type="text/javascript" src="scripts/game-result.js"></script>
 
 
     <link rel="stylesheet" href="styles/words.css"/>
@@ -39,17 +43,18 @@
 <body>
 <header>
     <nav class="navbar navbar-default dropdown" role="navigation">
-        <div class="container">
+        <div class="container" ng-controller="UserForms">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">Language assistant</a>
+                <a class="navbar-brand" ng-click="home()">Language assistant</a>
             </div>
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
-                <li><a href="#admin"><i class="fa fa-shield"></i> AdministrationPanel</a></li>
-                <li><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Log In</a>
+                <li ng-show="isLogged()"><a href="#profile"><i class="fa fa-home"></i> Home</a></li>
+                <li ng-show="isLogged()"><a href="#admin"><i class="fa fa-shield"></i> AdministrationPanel</a></li>
+                <li ng-show="isLogged()"><a ng-click="logout()">Logout</a></li>
+                <li ng-show="!isLogged()"><a class="dropdown-toggle" data-toggle="dropdown" id="navLogin">Log In</a>
 
-                    <div class="dropdown-menu spaces" ng-controller="UserForms">
+                    <div class="dropdown-menu spaces">
 
                         <form role="form" class="form form-group wide">
                             <label for="registerEmail" class="close-distance">Register</label>
@@ -59,7 +64,7 @@
                                     ng-disabled="isNotValid(register.user)">
                                 Submit
                             </button>
-                            <div>{{registrationResult}}</div>
+                            <div>{{registerResult}}</div>
                         </form>
 
                         <form class="norm-distance">
@@ -69,7 +74,7 @@
                         <form role="form" id="formLogin" class="form form-group collapse">
                             <label for="loginEmail" class="close-distance">Login</label>
                             <input ng-model="login.user.email" type="email" class="form-control close-distance"
-                                   id="loginEmail" placeholder="Enter email">
+                                   id="loginEmail" placeholder="Enter email" />
                             <button ng-click="login(login.user)" class="btn btn-default close-distance"
                                     ng-disabled="isNotValid(login.user)">
                                 Submit
