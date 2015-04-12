@@ -1,5 +1,5 @@
-angular.module('main').controller('UserDictionary', function ($scope, $http, $modal, LanguageFactory,
-                                                              UserLoginFactory, UserWordFactory, UserLanguageFactory) {
+angular.module('main').controller('UserDictionary', function ($scope, $http, $modal, UserWordFactory, LanguageFactory,
+                                                              UserLoginFactory, UserLanguageFactory) {
 
     $scope.languages = LanguageFactory.getLanguages();
 
@@ -23,6 +23,8 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $mo
         });
 
         modalInstance.result.then(function () {
+            $scope.refreshWords();
+        }, function () {
             $scope.refreshWords();
         });
     };
@@ -62,12 +64,14 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $mo
     };
 
     $scope.$on('language:refresh', function (event, data) {
+        console.log('lang');
         $scope.languages = data;
         $scope.languageName = {};
         $scope.languageName.languageName = "English";
     });
 
-    $scope.$on('user:word.refreshed', function (event, data) {
+    $scope.$on('user:refreshed', function () {
+        console.log('uw');
         $scope.userWords = UserWordFactory.getWords();
     });
 });

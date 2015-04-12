@@ -29,30 +29,63 @@ app.config(function ($routeProvider) {
 });
 
 
-app.factory('LanguageFactory', function LanguageFactory($http, $rootScope) {
-    LanguageFactory.languages = [{"languageEnglishName": "Russian", "languageName": "Русский"},
+app.factory('UserWordFactory', function ($rootScope, $http, UserLanguageFactory, UserLoginFactory) {
+    var words;
+
+    var refreshWords = function (param) {
+        if (!param) param = UserLanguageFactory.getLanguage();
+
+        if (!UserLoginFactory.isLogged()) return;
+
+        $http({
+            method: 'GET', url: 'user/dictionary/getall/translation', params: {
+                language: UserLanguageFactory.getLanguage()
+            }
+        }).
+            success(function (data) {
+                if (data.code == "OK") {
+                    words = data.data;
+                    console.log("Refreshed");
+                    $rootScope.$broadcast('user:refreshed');
+                }
+            });
+    };
+
+    refreshWords(UserLanguageFactory.getLanguage());
+
+    return {
+        getWords: function () {
+            return words;
+        },
+        refreshWords: refreshWords
+    }
+});
+
+
+app.factory('LanguageFactory', function ($http, $rootScope) {
+    var languages = [{"languageEnglishName": "Russian", "languageName": "Русский"},
         {"languageEnglishName": "French", "languageName": "Français"},
         {"languageEnglishName": "German", "languageName": "Deutsch"},
         {"languageEnglishName": "Italian", "languageName": "Italiano"}];
 
-    LanguageFactory.refreshLanguages = function () {
+    var refreshLanguages = function () {
         $http({method: 'GET', url: 'languages/getLanguages'}).
             success(function (data) {
                 if (data.code == "OK") {
-                    LanguageFactory.languages = data.data;
+                    languages = data.data;
                     console.log("refreshing");
                     $rootScope.$broadcast('language:refresh', data.data);
                 }
             });
     };
 
-    LanguageFactory.refreshLanguages();
+    refreshLanguages();
 
     return {
         getLanguages: function () {
-            return LanguageFactory.languages;
+            return languages;
         },
-        refreshLanguages: LanguageFactory.refreshLanguages
+        refreshLanguages: refreshLanguages
     };
 });
 
@@ -148,36 +181,5 @@ app.factory('UserLoginFactory', function UserLoginFactory($http, $rootScope, $co
             return logged;
         },
         logout: logout
-    }
-});
-
-
-app.factory('UserWordFactory', function ($rootScope, $http, UserLanguageFactory, UserLoginFactory) {
-    var words;
-
-    var refreshWords = function (param) {
-        if (!param) param = UserLanguageFactory.getLanguage();
-
-        if (!UserLoginFactory.isLogged()) return;
-
-        $http({
-            method: 'GET', url: 'user/dictionary/getall/translation', params: {
-                language: UserLanguageFactory.getLanguage()
-            }
-        }).
-            success(function (data) {
-                if (data.code == "OK") words = data.data;
-
-                $rootScope.$broadcast('user:word.refreshed', words);
-            });
-    };
-
-    refreshWords(UserLanguageFactory.getLanguage());
-
-    return {
-        getWords: function () {
-            return words;
-        },
-        refreshWords: refreshWords
     }
 });
