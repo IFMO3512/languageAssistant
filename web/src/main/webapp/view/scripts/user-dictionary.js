@@ -30,6 +30,8 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $mo
     $scope.changeLanguage = function (language) {
         $scope.userLanguage = language;
 
+        UserLanguageFactory.refreshLanguage(language);
+
         $scope.refreshWords();
     };
 
