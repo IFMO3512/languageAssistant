@@ -1,5 +1,11 @@
 <div class="container" ng-controller="UserDictionary">
-    <p>Your language is {{language}}, and you can not change it.</p>
+    <div class="row-fluid">
+        <p>Your language is {{userLanguage}}, you can change it to
+            <span ng-repeat="language in languages">
+                <a ng-click="changeLanguage(language.languageName)">{{language.languageName}}</a>
+            </span>
+        </p>
+    </div>
 
     <a href="#game">Play!!!</a>
 
