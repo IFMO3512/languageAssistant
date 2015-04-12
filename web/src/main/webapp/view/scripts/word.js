@@ -177,6 +177,8 @@ angular.module('main').controller('Word', function ($scope, $http, $route, $rout
     $scope.changeLanguage = function (language) {
         $scope.userLanguage = language;
 
+        UserLanguageFactory.refreshLanguage(language);
+
         $scope.refreshTranslation();
     };
 
