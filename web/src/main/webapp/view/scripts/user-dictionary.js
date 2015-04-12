@@ -3,7 +3,7 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $mo
 
     $scope.languages = LanguageFactory.getLanguages();
 
-    $scope.language = UserLanguageFactory.getLanguage();
+    $scope.userLanguage = UserLanguageFactory.getLanguage();
 
     $scope.userWords = UserWordFactory.getWords();
 
@@ -27,6 +27,14 @@ angular.module('main').controller('UserDictionary', function ($scope, $http, $mo
         }, function () {
             $scope.refreshWords();
         });
+    };
+
+    $scope.changeLanguage = function (language) {
+        $scope.userLanguage = language;
+
+        UserLanguageFactory.refreshLanguage(language);
+
+        $scope.refreshWords();
     };
 
     $scope.cutWord = function (word) {

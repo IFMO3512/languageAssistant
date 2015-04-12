@@ -92,12 +92,12 @@ app.factory('LanguageFactory', function ($http, $rootScope) {
 app.factory('UserLanguageFactory', function UserLanguageFactory($http, $rootScope, $cookies) {
     var language = "Russian";
 
-    var refreshLanguage = function () {
-        // TODO
+    var refreshLanguage = function (lang) {
+        language = lang;
     };
 
     if ($cookies.domain && $cookies.email && $cookies.name) {
-        refreshLanguage();
+        //refreshLanguage();
     }
 
     return {
