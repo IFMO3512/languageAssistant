@@ -8,7 +8,7 @@ app.config(function ($routeProvider) {
         })
 
         .when('/profile', {
-            templateUrl: 'pages/user.html',
+            templateUrl: 'pages/user-dictionary.html',
             controller: 'UserDictionary'
         })
 
