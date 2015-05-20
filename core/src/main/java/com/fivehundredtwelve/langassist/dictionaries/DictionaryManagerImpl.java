@@ -22,6 +22,8 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
     private final Map<Word, List<Word>> translations;       // TODO recurrent words in translations =(
 
+
+
     public DictionaryManagerImpl() {
         words = new CopyOnWriteArraySet<>();                // TODO compare with ConcurrentHashSet
         translations = new ConcurrentHashMap<>();
@@ -162,5 +164,4 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
         return _translations;
     }
-
 }

@@ -2,9 +2,12 @@ package com.fivehundredtwelve.langassist.accounts;
 
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
+import com.fivehundredtwelve.langassist.accounts.dao.UserDao;
+import com.fivehundredtwelve.langassist.dictionaries.dao.DictionaryDao;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,12 +27,19 @@ public class AccountManagerImpl implements AccountManager {
 
     private final Map<User, List<Word>> translations;
 
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private DictionaryDao dictionaryDao;
+
     public AccountManagerImpl() {
         users = new ConcurrentHashMap<>();
         translations = new ConcurrentHashMap<>();
     }
 
     @Override
+
     public void putUser(final @Nonnull User user) {
         Preconditions.checkNotNull(user);
 
@@ -115,5 +125,9 @@ public class AccountManagerImpl implements AccountManager {
         } else {
             LOGGER.debug("Can't find the user={}", user);
         }
+    }
+
+    public void init() {
+        dictionaryDao.addWord("Magic", "Majorish");
     }
 }
