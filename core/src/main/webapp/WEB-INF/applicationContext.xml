@@ -1,58 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-         http://www.springframework.org/schema/context
-         http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
-
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:annotation-config/>
-    <context:component-scan base-package="com.fivehundredtwelve.langassist"/>
 
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <import resource="daoCollectionsContext.xml"/>
+    <!--<import resource="daoHibernateContext.xml"/>  uncomment to hibernate-->
 
-    <bean name="accountManager" class="com.fivehundredtwelve.langassist.accounts.AccountManagerImpl" />
+    <bean name="accountManager" class="com.fivehundredtwelve.langassist.accounts.AccountManagerImpl"/>
 
-    <bean name="dictionaryManager" class="com.fivehundredtwelve.langassist.dictionaries.DictionaryManagerImpl" />
-
-    <bean name="dictionaryDaoHibernate"
-          class="com.fivehundredtwelve.langassist.dictionaries.hibernate.DictionaryDaoHibernateProxy"/>
-
-
-    <!--<bean name="dictionaryDaoCollections"-->
-          <!--class="com.fivehundredtwelve.langassist.dictionaries.DictionaryDaoCollections"/>-->
-
-    <!--<bean name="accountDaoCollections"-->
-          <!--class="com.fivehundredtwelve.langassist.accounts.AccountDaoCollections"/>-->
-
-
-    <bean name="mysqlDatasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="username" value="langassist"/>
-        <property name="password" value="password"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/LANG_ASSIST"/>
-    </bean>
-
-    <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate">
-        <property name="dataSource" ref="mysqlDatasource"/>
-    </bean>
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" depends-on="flyway">
-        <property name="dataSource" ref="mysqlDatasource"/>
-        <property name="packagesToScan" value="com.fivehundredtwelve.langassist"/>
-        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+    <bean name="dictionaryManager" class="com.fivehundredtwelve.langassist.dictionaries.DictionaryManagerImpl"/>
 </beans>
