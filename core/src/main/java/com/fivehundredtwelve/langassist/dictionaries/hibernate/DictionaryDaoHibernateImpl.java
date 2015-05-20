@@ -1,7 +1,7 @@
-package com.fivehundredtwelve.langassist.dictionaries.dao;
+package com.fivehundredtwelve.langassist.dictionaries.hibernate;
 
-import com.fivehundredtwelve.langassist.dictionaries.entities.LanguageEntity;
-import com.fivehundredtwelve.langassist.dictionaries.entities.WordEntity;
+import com.fivehundredtwelve.langassist.dictionaries.hibernate.entities.LanguageEntity;
+import com.fivehundredtwelve.langassist.dictionaries.hibernate.entities.WordEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author eliseev
- */ // TODO write anything!!!
+ */
 @Repository
 @Transactional
-public class DictionaryDao {
+public class DictionaryDaoHibernateImpl {
     @Autowired
     private SessionFactory sessionFactory;
 

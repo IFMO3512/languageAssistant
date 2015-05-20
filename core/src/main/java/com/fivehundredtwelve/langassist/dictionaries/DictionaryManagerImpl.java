@@ -5,12 +5,11 @@ import com.fivehundredtwelve.langassist.Word;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author eliseev
@@ -18,28 +17,23 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class DictionaryManagerImpl implements DictionaryManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(DictionaryManagerImpl.class);
 
-    private final Set<Word> words;
-
-    private final Map<Word, List<Word>> translations;       // TODO recurrent words in translations =(
-
-
+    @Autowired
+    private DictionaryDao dictionaryDao;
 
     public DictionaryManagerImpl() {
-        words = new CopyOnWriteArraySet<>();                // TODO compare with ConcurrentHashSet
-        translations = new ConcurrentHashMap<>();
     }
 
     @Override
     public void addWord(@Nonnull Word word) {
         Preconditions.checkNotNull(word, "Dictionary manager does not supports null element additions");
 
-        words.add(word);
+        dictionaryDao.addWord(word);
     }
 
     @Override
     @Nonnull
     public Collection<Word> getWords() {
-        return new HashSet<>(words);
+        return dictionaryDao.getWords();
     }
 
     @Nonnull
@@ -82,13 +76,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
         LOGGER.debug("Adding word={} with translation={}", word, translation);
 
-        words.add(word.minimal());
-        words.add(translation.minimal());
-
-        final List<Word> newTranslations = getTranslationList(word);
-        newTranslations.add(translation);
-
-        translations.put(word, newTranslations);
+        dictionaryDao.addTranslation(word, translation);
     }
 
     @Override
@@ -97,21 +85,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
         Preconditions.checkNotNull(word, "Translated word shouldn't be null");
         Preconditions.checkNotNull(language, "Language shouldn't be null");
 
-        LOGGER.debug("Get translation for word={} and language={}", word, language);
-
-        final List<Word> _translations = getTranslationList(word);
-
-        LOGGER.debug("Found {} translations for word={}", _translations.size(), word);
-
-        for (Word translation : _translations) {
-            if (translation.getLanguage().equals(language)) {
-                return translation;
-            }
-        }
-
-        LOGGER.debug("Translation for word={} was not found", word);
-
-        return null;
+        return dictionaryDao.getTranslation(word, language);
     }
 
     @Override
@@ -119,7 +93,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
     public Map<Word, List<Word>> getTranslations() {
         LOGGER.debug("Getting translations");
 
-        return new HashMap<>(translations);
+        return dictionaryDao.getTranslations();
     }
 
     @Override
@@ -127,13 +101,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
     public List<Word> getTranslations(final @Nonnull Word word) {
         Preconditions.checkNotNull(word);
 
-        LOGGER.debug("Getting translations for word={}", word);
-
-        final List<Word> _translations = getTranslationList(word);
-
-        LOGGER.debug("Found {} translations for word={}", _translations.size(), word);
-
-        return new ArrayList<>(_translations);
+        return dictionaryDao.getTranslation(word);
     }
 
     @Override
@@ -142,26 +110,6 @@ public class DictionaryManagerImpl implements DictionaryManager {
 
         LOGGER.debug("Removing word={}", word);
 
-        for (Word currentWord : words) {
-            List<Word> _translations = getTranslationList(currentWord);
-            if (_translations.remove(word)) {
-                translations.put(currentWord, _translations);
-            }
-        }
-
-        words.remove(word);
-        translations.remove(word);
-    }
-
-    private List<Word> getTranslationList(final Word currentWord) {
-        Preconditions.checkNotNull(currentWord);
-
-        LOGGER.debug("Getting translation list for word={}", currentWord);
-
-        final List<Word> _translations = translations.getOrDefault(currentWord, new ArrayList<>());
-
-        LOGGER.debug("Found {} translations for word={}", _translations.size(), currentWord);
-
-        return _translations;
+        dictionaryDao.removeWord(word);
     }
 }

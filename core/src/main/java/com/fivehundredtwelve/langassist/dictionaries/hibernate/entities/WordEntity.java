@@ -1,4 +1,4 @@
-package com.fivehundredtwelve.langassist.dictionaries.entities;
+package com.fivehundredtwelve.langassist.dictionaries.hibernate.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;

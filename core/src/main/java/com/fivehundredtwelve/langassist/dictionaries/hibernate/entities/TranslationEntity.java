@@ -1,7 +1,4 @@
-package com.fivehundredtwelve.langassist.dictionaries.entities;
-
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
+package com.fivehundredtwelve.langassist.dictionaries.hibernate.entities;
 
 import javax.persistence.*;
 import javax.persistence.Entity;

@@ -1,7 +1,6 @@
-package com.fivehundredtwelve.langassist.accounts.entities;
+package com.fivehundredtwelve.langassist.accounts.hibernate.entities;
 
-import com.fivehundredtwelve.langassist.accounts.entities.UserEntity;
-import com.fivehundredtwelve.langassist.dictionaries.entities.WordEntity;
+import com.fivehundredtwelve.langassist.dictionaries.hibernate.entities.WordEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;

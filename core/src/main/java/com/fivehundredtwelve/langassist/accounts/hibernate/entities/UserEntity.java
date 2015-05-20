@@ -1,4 +1,4 @@
-package com.fivehundredtwelve.langassist.accounts.entities;
+package com.fivehundredtwelve.langassist.accounts.hibernate.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
