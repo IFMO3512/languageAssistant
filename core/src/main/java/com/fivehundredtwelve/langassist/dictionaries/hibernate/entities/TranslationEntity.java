@@ -22,6 +22,14 @@ public class TranslationEntity implements Serializable {
     @JoinColumn(name = "TRANSLATION_ID")
     private WordEntity translation;
 
+    public TranslationEntity(final WordEntity source, final WordEntity translation) {
+        this.source = source;
+        this.translation = translation;
+    }
+
+    public TranslationEntity() {
+    }
+
     public WordEntity getSource() {
         return source;
     }

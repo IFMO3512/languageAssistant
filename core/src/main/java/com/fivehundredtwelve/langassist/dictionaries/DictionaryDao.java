@@ -21,7 +21,7 @@ public interface DictionaryDao {
 
     Word getTranslation(Word word, Language language);
 
-    List<Word> getTranslation(Word word);
+    List<Word> getTranslations(Word word);
 
     void removeWord(Word word);
 }

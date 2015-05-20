@@ -17,8 +17,8 @@
     <bean name="dictionaryManager" class="com.fivehundredtwelve.langassist.dictionaries.DictionaryManagerImpl" />
 
 
-    <bean name="dictionaryDaoCollections"
-          class="com.fivehundredtwelve.langassist.dictionaries.DictionaryDaoCollections"/>
+    <!--<bean name="dictionaryDaoCollections"-->
+          <!--class="com.fivehundredtwelve.langassist.dictionaries.DictionaryDaoCollections"/>-->
 
     <bean name="accountDaoCollections"
           class="com.fivehundredtwelve.langassist.accounts.AccountDaoCollections"/>

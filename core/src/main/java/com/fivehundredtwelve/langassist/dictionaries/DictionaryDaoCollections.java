@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author eliseev
- */ // TODO write anything!!!
+ */
 public class DictionaryDaoCollections implements DictionaryDao {
     private final static Logger LOGGER = LoggerFactory.getLogger(DictionaryDaoCollections.class);
 
@@ -84,7 +84,7 @@ public class DictionaryDaoCollections implements DictionaryDao {
     }
 
     @Override
-    public List<Word> getTranslation(final Word word) {
+    public List<Word> getTranslations(final Word word) {
         LOGGER.debug("Getting translations for word={}", word);
 
         final List<Word> _translations = getTranslationList(word);

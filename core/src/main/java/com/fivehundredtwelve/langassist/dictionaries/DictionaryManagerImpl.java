@@ -101,7 +101,7 @@ public class DictionaryManagerImpl implements DictionaryManager {
     public List<Word> getTranslations(final @Nonnull Word word) {
         Preconditions.checkNotNull(word);
 
-        return dictionaryDao.getTranslation(word);
+        return dictionaryDao.getTranslations(word);
     }
 
     @Override

@@ -23,6 +23,14 @@ public class WordEntity implements Serializable {
     @JoinColumn(name = "LANGUAGE_ID")
     private LanguageEntity languageEntity;
 
+    public WordEntity(final String name, final LanguageEntity languageEntity) {
+        this.name = name;
+        this.languageEntity = languageEntity;
+    }
+
+    public WordEntity() {
+    }
+
     public long getId() {
         return id;
     }
