@@ -5,14 +5,12 @@ import com.fivehundredtwelve.langassist.Word;
 import com.google.common.base.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author eliseev
@@ -20,14 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AccountManagerImpl implements AccountManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(AccountManagerImpl.class);
 
-    private final Map<String, User> users;
-
-    private final Map<User, List<Word>> translations;
-
-    public AccountManagerImpl() {
-        users = new ConcurrentHashMap<>();
-        translations = new ConcurrentHashMap<>();
-    }
+    @Autowired
+    private AccountDao accountDao;
 
     @Override
     public void putUser(final @Nonnull User user) {
@@ -35,7 +27,7 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Adding user with email={}", user.getEmail());
 
-        users.put(user.getEmail(), user);
+        accountDao.addUser(user);
 
         LOGGER.debug("User added");
     }
@@ -47,7 +39,7 @@ public class AccountManagerImpl implements AccountManager {
         LOGGER.debug("Checking user with email={}", user.getEmail());
 
 
-        if (users.get(user.getEmail()) != null) {
+        if (getUser(user.getEmail()) != null) {
             LOGGER.debug("User={} is found", user);
             return true;
         } else {
@@ -63,7 +55,7 @@ public class AccountManagerImpl implements AccountManager {
 
         LOGGER.debug("Getting user with email={}", email);
 
-        return users.get(email);
+        return accountDao.getUser(email);
     }
 
     @Override
@@ -74,12 +66,7 @@ public class AccountManagerImpl implements AccountManager {
         LOGGER.debug("Adding word={} to user with email={}", user, word);
 
         if (checkUser(user)) {
-            LOGGER.debug("User is correct, adding the word");
-
-            List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
-
-            userWords.add(word);
-            translations.put(user, userWords);
+            accountDao.addWordToUser(user, word);
         }
 
         LOGGER.debug("Addition of word to user is finished");
@@ -90,7 +77,8 @@ public class AccountManagerImpl implements AccountManager {
     public Collection<Word> getWords(final @Nonnull User user) {
         LOGGER.debug("Getting the words for user with email={}", user.getEmail());
 
-        List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
+        List<Word> userWords = accountDao.getWords(user);
+
         LOGGER.debug("Found {} words for {}", userWords.size(), user.getEmail());
 
         return userWords;
@@ -106,10 +94,7 @@ public class AccountManagerImpl implements AccountManager {
         if (checkUser(user)) {
             LOGGER.debug("User is correct, adding the word");
 
-            List<Word> userWords = translations.getOrDefault(user, new ArrayList<>());
-
-            userWords.remove(word);
-            translations.put(user, userWords);
+            accountDao.removeWord(user, word);
 
             LOGGER.debug("Word={} was removed", word);
         } else {

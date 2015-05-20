@@ -3,6 +3,7 @@ package com.fivehundredtwelve.langassist;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
@@ -63,5 +64,13 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return email.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("email", email)
+                .append("language", language)
+                .toString();
     }
 }
