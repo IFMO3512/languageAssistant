@@ -10,18 +10,22 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="com.fivehundredtwelve.langassist"/>
+
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <bean name="accountManager" class="com.fivehundredtwelve.langassist.accounts.AccountManagerImpl" />
 
     <bean name="dictionaryManager" class="com.fivehundredtwelve.langassist.dictionaries.DictionaryManagerImpl" />
 
+    <bean name="dictionaryDaoHibernate"
+          class="com.fivehundredtwelve.langassist.dictionaries.hibernate.DictionaryDaoHibernateProxy"/>
+
 
     <!--<bean name="dictionaryDaoCollections"-->
           <!--class="com.fivehundredtwelve.langassist.dictionaries.DictionaryDaoCollections"/>-->
 
-    <bean name="accountDaoCollections"
-          class="com.fivehundredtwelve.langassist.accounts.AccountDaoCollections"/>
+    <!--<bean name="accountDaoCollections"-->
+          <!--class="com.fivehundredtwelve.langassist.accounts.AccountDaoCollections"/>-->
 
 
     <bean name="mysqlDatasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

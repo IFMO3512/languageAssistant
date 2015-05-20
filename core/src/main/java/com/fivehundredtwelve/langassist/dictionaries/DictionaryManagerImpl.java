@@ -20,9 +20,6 @@ public class DictionaryManagerImpl implements DictionaryManager {
     @Autowired
     private DictionaryDao dictionaryDao;
 
-    public DictionaryManagerImpl() {
-    }
-
     @Override
     public void addWord(@Nonnull Word word) {
         Preconditions.checkNotNull(word, "Dictionary manager does not supports null element additions");

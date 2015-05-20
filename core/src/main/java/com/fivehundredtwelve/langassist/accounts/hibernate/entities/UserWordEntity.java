@@ -23,6 +23,14 @@ public class UserWordEntity implements Serializable {
     @Id
     private WordEntity wordEntity;
 
+    public UserWordEntity(final UserEntity userEntity, final WordEntity wordEntity) {
+        this.userEntity = userEntity;
+        this.wordEntity = wordEntity;
+    }
+
+    public UserWordEntity() {
+    }
+
     public UserEntity getUserEntity() {
         return userEntity;
     }
