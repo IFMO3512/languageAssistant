@@ -12,6 +12,11 @@ app.config(function ($routeProvider) {
             controller: 'UserDictionary'
         })
 
+        .when('/userpage', {
+            templateUrl: 'pages/user-page.html',
+            controller: ''
+        })
+
         .when('/admin', {
             templateUrl: 'pages/admin.html',
             controller: 'Words'
