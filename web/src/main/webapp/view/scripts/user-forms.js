@@ -15,12 +15,12 @@ angular.module('main').controller('UserForms', function ($scope, $http, $locatio
 
     $scope.registerAndToMain = function (user) {
         $scope.register(user);
-        $location.path("/userpage");
+        $location.path("/menu");
     };
 
     $scope.loginAndToMain = function (user) {
         $scope.login(user);
-        $location.path("/userpage");
+        $location.path("/menu");
 
     };
 
@@ -34,7 +34,7 @@ angular.module('main').controller('UserForms', function ($scope, $http, $locatio
     $scope.home = function () {
         if ($scope.isLogged()) {
             if ($location.path == "/")
-                $location.path("/userpage");
+                $location.path("/menu");
         } else {
             $location.path("/");
         }

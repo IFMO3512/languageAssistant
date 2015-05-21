@@ -12,7 +12,7 @@ app.config(function ($routeProvider) {
             controller: 'UserDictionary'
         })
 
-        .when('/userpage', {
+        .when('/menu', {
             templateUrl: 'pages/user-page.html',
             controller: ''
         })
