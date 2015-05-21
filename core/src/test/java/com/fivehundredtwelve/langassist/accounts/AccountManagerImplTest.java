@@ -3,8 +3,8 @@ package com.fivehundredtwelve.langassist.accounts;
 import com.fivehundredtwelve.langassist.Language;
 import com.fivehundredtwelve.langassist.User;
 import com.fivehundredtwelve.langassist.Word;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
