@@ -145,7 +145,7 @@ angular.module('main').controller('Game', function ($scope, $http, $location, Us
         });
 
         var f = function() {
-            $location.path('/profile');
+            $location.path('/menu');
         };
 
         modalInstance.result.then(f, f);

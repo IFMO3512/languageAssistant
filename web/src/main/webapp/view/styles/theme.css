@@ -1,0 +1,23 @@
+.btn-success {
+    background-color: #FF5722;
+    border-color: #FF5722;
+    color: #FFFFFF;
+}
+/* цвет фона и рамки навигационного меню */
+.navbar-default {
+    background-color: #8BC34A;
+    border-color: #8BC34A;
+}
+/* цвет текста, содержащий название сайта или бренда */
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+/* цвет текста (название сайта или бренда), при поднесении к нему курсора мышки или при его нахождении в фокусе */
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #FFFFFF;
+}
+/* Цвет пунктов навигационного меню */
+.navbar-default .navbar-nav > li > a {
+    color: #FFFFFF;
+}

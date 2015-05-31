@@ -7,9 +7,19 @@ app.config(function ($routeProvider) {
             controller: 'First'
         })
 
+        .when('/cards', {
+            templateUrl: 'pages/cards.html',
+            controller: ''
+        })
+
         .when('/profile', {
             templateUrl: 'pages/user-dictionary.html',
             controller: 'UserDictionary'
+        })
+
+        .when('/menu', {
+            templateUrl: 'pages/user-page.html',
+            controller: ''
         })
 
         .when('/admin', {
